@@ -1,0 +1,169 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://PlayerHealth.gd" type="Script" id=1]
+[ext_resource path="res://Enemy.gd" type="Script" id=2]
+[ext_resource path="res://EnemyHealth.gd" type="Script" id=3]
+[ext_resource path="res://Player.gd" type="Script" id=4]
+[ext_resource path="res://BattleHUD.gd" type="Script" id=5]
+
+[node name="BattleHUD" type="CanvasLayer"]
+script = ExtResource( 5 )
+
+[node name="ATK1" type="Button" parent="."]
+margin_top = 448.0
+margin_right = 256.0
+margin_bottom = 512.0
+text = "ATK 1 (10)"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ATK2" type="Button" parent="."]
+margin_left = 256.0
+margin_top = 448.0
+margin_right = 512.0
+margin_bottom = 512.0
+text = "ATK 2 (5)"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ATK3" type="Button" parent="."]
+margin_left = 512.0
+margin_top = 448.0
+margin_right = 768.0
+margin_bottom = 512.0
+text = "ATK 3 (0)"
+
+[node name="ATK4" type="Button" parent="."]
+margin_left = 768.0
+margin_top = 448.0
+margin_right = 1024.0
+margin_bottom = 512.0
+text = "ATK 3 (8)"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ENEMY1" type="Button" parent="."]
+margin_top = 448.0
+margin_right = 256.0
+margin_bottom = 512.0
+text = "ENEMY 1"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ENEMY2" type="Button" parent="."]
+margin_left = 256.0
+margin_top = 448.0
+margin_right = 512.0
+margin_bottom = 512.0
+text = "ENEMY 2"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ENEMY3" type="Button" parent="."]
+margin_left = 512.0
+margin_top = 448.0
+margin_right = 768.0
+margin_bottom = 512.0
+text = "ENEMY 3"
+
+[node name="ENEMY4" type="Button" parent="."]
+margin_left = 768.0
+margin_top = 448.0
+margin_right = 1024.0
+margin_bottom = 512.0
+text = "ENEMY 4"
+
+[node name="WAIT" type="Label" parent="."]
+anchor_right = 0.0537109
+margin_top = 360.0
+margin_right = 969.0
+margin_bottom = 600.0
+text = "ENEMY's turn..."
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player" type="Label" parent="."]
+margin_left = 448.0
+margin_top = 320.0
+margin_right = 576.0
+margin_bottom = 384.0
+text = "PLAYER"
+align = 1
+valign = 1
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PlayerHealth" type="Label" parent="."]
+anchor_top = -3.17891e-09
+anchor_bottom = -3.17891e-09
+margin_left = 496.0
+margin_top = 376.0
+margin_right = 520.0
+margin_bottom = 390.0
+rect_rotation = -0.296295
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Enemy" type="Label" parent="."]
+margin_left = 448.0
+margin_top = 16.0
+margin_right = 576.0
+margin_bottom = 80.0
+text = "ENEMY 1"
+align = 1
+valign = 1
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="EnemyHealth" type="Label" parent="."]
+anchor_top = -3.17891e-09
+anchor_bottom = -3.17891e-09
+margin_left = 496.0
+margin_top = 8.0
+margin_right = 520.0
+margin_bottom = 22.0
+rect_rotation = -0.296295
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OUTCOME" type="Label" parent="."]
+margin_right = 1024.0
+margin_bottom = 600.0
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="ATK1" to="Player" method="_on_ATK1_pressed"]
+[connection signal="pressed" from="ATK1" to="." method="_on_ATK1_pressed"]
+[connection signal="pressed" from="ATK2" to="Player" method="_on_ATK2_pressed"]
+[connection signal="pressed" from="ATK2" to="." method="_on_ATK2_pressed"]
+[connection signal="pressed" from="ATK3" to="Player" method="_on_ATK3_pressed"]
+[connection signal="pressed" from="ATK3" to="." method="_on_ATK3_pressed"]
+[connection signal="pressed" from="ATK4" to="Player" method="_on_ATK4_pressed"]
+[connection signal="pressed" from="ATK4" to="." method="_on_ATK4_pressed"]
+[connection signal="pressed" from="ENEMY1" to="Player" method="_on_ENEMY1_pressed"]
+[connection signal="pressed" from="ENEMY1" to="." method="_on_ENEMY1_pressed"]
+[connection signal="display_health" from="Player" to="PlayerHealth" method="_on_Player_display_health"]
+[connection signal="enemy1_damaged" from="Player" to="Enemy" method="_on_Player_enemy1_damaged"]
+[connection signal="player_defeated" from="Player" to="." method="_on_Player_player_defeated"]
+[connection signal="display_health" from="Enemy" to="EnemyHealth" method="_on_Enemy_display_health"]
+[connection signal="enemy_defeated" from="Enemy" to="." method="_on_Enemy_enemy_defeated"]
+[connection signal="player_damaged" from="Enemy" to="Player" method="_on_Enemy_player_damaged"]
