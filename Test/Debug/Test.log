@@ -1,8 +1,3 @@
 ﻿  Character.cpp
-C:\Users\sydneylu\source\repos\Test\Character.cpp(3,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  Mon.cpp
-C:\Users\sydneylu\source\repos\Test\Mon.cpp(3,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  Player.cpp
-  Test.cpp
-  Generating Code...
+C:\Users\sydneylu\source\repos\Test\Character.cpp(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
   Test.vcxproj -> C:\Users\sydneylu\source\repos\Test\Debug\Test.exe

@@ -6,4 +6,4 @@ using namespace sf;
 #define SCRN_H (1080)
 #define SCRN_W (1920)
 
-enum Direction { LEFT, RIGHT, UP, DOWN }; // remove clas?? add this to gen header for use in others
+enum Direction { LEFT, RIGHT, UP, DOWN, NONE }; // remove clas?? add this to gen header for use in others

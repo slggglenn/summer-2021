@@ -41,30 +41,14 @@ int main()
             if (event.type == Event::KeyPressed)
             {
                 player.isMoving(true);
+                player.setSprite();
 
-                if (Keyboard::isKeyPressed(Keyboard::Left))
-                {
-                    player.setOrientation(LEFT);
-                }
-
-                if (Keyboard::isKeyPressed(Keyboard::Right))
-                {
-                    player.setOrientation(RIGHT);
-                }
-
-                if (Keyboard::isKeyPressed(Keyboard::Up))
-                {
-                    player.setOrientation(UP);
-                }
-
-                if (Keyboard::isKeyPressed(Keyboard::Down))
-                {
-                    player.setOrientation(DOWN);
-                }
+                player.updateDirection();
             }
             if (event.type == Event::KeyReleased)
             {
                 player.isMoving(false);
+                player.zeroDirection();
             }
         }
 

@@ -9,6 +9,7 @@ private:
 	Sprite sprite_;
 	float speed_ = 0;
 	Direction orientation_ = DOWN;
+	Vector2f direction = { 0, 0 };
 	Image textBack_; //!!!
 
 public:
@@ -22,6 +23,11 @@ public:
 	Sprite getSprite();
 	void setSprite();
 	void setOrientation(Direction new_orient);
+	Direction getOrientation();
+	//Direction* setmovementMatrix(Direction x, Direction y);
+	Vector2f updateDirection();
+	Vector2f zeroDirection();
+	float getSpeed();
 	void isMoving(bool moving);
 	void update(Time dt);
 	// randomly generated movement
