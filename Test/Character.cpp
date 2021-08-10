@@ -46,6 +46,7 @@ void Character::setTexture(std::string img_loc)//does this overload
 	textBack_.createMaskFromColor(Color(0, 128, 128), 0); // !!! NEED: program to get color pixels from the thing itself
 	texture_.loadFromImage(textBack_);
 }
+
 // gets the sprite
 Sprite Character::getSprite()
 {

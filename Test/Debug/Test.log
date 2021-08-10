@@ -1,3 +1,4 @@
 ﻿  Character.cpp
 C:\Users\sydneylu\source\repos\Test\Character.cpp(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  LINK : C:\Users\sydneylu\source\repos\Test\Debug\Test.exe not found or not built by the last incremental link; performing full link
   Test.vcxproj -> C:\Users\sydneylu\source\repos\Test\Debug\Test.exe
