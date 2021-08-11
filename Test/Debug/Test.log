@@ -1,40 +1,6 @@
-﻿  Animation.cpp
-C:\Users\sydneylu\source\repos\Test\Animation.cpp(65,25): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-  Character.cpp
-C:\Users\sydneylu\source\repos\Test\Character.cpp(3,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-C:\Users\sydneylu\source\repos\Test\Character.cpp(5,57): error C2061: syntax error: identifier '_Immortalize_memcpy_image'
-C:\Users\sydneylu\source\repos\Test\Character.cpp(5,85): error C2511: 'Character::Character(float,float)': overloaded member function not found in 'Character'
-C:\Users\sydneylu\source\repos\Test\Character.h(8): message : see declaration of 'Character'
-C:\Users\sydneylu\source\repos\Test\Character.cpp(15,37): error C2597: illegal reference to non-static member 'Character::position_'
-C:\Users\sydneylu\source\repos\Test\Character.h(14): message : see declaration of 'Character::position_'
+﻿  Character.cpp
   Mon.cpp
-C:\Users\sydneylu\source\repos\Test\Mon.cpp(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-C:\Users\sydneylu\source\repos\Test\Mon.cpp(9,13): error C2039: 'setTexture': is not a member of 'Character'
-C:\Users\sydneylu\source\repos\Test\Character.h(8): message : see declaration of 'Character'
-C:\Users\sydneylu\source\repos\Test\Mon.cpp(9,23): error C3861: 'setTexture': identifier not found
-C:\Users\sydneylu\source\repos\Test\Mon.cpp(10,13): error C2039: 'setSprite': is not a member of 'Character'
-C:\Users\sydneylu\source\repos\Test\Character.h(8): message : see declaration of 'Character'
-C:\Users\sydneylu\source\repos\Test\Mon.cpp(10,22): error C3861: 'setSprite': identifier not found
   Player.cpp
-C:\Users\sydneylu\source\repos\Test\Player.cpp(5,90): error C2065: 'imgPath': undeclared identifier
-C:\Users\sydneylu\source\repos\Test\Player.cpp(7,13): error C2039: 'setTexture': is not a member of 'Character'
-C:\Users\sydneylu\source\repos\Test\Character.h(8): message : see declaration of 'Character'
-C:\Users\sydneylu\source\repos\Test\Player.cpp(7,24): error C2065: 'imgPath': undeclared identifier
-C:\Users\sydneylu\source\repos\Test\Player.cpp(7,23): error C3861: 'setTexture': identifier not found
-C:\Users\sydneylu\source\repos\Test\Player.cpp(8,13): error C2039: 'setSprite': is not a member of 'Character'
-C:\Users\sydneylu\source\repos\Test\Character.h(8): message : see declaration of 'Character'
-C:\Users\sydneylu\source\repos\Test\Player.cpp(8,22): error C3861: 'setSprite': identifier not found
   Test.cpp
-C:\Users\sydneylu\source\repos\Test\Test.cpp(43,24): error C2039: 'isMoving': is not a member of 'Player'
-C:\Users\sydneylu\source\repos\Test\Player.h(7): message : see declaration of 'Player'
-C:\Users\sydneylu\source\repos\Test\Test.cpp(44,24): error C2039: 'setSprite': is not a member of 'Player'
-C:\Users\sydneylu\source\repos\Test\Player.h(7): message : see declaration of 'Player'
-C:\Users\sydneylu\source\repos\Test\Test.cpp(50,24): error C2039: 'isMoving': is not a member of 'Player'
-C:\Users\sydneylu\source\repos\Test\Player.h(7): message : see declaration of 'Player'
-C:\Users\sydneylu\source\repos\Test\Test.cpp(67,28): error C2039: 'getSprite': is not a member of 'Player'
-C:\Users\sydneylu\source\repos\Test\Player.h(7): message : see declaration of 'Player'
   Generating Code...
+  Test.vcxproj -> C:\Users\sydneylu\source\repos\Test\Debug\Test.exe

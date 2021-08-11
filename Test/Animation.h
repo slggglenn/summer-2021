@@ -30,7 +30,7 @@ private:
 	std::map<std::pair<State, Direction>, Sprite> animSprites_;
 
 public:
-	Animation(std::string imgPath);
+	Animation(); //std::string imgPath
 	void setTexture(std::string imgPath);
 	Texture getTexture();
 	std::map<std::pair<State, Direction>, Sprite> get_animSprites();

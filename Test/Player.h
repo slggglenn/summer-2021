@@ -3,7 +3,6 @@
 #include "Test.h"
 #include "Character.h"
 
-
 class Player : public Character
 {
 private:
@@ -12,7 +11,6 @@ private:
 
 public:
 	Player(float new_x, float new_y, std::string text_loc);
-	/*void movePlayer(Time dt);
-	void updatePlayer(Time dt);*/
-	Vector2f getPosition();
+	/*Vector2f getPosition();*/
+	void updateDirection();
 };

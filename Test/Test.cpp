@@ -40,14 +40,14 @@ int main()
         {
             if (event.type == Event::KeyPressed)
             {
-                player.isMoving(true);
-                player.setSprite();
+                player.setState(MOVING);
+                player.getAnimation().updateIdleSprite(player.getOrientation());
 
                 player.updateDirection();
             }
             if (event.type == Event::KeyReleased)
             {
-                player.isMoving(false);
+                player.setState(IDLE);
                 player.zeroDirection();
             }
         }
@@ -64,7 +64,7 @@ int main()
 
         // eevee sprite: 652/2/4/2, 267/11
         window.clear();
-        window.draw(player.getSprite()); // Make sprite bigger and remove background
+        window.draw(player.getAnimation().getSprite()); // Make sprite bigger and remove background
 
         // show everything just drawn
         window.display();

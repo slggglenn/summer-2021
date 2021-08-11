@@ -1,14 +1,15 @@
 
 #include "Test.h"
-#include "Character.h";
+#include "Character.h"
+#include <iostream>
+
 
 Character::Character(float x_start, float y_start, std::string imgPath) {
-	position_.x = x_start;
-	position_.y = y_start;
+	updatePosition(x_start, y_start);
 	imgRef_ = imgPath;
 	// do i need parameter for this really?? when is orientation used
 	// animation already initialized
-	
+	animation_.setTexture(imgPath);
 	animation_.getSprite().setPosition(position_);
 }
 
@@ -17,49 +18,32 @@ Vector2f Character::get_directionVect()
 	return directionVect_;
 }
 
+void Character::set_directionVect(float new_x, float new_y)
+{
+	directionVect_.x = new_x;
+	directionVect_.y = new_y;
+}
+
 State Character::getState()
 {
 	return state_;
 }
 
+void Character::setState(State new_state)
+{
+	state_ = new_state;
+}
+
 Animation Character::getAnimation()
 {
+	cout << "get animation\n" << endl;
 	return animation_;
 }
-// updates direction vector based on key presses
-Vector2f Character::updateDirection()
-{
-	if (Keyboard::isKeyPressed(Keyboard::Left)) // more cases for iskeyheld stuff...should update state
-	{
-		setOrientation(LEFT);
-		directionVect_.x = -1;
-	}
 
-	if (Keyboard::isKeyPressed(Keyboard::Right))
-	{
-		setOrientation(RIGHT);
-		directionVect_.x = 1;
-	}
-
-	if (Keyboard::isKeyPressed(Keyboard::Up))
-	{
-		setOrientation(UP);
-		directionVect_.y = -1;
-	}
-
-	if (Keyboard::isKeyPressed(Keyboard::Down))
-	{
-		setOrientation(DOWN);
-		directionVect_.y = 1;
-	}
-	return directionVect_;
-}
-
-Vector2f Character::zeroDirection()
+void Character::zeroDirection()
 {
 	directionVect_.x = 0;
 	directionVect_.y = 0;
-	return directionVect_;
 }
 
 Direction Character::getOrientation()

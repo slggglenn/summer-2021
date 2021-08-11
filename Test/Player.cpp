@@ -4,60 +4,40 @@
 
 Player::Player(float new_x, float new_y, std::string text_loc) : Character(new_x, new_y, text_loc)
 {
-	Character::setTexture(text_loc);
-	Character::setSprite();
-	Character::updatePosition(new_x, new_y);
+	Character::getAnimation().setTexture(text_loc);
+	//Character::getAnimation().updateIdleSprite(; // UPDATE TO SET SPRITE
+	//Character::updatePosition(new_x, new_y);
 };
 
-Vector2f Player::getPosition()
+//Vector2f Player::getPosition()
+//{
+//	return position_;
+//}
+
+// updates direction vector based on key presses
+void Player::updateDirection()
 {
-	return position_;
+	if (Keyboard::isKeyPressed(Keyboard::Left)) // more cases for iskeyheld stuff...should update state
+	{
+		setOrientation(LEFT);
+		Character::set_directionVect(-1.00, Character::get_directionVect().y);
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::Right))
+	{
+		setOrientation(RIGHT);
+		Character::set_directionVect(1.00, Character::get_directionVect().y);
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::Up))
+	{
+		setOrientation(UP);
+		Character::set_directionVect(Character::get_directionVect().x, -1.00);
+	}
+
+	if (Keyboard::isKeyPressed(Keyboard::Down))
+	{
+		setOrientation(DOWN);
+		Character::set_directionVect(Character::get_directionVect().x, 1.00);
+	}
 }
-
-
-//void Player::movePlayer(Time dt)
-//{
-//	
-//	if (Player::getOrientation() == LEFT)
-//	{
-//		(Character::getSprite()).move(dt, -1.f, 0.f);// -= dt.asSeconds() * Player::getSpeed();
-//	}
-//	if (Player::getOrientation() == RIGHT)
-//	{
-//		position_.x += dt.asSeconds() * Player::getSpeed();
-//	}
-//	if (Player::getOrientation() == UP)
-//	{
-//		position_.y -= dt.asSeconds() * Player::getSpeed();
-//	}
-//	if (Player::getOrientation() == DOWN)
-//	{
-//		position_.y += dt.asSeconds() * Player::getSpeed();
-//	}
-//
-//	// moves shape representation to that location
-//	Player::getSprite().setPosition(position_);
-//}
-//
-//void Player::updatePlayer(Time dt)
-//{
-//	if (Keyboard::isKeyPressed(Keyboard::Left))
-//	{
-//		setOrientation(LEFT);
-//	}
-//
-//	if (Keyboard::isKeyPressed(Keyboard::Right))
-//	{
-//		setOrientation(RIGHT);
-//	}
-//
-//	if (Keyboard::isKeyPressed(Keyboard::Up))
-//	{
-//		setOrientation(UP);
-//	}
-//
-//	if (Keyboard::isKeyPressed(Keyboard::Down))
-//	{
-//		setOrientation(DOWN);
-//	}
-//}

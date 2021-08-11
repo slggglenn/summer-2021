@@ -1,9 +1,9 @@
 
 #include "Animation.h"
 
-Animation::Animation(std::string imgPath) //update!!
+Animation::Animation() // ???? if derived class has path, how to get it to object of base class????
 {
-	setTexture(imgPath); // initializes textBack_ and texture_
+	//setTexture(imgPath); // initializes textBack_ and texture_
 	set_animSprites();
 	updateIdleSprite(DOWN);
 }
@@ -63,7 +63,7 @@ void Animation::set_animSprites()
 	Sprite sleepChunk;
 	sleepChunk.setTexture(texture_);
 	sleepChunk.setTextureRect(IntRect(SLEEP_START_X,
-					SLEEP_START_Y, 2.5 * SPRITE_SIDE_LEN, SPRITE_SIDE_LEN)); // CHHECK 2.5 if enough size and if width param!!
+					SLEEP_START_Y, 3 * SPRITE_SIDE_LEN, SPRITE_SIDE_LEN)); // CHHECK 2.5 if enough size and if width param!!
 	sleepChunk.setScale(3, 3);
 	animSprites_[make_pair(ASLEEP, NONE)] = sleepChunk;
 }

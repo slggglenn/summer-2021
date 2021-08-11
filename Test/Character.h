@@ -21,9 +21,11 @@ public:
 	void setOrientation(Direction new_orient);
 	Direction getOrientation();
 	Vector2f get_directionVect();
-	Vector2f updateDirection();
-	Vector2f zeroDirection();
+	void set_directionVect(float new_x, float new_y);
+	void zeroDirection();
 	State getState();
+	void setState(State new_state);
+
 
 	Vector2f getPosition();
 	void updatePosition(float new_x, float new_y);
