@@ -2,34 +2,34 @@
 
 #include "Test.h"
 #include "Animation.h"
+#include <map>
+using namespace std;
 
 class Character {
 private:
+	std::string imgRef_;
 	Vector2f position_;
-	//Texture texture_;
 	Animation animation_;
+	Direction orientation_ = DOWN;
+	State state_ = IDLE;
+	Vector2f directionVect_ = { 0 , 0 }; //?
 	float speed_ = 0;
-	Image textBack_; //!!!
 
 public:
-	Character(float x_start, float y_start); //https://stackoverflow.com/questions/14693745/string-as-parameter
-	Vector2f getPosition(); // vector?
+	Character(float x_start, float y_start, std::string imgPath); //https://stackoverflow.com/questions/14693745/string-as-parameter
+
+	void setOrientation(Direction new_orient);
+	Direction getOrientation();
+	Vector2f get_directionVect();
+	Vector2f updateDirection();
+	Vector2f zeroDirection();
+	State getState();
+
+	Vector2f getPosition();
 	void updatePosition(float new_x, float new_y);
-	Animation setAnimation();
-	//FloatRect getSpriteBounds(); // !!! MODIFY !!!
-	//void setPosition()
-	//Texture getTexture(); // !!! MODIFY !!!
-	//void setTexture(std::string img_loc); // !!! MODIFY !!!
-	//Sprite getSprite(); // !!! MODIFY !!!
-	//void setSprite(); // !!! MODIFY !!!
-	//void setOrientation(Direction new_orient);
-	//Direction getOrientation();
-	////Direction* setmovementMatrix(Direction x, Direction y);
-	//Vector2f updateDirection();
-	//Vector2f zeroDirection();
+	Animation getAnimation();
+	Animation setAnimation(); // ?
 	float getSpeed();
-	void isMoving(bool moving);
+	void updateSpeed();
 	void update(Time dt);
-	// randomly generated movement
-	// set orientation
 };

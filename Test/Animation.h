@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Test.h"
+#include <map>
+using namespace std;
 
 #define NUM_SPRITES (42)
 #define SPRITE_SIDE_LEN (26) // 22 b4
@@ -19,44 +21,22 @@
 class Animation
 {
 private:
-	//Sprite spritesArray[NUM_SPRITES]; // get rid!!
 	Texture texture_;
-	std::string imgRef_;
-	Sprite sprite_;
-	//Sprite spritesheet_;
 	Image textBack_; // updated to hold masked spritesheet
+	Sprite sprite_;
+
 	// stores sequence of sprites for each animation,
 	// paired with keys for state and direction
 	std::map<std::pair<State, Direction>, Sprite> animSprites_;
-	Direction orientation_ = DOWN;
-	Vector2f direction_; //driectionVect
-	//Vector2f direction = { 0, 0 };
-
-	// load 1 texture for ALL animation sprites
-	// divide into temporary srites based on state and direction
-	// when playing animation, divide temp sprites into individuals and loop
-	// 
-	// play() method (1 unique for player based on key pressed) + default idle... or maybe based on states altogether
-
 
 public:
-	Animation();
-	void setTexture();
+	Animation(std::string imgPath);
+	void setTexture(std::string imgPath);
 	Texture getTexture();
+	std::map<std::pair<State, Direction>, Sprite> get_animSprites();
 
-	void setOrientation(Direction new_orient);
-	Direction getOrientation();
-	//Direction* setmovementMatrix(Direction x, Direction y);
-	Vector2f getDirection();
-	Vector2f updateDirection();
-	Vector2f zeroDirection();
-
-	//void setSprite();
-	//Sprite getSprite();
-	//FloatRect getSpriteBounds(); // migt need??
-	//Sprite* setspritesArray();
+	Sprite getSprite();
+	void updateIdleSprite(Direction dir);
 	void set_animSprites();
-	void updateIdleSprite();
-	//unsigned int* getAnimIndeces(Direction dir, bool moving);
-	void playAnim(Direction dir, bool moving);
+	//void playAnim(Direction dir, bool moving);
 };

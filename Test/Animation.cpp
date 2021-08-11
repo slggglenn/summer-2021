@@ -1,48 +1,29 @@
 
 #include "Animation.h"
-#include <map>
-using namespace std;
 
-
-// constructor
-Animation::Animation() //update!!
+Animation::Animation(std::string imgPath) //update!!
 {
-	setTexture();
-	//setSprite();
+	setTexture(imgPath); // initializes textBack_ and texture_
+	set_animSprites();
+	updateIdleSprite(DOWN);
 }
 
-// sets the texture
-void Animation::setTexture()
+Sprite Animation::getSprite()
+{
+	return sprite_;
+}
+
+void Animation::setTexture(std::string imgPath)
 {//imgRef_
 	textBack_.loadFromFile("graphics/eevee.png");// !!! en.sfml-dev.org/forums/index.php?topic=12663.0
 	textBack_.createMaskFromColor(Color(0, 128, 128), 0); // !!! NEED: program to get color pixels from the thing itself
 	texture_.loadFromImage(textBack_);
 }
 
-// gets the texture
 Texture Animation::getTexture()
 {
 	return texture_;
 }
-
-// gets the sprite
-//Sprite Animation::getSprite()
-//{
-//	return spritesheet_;
-//}
-
-// gets sprite global bounds
-//FloatRect Animation::getSpriteBounds()
-//{
-//	return spritesheet_.getGlobalBounds();
-//}
-
-
-Vector2f Animation::getDirection()
-{
-	return direction_;
-}
-
 
 // loads temporary sprites into animSprites
 void Animation::set_animSprites()
@@ -87,98 +68,17 @@ void Animation::set_animSprites()
 	animSprites_[make_pair(ASLEEP, NONE)] = sleepChunk;
 }
 
-Vector2f Animation::updateDirection()
+// sets the current sprite given STATE and DIRECTION
+void Animation::updateIdleSprite(Direction dir) // CURRENTLY JUST FOR IDLE
 {
-	if (Keyboard::isKeyPressed(Keyboard::Left))
-	{
-		setOrientation(LEFT);
-		direction_.x = -1;
-	}
-
-	if (Keyboard::isKeyPressed(Keyboard::Right))
-	{
-		setOrientation(RIGHT);
-		direction_.x = 1;
-	}
-
-	if (Keyboard::isKeyPressed(Keyboard::Up))
-	{
-		setOrientation(UP);
-		direction_.y = -1;
-	}
-
-	if (Keyboard::isKeyPressed(Keyboard::Down))
-	{
-		setOrientation(DOWN);
-		direction_.y = 1;
-	}
-	return direction_;
-}
-
-Vector2f Animation::zeroDirection()
-{
-	direction_.x = 0;
-	direction_.y = 0;
-	return direction_;
-}
-
-Direction Animation::getOrientation()
-{
-	return orientation_;
-}
-
-void Animation::setOrientation(Direction new_orient)
-{
-	orientation_ = new_orient;
-}
-
-
-void Animation::updateIdleSprite() // CURRENTLY JUST FOR IDLE
-{
-	sprite_.setTexture(*(animSprites_[make_pair(IDLE, orientation_)].getTexture())); // pointer ok??????!!!!
+	sprite_.setTexture(*animSprites_[make_pair(IDLE, dir)].getTexture()); // pointer ok??????!!!!
 	sprite_.setTextureRect(IntRect(0, 0, SPRITE_SIDE_LEN, SPRITE_SIDE_LEN));
-
-	//switch (orientation_) {
-	//case LEFT:
-	//	sprite_.setTexture(*(animSprites_[make_pair(IDLE, LEFT)].getTexture())); // pointer ok??????!!!!
-	//	sprite_.setTextureRect(IntRect(0, 0, SPRITE_SIDE_LEN, SPRITE_SIDE_LEN));
-	//	break;
-	//case RIGHT:
-	//	sprite_.setTexture(*(animSprites_[make_pair(IDLE, LEFT)].getTexture())); // pointer ok??????!!!!
-	//	sprite_.setTextureRect(IntRect(0, 0, SPRITE_SIDE_LEN, SPRITE_SIDE_LEN));
-	//	break;
-	//case DOWN:
-	//	sprite_.setTexture(*(animSprites_[make_pair(IDLE, LEFT)].getTexture())); // pointer ok??????!!!!
-	//	sprite_.setTextureRect(IntRect(0, 0, SPRITE_SIDE_LEN, SPRITE_SIDE_LEN));
-	//	break;
-	//case UP:
-	//	sprite_.setTexture(*(animSprites_[make_pair(IDLE, LEFT)].getTexture())); // pointer ok??????!!!!
-	//	sprite_.setTextureRect(IntRect(0, 0, SPRITE_SIDE_LEN, SPRITE_SIDE_LEN));
-	//	break;
-	//case LEFT_DOWN:
-	//	sprite_.setTexture(*(animSprites_[make_pair(IDLE, LEFT)].getTexture())); // pointer ok??????!!!!
-	//	sprite_.setTextureRect(IntRect(0, 0, SPRITE_SIDE_LEN, SPRITE_SIDE_LEN));
-	//case LEFT_UP:
-	//case RIGHT_DOWN:
-	//	break;
-	//case RIGHT_UP:
-	//	break;
-	//}
-
-	//sprite_.setScale(3, 3);
-	//sprite_.setPosition(position_);
 }
-
-// TO DO!!!
-// ANimation class functionality of recognizing key presses nad changing orientation
-// orientation becomes Animation member
-// for now just do idle
-
 
 // draws Animation based on keyword for animation type
-void Animation::playAnim(Direction dir, bool moving)
-{
-
-}
+//void Animation::playAnim(Direction dir, bool moving)
+//{
+//
+//}
 
 // error handling?
