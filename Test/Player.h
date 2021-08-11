@@ -7,8 +7,8 @@
 class Player : public Character
 {
 private:
-	std::string text_loc = "graphics / player.png";
-	Vector2f position_;
+	std::string text_loc = "graphics / player.png"; /// !!!
+	Vector2f position_; // character also has position tho....
 
 public:
 	Player(float new_x, float new_y, std::string text_loc);
