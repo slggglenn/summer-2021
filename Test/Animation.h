@@ -33,7 +33,7 @@ public:
 	Animation(); //std::string imgPath
 	void setTexture(std::string imgPath);
 	Texture getTexture();
-	std::map<std::pair<State, Direction>, Sprite> get_animSprites();
+	//std::map<std::pair<State, Direction>, Sprite> get_animSprites();
 
 	Sprite getSprite();
 	void updateIdleSprite(Direction dir);

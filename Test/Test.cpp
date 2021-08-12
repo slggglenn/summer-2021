@@ -12,6 +12,8 @@ int main()
     RenderWindow window(vm, "Test", Style::Fullscreen);
 
     Player player = Player(SCRN_W / 2, SCRN_H / 3, "graphics/eevee.png");
+    Animation animTest = Animation();
+   // Character A = Character(SCRN_W / 2, SCRN_H / 3, "graphics/eevee.png");
     // ERROR HERE??? //
     //Mon eevee = Mon(SCRN_W / 2, SCRN_H / 2, "graphics/eevee.png"); // don't use other slash (gets yellow highlighted) recognized as escape characters
 
@@ -70,9 +72,13 @@ int main()
 
         /* draw scene */
 
+        animTest.getSprite().setPosition(SCRN_W / 3, SCRN_H / 3);
+
         // eevee sprite: 652/2/4/2, 267/11
         window.clear();
-        window.draw(player.getTempSprite());
+        window.draw(animTest.getSprite());
+        //window.draw(player.getTempSprite());
+       // window.draw(A.getAnimation().getSprite());
         //window.draw(player.getAnimation().getSprite()); // Make sprite bigger and remove background
         // !!! THINK ERROR CAUSED HERE !!!
 
