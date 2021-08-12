@@ -37,6 +37,6 @@ public:
 
 	Sprite getSprite();
 	void updateIdleSprite(Direction dir);
-	void set_animSprites();
+	void set_animSprites(Texture* texture);
 	//void playAnim(Direction dir, bool moving);
 };

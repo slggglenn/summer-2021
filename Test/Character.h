@@ -10,7 +10,7 @@ private:
 	std::string imgRef_;
 	Vector2f position_;
 	Animation animation_;
-	Direction orientation_ = DOWN;
+	Direction orientation_ = RIGHT;
 	State state_ = IDLE;
 	Vector2f directionVect_ = { 0 , 0 }; //?
 	float speed_ = 0;
