@@ -3,7 +3,7 @@
 
 Animation::Animation() // ???? if derived class has path, how to get it to object of base class????
 {
-	//setTexture(imgPath); // initializes textBack_ and texture_
+	//setTexture(imgPath); // initializes textBack_ and texture_ ... why not here??
 	set_animSprites();
 	updateIdleSprite(DOWN);
 }

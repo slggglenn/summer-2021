@@ -1,7 +1,6 @@
 
 #include "Test.h"
 #include "Character.h"
-#include <iostream>
 
 
 Character::Character(float x_start, float y_start, std::string imgPath) {
@@ -36,7 +35,6 @@ void Character::setState(State new_state)
 
 Animation Character::getAnimation()
 {
-	cout << "get animation\n" << endl;
 	return animation_;
 }
 
@@ -90,5 +88,5 @@ void Character::update(Time dt)
 	position_.y += dt.asSeconds() * speed_ * get_directionVect().y;
 
 	// moves sprite to that location
-	animation_.getSprite().setPosition(position_);
+	animation_.getSprite().setPosition(position_); // NOT A CAUSE OF THE ERRO!!!//
 }

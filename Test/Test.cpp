@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Mon.h"
 #include "Test.h"
+#include <iostream>
 
 int main()
 {
@@ -11,6 +12,7 @@ int main()
     RenderWindow window(vm, "Test", Style::Fullscreen);
 
     Player player = Player(SCRN_W / 2, SCRN_H / 3, "graphics/eevee.png");
+    // ERROR HERE??? //
     //Mon eevee = Mon(SCRN_W / 2, SCRN_H / 2, "graphics/eevee.png"); // don't use other slash (gets yellow highlighted) recognized as escape characters
 
     Clock clock;
@@ -34,37 +36,45 @@ int main()
             window.close();
         }
        
-        Event event;
+        /*Event event;
 
         while (window.pollEvent(event))
         {
             if (event.type == Event::KeyPressed)
             {
                 player.setState(MOVING);
+                cout << "setState (M)" << endl;
                 player.getAnimation().updateIdleSprite(player.getOrientation());
+                cout << "updateIdleSprite" << endl;
 
                 player.updateDirection();
+                cout << "updateDirection" << endl;
             }
             if (event.type == Event::KeyReleased)
             {
                 player.setState(IDLE);
+                cout << "setState" << endl;
                 player.zeroDirection();
+                cout << "zeroDire" << endl;
             }
-        }
+        }*/
 
 
         /* update scene */
 
         // update time
         Time dt = clock.restart();
-        player.update(dt);
+        //player.update(dt);
+        // ERROR CAUSED HERE?? //
 
 
         /* draw scene */
 
         // eevee sprite: 652/2/4/2, 267/11
         window.clear();
-        window.draw(player.getAnimation().getSprite()); // Make sprite bigger and remove background
+        window.draw(player.getTempSprite());
+        //window.draw(player.getAnimation().getSprite()); // Make sprite bigger and remove background
+        // !!! THINK ERROR CAUSED HERE !!!
 
         // show everything just drawn
         window.display();

@@ -4,10 +4,24 @@
 
 Player::Player(float new_x, float new_y, std::string text_loc) : Character(new_x, new_y, text_loc)
 {
-	Character::getAnimation().setTexture(text_loc);
+	//Character::getAnimation().setTexture(text_loc); // NOT A CAUSE OF ERROR
 	//Character::getAnimation().updateIdleSprite(; // UPDATE TO SET SPRITE
 	//Character::updatePosition(new_x, new_y);
+	tempSetup(text_loc);
+	temp_position.x = new_x;
+	temp_position.y = new_y;
 };
+
+void Player::tempSetup(std::string text_loc)
+{
+	temp.loadFromFile(text_loc);
+	temp_sprite.setTexture(temp);
+}
+
+Sprite Player::getTempSprite()
+{
+	return temp_sprite;
+}
 
 //Vector2f Player::getPosition()
 //{
