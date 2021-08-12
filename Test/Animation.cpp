@@ -71,7 +71,7 @@ void Animation::set_animSprites()
 // sets the current sprite given STATE and DIRECTION
 void Animation::updateIdleSprite(Direction dir) // CURRENTLY JUST FOR IDLE
 {
-	sprite_.setTexture(*animSprites_[make_pair(IDLE, dir)].getTexture()); // pointer ok??????!!!!
+	sprite_.setTexture(*(animSprites_[make_pair(IDLE, dir)]).getTexture()); // pointer ok??????!!!!
 	sprite_.setTextureRect(IntRect(0, 0, SPRITE_SIDE_LEN, SPRITE_SIDE_LEN));
 }
 
