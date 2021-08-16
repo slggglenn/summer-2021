@@ -5,7 +5,7 @@
 using namespace std;
 
 #define NUM_SPRITES (42)
-#define SPRITE_SIDE_LEN (26) // 22 b4
+#define SPRITE_SIDE_LEN (26)
 #define NUM_IDLE (16)
 #define NUM_IDLE_ANIM_SPRITES (NUM_IDLE / 8)
 #define NUM_WALK (24)
@@ -25,18 +25,21 @@ private:
 	Image textBack_; // updated to hold masked spritesheet
 	Sprite sprite_;
 
-	// stores sequence of sprites for each animation,
-	// paired with keys for state and direction
-	std::map<std::pair<State, Direction>, Sprite> animSprites_;
+	Sprite idle_[NUM_IDLE];
+	Sprite moving_[NUM_WALK];
+	Sprite asleep_[NUM_SLEEP];
+	
 
 public:
-	Animation(); //std::string imgPath
-	void setTexture(std::string imgPath);
+	Animation();
+	void setTexture(const std::string imgPath);
 	Texture getTexture();
-	//std::map<std::pair<State, Direction>, Sprite> get_animSprites();
+
+	void updateIdle();
+	void updateMoving();
+	void updateAsleep();
 
 	Sprite getSprite();
-	void updateIdleSprite(Direction dir);
-	void set_animSprites(Texture* texture);
-	//void playAnim(Direction dir, bool moving);
+	void updateSprite(State state, Direction dir);
+	void playAnim(Direction dir, State sta);
 };

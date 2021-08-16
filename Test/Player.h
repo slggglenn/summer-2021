@@ -6,11 +6,9 @@
 class Player : public Character
 {
 private:
-	std::string text_loc = "graphics / player.png"; /// !!!
-	//Vector2f position_; // character also has position tho....
+	const std::string text_loc = "graphics/eevee.png";
 
 public:
-	Player(float new_x, float new_y, std::string text_loc);
-	/*Vector2f getPosition();*/
+	Player(float new_x, float new_y);
 	void updateDirection();
 };

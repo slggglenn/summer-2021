@@ -3,11 +3,8 @@
 #include "Character.h"
 
 
-Character::Character(float x_start, float y_start, std::string imgPath) {
+Character::Character(float x_start, float y_start, const std::string imgPath) {
 	updatePosition(x_start, y_start);
-	imgRef_ = imgPath;
-	// do i need parameter for this really?? when is orientation used
-	// animation already initialized
 	animation_.setTexture(imgPath);
 	animation_.getSprite().setPosition(position_);
 }
@@ -66,8 +63,6 @@ void Character::updatePosition(float new_x, float new_y) {
 }
 
 
-// need set position!!
-
 float Character::getSpeed()
 {
 	return speed_;
@@ -88,5 +83,5 @@ void Character::update(Time dt)
 	position_.y += dt.asSeconds() * speed_ * get_directionVect().y;
 
 	// moves sprite to that location
-	animation_.getSprite().setPosition(position_); // NOT A CAUSE OF THE ERRO!!!//
+	animation_.getSprite().setPosition(position_);
 }
