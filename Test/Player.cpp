@@ -1,53 +1,62 @@
-
 #include "Character.h"
 #include "Player.h"
 
-Player::Player(float new_x, float new_y) : Character(new_x, new_y, text_loc)
+Player::Player(float new_x, float new_y, std::string text_loc) : Character(new_x, new_y, text_loc)
 {
-	//Character::getAnimation().setTexture(text_loc);
+	Character::setTexture(text_loc);
+	Character::setSprite();
+	Character::updatePosition(new_x, new_y);
 };
 
-// updates orientation_ and direction vector based on key presses
-void Player::updateDirection()
+Vector2f Player::getPosition()
 {
-	if (Keyboard::isKeyPressed(Keyboard::Left) && (Keyboard::isKeyPressed(Keyboard::Up)))
-	{
-		setOrientation(LEFT_UP);
-		Character::set_directionVect(-1.00, -1.00);
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Left) && (Keyboard::isKeyPressed(Keyboard::Down)))
-	{
-		setOrientation(LEFT_DOWN);
-		Character::set_directionVect(-1.00, 1.00);
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Left))
-	{
-		setOrientation(LEFT);
-		Character::set_directionVect(-1.00, Character::get_directionVect().y);
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Right) && (Keyboard::isKeyPressed(Keyboard::Down)))
-	{
-		setOrientation(RIGHT_DOWN);
-		Character::set_directionVect(1.00, 1.00);
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Right) && (Keyboard::isKeyPressed(Keyboard::Up)))
-	{
-		setOrientation(RIGHT_UP);
-		Character::set_directionVect(1.00, -1.00);
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Right))
-	{
-		setOrientation(RIGHT);
-		Character::set_directionVect(1.00, Character::get_directionVect().y);
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Up))
-	{
-		setOrientation(UP);
-		Character::set_directionVect(Character::get_directionVect().x, -1.00);
-	}
-	else if (Keyboard::isKeyPressed(Keyboard::Down))
-	{
-		setOrientation(DOWN);
-		Character::set_directionVect(Character::get_directionVect().x, 1.00);
-	}
+	return position_;
 }
+
+
+//void Player::movePlayer(Time dt)
+//{
+//	
+//	if (Player::getOrientation() == LEFT)
+//	{
+//		(Character::getSprite()).move(dt, -1.f, 0.f);// -= dt.asSeconds() * Player::getSpeed();
+//	}
+//	if (Player::getOrientation() == RIGHT)
+//	{
+//		position_.x += dt.asSeconds() * Player::getSpeed();
+//	}
+//	if (Player::getOrientation() == UP)
+//	{
+//		position_.y -= dt.asSeconds() * Player::getSpeed();
+//	}
+//	if (Player::getOrientation() == DOWN)
+//	{
+//		position_.y += dt.asSeconds() * Player::getSpeed();
+//	}
+//
+//	// moves shape representation to that location
+//	Player::getSprite().setPosition(position_);
+//}
+//
+//void Player::updatePlayer(Time dt)
+//{
+//	if (Keyboard::isKeyPressed(Keyboard::Left))
+//	{
+//		setOrientation(LEFT);
+//	}
+//
+//	if (Keyboard::isKeyPressed(Keyboard::Right))
+//	{
+//		setOrientation(RIGHT);
+//	}
+//
+//	if (Keyboard::isKeyPressed(Keyboard::Up))
+//	{
+//		setOrientation(UP);
+//	}
+//
+//	if (Keyboard::isKeyPressed(Keyboard::Down))
+//	{
+//		setOrientation(DOWN);
+//	}
+//}

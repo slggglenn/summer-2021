@@ -3,12 +3,16 @@
 #include "Test.h"
 #include "Character.h"
 
+
 class Player : public Character
 {
 private:
-	const std::string text_loc = "graphics/eevee.png";
+	std::string text_loc = "graphics / player.png";
+	Vector2f position_;
 
 public:
-	Player(float new_x, float new_y);
-	void updateDirection();
+	Player(float new_x, float new_y, std::string text_loc);
+	/*void movePlayer(Time dt);
+	void updatePlayer(Time dt);*/
+	Vector2f getPosition();
 };
