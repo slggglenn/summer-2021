@@ -75,7 +75,7 @@ void Character::setSprite()
 		break;
 	}
 
-	sprite_.setScale(3, 3);
+	sprite_.setScale(6, 6);
 }
 
 float Character::getSpeed()
@@ -95,7 +95,7 @@ void Character::setOrientation(Direction new_orient)
 
 void Character::isMoving(bool moving)
 {
-	if (moving) speed_ = 80;
+	if (moving) speed_ = 160;
 	else speed_ = 0;
 }
 

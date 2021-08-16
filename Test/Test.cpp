@@ -3,52 +3,74 @@
 #include "Character.h"
 #include "Player.h"
 #include "Mon.h"
+#include "Background.h"
 #include "Test.h"
 #include <iostream>
 
 int main()
 {
     VideoMode vm(1920, 1080);
-    RenderWindow window(vm, "Test", Style::Fullscreen);
+    RenderWindow window(vm, "Test");
+    window.setSize(sf::Vector2u(640, 360));
+
+    //static const std::vector<VideoMode>& arr = vm.getFullscreenModes();
+   // vm = arr[1];
 
     Player player = Player(SCRN_W / 2, SCRN_H / 3, "graphics/eevee.png");
     //Mon eevee = Mon(SCRN_W / 2, SCRN_H / 2, "graphics/eevee.png"); // don't use other slash (gets yellow highlighted) recognized as escape characters
 
     Clock clock;
-    const unsigned int TILE_SIZE = 32;
+    const unsigned int TILE_SIZE = 64;
     const unsigned int TILE_TYPES = 4;
     VertexArray background;
-    Texture backgroundTexture;
-    
-    if (!backgroundTexture.loadFromFile("graphics/tilesetCut.png")) std::cout << "ERROR" << std::endl;
+    Texture ssTrans;
+    Image spritesheet;
 
-    background.setPrimitiveType(Quads);
-    background.resize((SCRN_H / TILE_SIZE) * (SCRN_W / TILE_SIZE) * TILE_TYPES);
+    if (!spritesheet.loadFromFile("graphics/tilesetCut.png")) std::cout << "ERROR" << std::endl;
+    spritesheet.createMaskFromColor(Color(255, 255, 255, 0), 0);
+    ssTrans.loadFromImage(spritesheet);
 
-    int currVertex = 0;
-    for (unsigned int c = 0; c < SCRN_W / TILE_SIZE; c++) {
+    makeBackground(background);
 
-        for (unsigned int r = 0; r < SCRN_H / TILE_SIZE; r++) {
-            background[currVertex].position = Vector2f(c * TILE_SIZE, r * TILE_SIZE); // 96 2240, 128 2272
-            background[currVertex + 1].position = Vector2f((c * TILE_SIZE) + TILE_SIZE, r * TILE_SIZE);
-            background[currVertex + 2].position = Vector2f((c * TILE_SIZE) + TILE_SIZE, (r * TILE_SIZE) + TILE_SIZE);
-            background[currVertex + 3].position = Vector2f(c * TILE_SIZE, (r * TILE_SIZE) + TILE_SIZE);
+    // other stuff
+    Sprite tree, sapling, grass, mushroom, bush, fruit, sprout, flowers;
+    tree.setTexture(ssTrans);
+    sapling.setTexture(ssTrans);
+    grass.setTexture(ssTrans);
+    mushroom.setTexture(ssTrans);
+    bush.setTexture(ssTrans);
+    fruit.setTexture(ssTrans);
+    sprout.setTexture(ssTrans);
+    flowers.setTexture(ssTrans);
 
 
-            // TO DO: scale up background sprites, increas TILE_SIZE, change resize of vertex array
-            // get correct coordinates
-            srand((int)time(0) + r * c - r);
-            int eitherGrassFlower = (rand() % TILE_SIZE);
-            int verticalOffset = eitherGrassFlower * TILE_SIZE;
+    tree.setTextureRect(IntRect(24, 3088, 83, 108));
+    sapling.setTextureRect(IntRect(142, 3122, 40, 76));
+    grass.setTextureRect(IntRect(400, 4489, 33, 35));
+    mushroom.setTextureRect(IntRect(79, 4618, 34, 33));
+    bush.setTextureRect(IntRect(208, 14200, 34, 38));
+    fruit.setTextureRect(IntRect(321, 3130, 63, 51));
+    sprout.setTextureRect(IntRect(270, 5710, 33, 27));
+    flowers.setTextureRect(IntRect(189, 4860, 67, 63));
 
-            background[currVertex].texCoords = Vector2f(0, verticalOffset);
-            background[currVertex + 1].texCoords = Vector2f(TILE_SIZE, verticalOffset);
-            background[currVertex + 2].texCoords = Vector2f(TILE_SIZE, verticalOffset + TILE_SIZE);
-            background[currVertex + 3].texCoords = Vector2f(0, verticalOffset + TILE_SIZE);
+    tree.setScale(3, 3);
+    sapling.setScale(3, 3);
+    grass.setScale(3, 3);
+    mushroom.setScale(3, 3);
+    bush.setScale(3, 3);
+    fruit.setScale(3, 3);
+    sprout.setScale(3, 3);
+    flowers.setScale(3, 3);
 
-            currVertex += 4; // incrementing for # of vertices in quad
-        }
-    }
+    tree.setPosition(SCRN_W * 2/ 3, SCRN_H / 4);
+    sapling.setPosition((SCRN_W * 2/ 3) + 20, (SCRN_H / 4) + 20);
+    grass.setPosition(SCRN_W / 3, SCRN_H / 3);
+    mushroom.setPosition((SCRN_W * 2 / 3) + 40, (SCRN_H / 4) + 10);
+    bush.setPosition(SCRN_W / 2, 3 * SCRN_H / 4);
+    fruit.setPosition(SCRN_W * 2 / 3, (SCRN_H / 4) - 60);
+    sprout.setPosition((SCRN_W * 2 / 3) - 20, (SCRN_H / 4) - 30);
+    flowers.setPosition(SCRN_W / 2, SCRN_H / 5);
+
     // draw background with texture ref
 
     while (window.isOpen())
@@ -99,7 +121,15 @@ int main()
 
         // eevee sprite: 652/2/4/2, 267/11
         window.clear();
-        window.draw(background, &backgroundTexture);
+        window.draw(background, &ssTrans);
+        window.draw(tree);
+        window.draw(sapling);
+        window.draw(grass);
+        window.draw(mushroom);
+        window.draw(bush);
+        window.draw(fruit);
+        window.draw(sprout);
+        window.draw(flowers);
         window.draw(player.getSprite()); // Make sprite bigger and remove background
 
         // show everything just drawn
