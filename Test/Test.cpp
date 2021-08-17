@@ -26,8 +26,8 @@ int main()
     Texture ssTrans;
     Image spritesheet;
 
-    if (!spritesheet.loadFromFile("graphics/tilesetCut.png")) std::cout << "ERROR" << std::endl;
-    spritesheet.createMaskFromColor(Color(255, 255, 255, 0), 0);
+    if (!spritesheet.loadFromFile("graphics/SPRITESHEET.png")) std::cout << "ERROR" << std::endl;
+    spritesheet.createMaskFromColor(Color::White, 0);
     ssTrans.loadFromImage(spritesheet);
 
     makeBackground(background);
@@ -44,32 +44,32 @@ int main()
     flowers.setTexture(ssTrans);
 
 
-    tree.setTextureRect(IntRect(24, 3088, 83, 108));
-    sapling.setTextureRect(IntRect(142, 3122, 40, 76));
-    grass.setTextureRect(IntRect(400, 4489, 33, 35));
-    mushroom.setTextureRect(IntRect(79, 4618, 34, 33));
-    bush.setTextureRect(IntRect(208, 14200, 34, 38));
-    fruit.setTextureRect(IntRect(321, 3130, 63, 51));
-    sprout.setTextureRect(IntRect(270, 5710, 33, 27));
-    flowers.setTextureRect(IntRect(189, 4860, 67, 63));
+    tree.setTextureRect(IntRect(10, 1535, 43, 55));
+    sapling.setTextureRect(IntRect(70, 1553, 20, 37));
+    grass.setTextureRect(IntRect(199, 2236, 19, 18));
+    mushroom.setTextureRect(IntRect(40, 2301, 16, 17));
+    bush.setTextureRect(IntRect(106, 6998, 18, 15));
+    fruit.setTextureRect(IntRect(159, 1557, 34, 27));
+    sprout.setTextureRect(IntRect(135, 2847, 16, 14));
+    flowers.setTextureRect(IntRect(95, 2420, 33, 33));
 
-    tree.setScale(3, 3);
-    sapling.setScale(3, 3);
-    grass.setScale(3, 3);
-    mushroom.setScale(3, 3);
-    bush.setScale(3, 3);
-    fruit.setScale(3, 3);
-    sprout.setScale(3, 3);
-    flowers.setScale(3, 3);
+    tree.setScale(6, 6);
+    sapling.setScale(6, 6);
+    grass.setScale(6, 6);
+    mushroom.setScale(6, 6);
+    bush.setScale(6, 6);
+    fruit.setScale(6, 6);
+    sprout.setScale(6, 6);
+    flowers.setScale(6, 6);
 
-    tree.setPosition(SCRN_W * 2/ 3, SCRN_H / 4);
-    sapling.setPosition((SCRN_W * 2/ 3) + 20, (SCRN_H / 4) + 20);
+    tree.setPosition((SCRN_W * 2/ 3) + 40, (SCRN_H / 4) + 50);
+    sapling.setPosition(SCRN_W * 3 / 5, (SCRN_H / 4) + 20);
     grass.setPosition(SCRN_W / 3, SCRN_H / 3);
-    mushroom.setPosition((SCRN_W * 2 / 3) + 40, (SCRN_H / 4) + 10);
+    mushroom.setPosition(5 * SCRN_W / 6, 2 * SCRN_H / 5);
     bush.setPosition(SCRN_W / 2, 3 * SCRN_H / 4);
-    fruit.setPosition(SCRN_W * 2 / 3, (SCRN_H / 4) - 60);
-    sprout.setPosition((SCRN_W * 2 / 3) - 20, (SCRN_H / 4) - 30);
-    flowers.setPosition(SCRN_W / 2, SCRN_H / 5);
+    fruit.setPosition((SCRN_W * 2 / 3) + 80, (2 * SCRN_H / 7) + 70);
+    sprout.setPosition((SCRN_W * 3 / 5) + 100, (SCRN_H / 4) + 80);
+    flowers.setPosition(SCRN_W / 3, SCRN_H / 7);
 
     // draw background with texture ref
 

@@ -20,10 +20,10 @@ void makeBackground(VertexArray &background) {
             int eitherGrassFlower = (rand() % TILE_SIZE);
             int verticalOffset = eitherGrassFlower * TILE_SIZE*/; // 192 4476, 256 4539
 
-            background[currVertex].texCoords = Vector2f(193, 4477);
-            background[currVertex + 1].texCoords = Vector2f(257, 4477);
-            background[currVertex + 2].texCoords = Vector2f(257, 4540);
-            background[currVertex + 3].texCoords = Vector2f(193, 4540);
+            background[currVertex].texCoords = Vector2f(96, 2230);
+            background[currVertex + 1].texCoords = Vector2f(128, 2230);
+            background[currVertex + 2].texCoords = Vector2f(128, 2262);
+            background[currVertex + 3].texCoords = Vector2f(96, 2262);
 
             currVertex += 4; // incrementing for # of vertices in quad
         }
