@@ -16,8 +16,8 @@ int main()
     //static const std::vector<VideoMode>& arr = vm.getFullscreenModes();
    // vm = arr[1];
 
-    Player player = Player(SCRN_W / 2, SCRN_H / 3, "graphics/eevee.png");
-    //Mon eevee = Mon(SCRN_W / 2, SCRN_H / 2, "graphics/eevee.png"); // don't use other slash (gets yellow highlighted) recognized as escape characters
+    //Player player = Player(SCRN_W / 2, SCRN_H / 3, "graphics/player.png");
+    Mon eevee = Mon(SCRN_W / 2, SCRN_H / 2, "graphics/eevee.png"); // don't use other slash (gets yellow highlighted) recognized as escape characters
 
     Clock clock;
     const unsigned int TILE_SIZE = 64;
@@ -92,7 +92,7 @@ int main()
             window.close();
         }
 
-        Event event;
+       /* Event event;
 
         while (window.pollEvent(event))
         {
@@ -100,21 +100,33 @@ int main()
             {
                 player.isMoving(true);
                 player.setSprite();
-                player.updateDirection();
+                player.updateDirection(); // try switching with setSprite to see if detects LEFT_UP
             }
             if (event.type == Event::KeyReleased)
             {
                 player.isMoving(false);
                 player.zeroDirection();
             }
-        }
+        }*/
 
 
-        /* update scene */
 
         // update time
         Time dt = clock.restart();
-        player.update(dt);
+
+        int steps = eevee.randSteps(dt);
+        if (steps) {
+            Direction dir = eevee.randDir(dt);
+            eevee.setOrientation(dir);
+            if (dir == LEFT || dir == RIGHT) {
+                eevee.updatePosition(steps, eevee.getPosition().y);
+            }
+            else {
+                eevee.updatePosition(eevee.getPosition().x, steps);
+            } // update position vector for unique +- 1, update speed = 0 or 160 or whatever
+        }
+       // player.update(dt);
+        eevee.update(dt); // changes position based on speed
 
 
         /* draw scene */
@@ -130,7 +142,8 @@ int main()
         window.draw(fruit);
         window.draw(sprout);
         window.draw(flowers);
-        window.draw(player.getSprite()); // Make sprite bigger and remove background
+        window.draw(eevee.getSprite());
+       // window.draw(player.getSprite()); // Make sprite bigger and remove background
 
         // show everything just drawn
         window.display();
