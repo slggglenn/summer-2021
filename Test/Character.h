@@ -34,4 +34,6 @@ public:
 	void update(Time dt);
 	// randomly generated movement
 	// set orientation
+	void setDirection(Direction dir);
+	Vector2f getDirection();
 };

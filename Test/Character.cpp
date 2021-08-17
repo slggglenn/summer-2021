@@ -32,6 +32,11 @@ FloatRect Character::getSpriteBounds()
 	return sprite_.getGlobalBounds();
 }
 
+Vector2f Character::getDirection()
+{
+	return direction;
+}
+
 // gets the texture
 Texture Character::getTexture()
 {
@@ -95,10 +100,35 @@ void Character::setOrientation(Direction new_orient)
 
 void Character::isMoving(bool moving)
 {
-	if (moving) speed_ = 160;
+	if (moving) speed_ = 130;
 	else speed_ = 0;
 }
 
+//void Character::setDirection(Direction dir) 
+//{
+//	direction.x = ;
+//
+//}
+
+void Character::setDirection(Direction dir)
+{
+	switch (dir) {
+		case LEFT:
+			direction.x = -1;
+			break;
+		case RIGHT:
+			direction.x = 1;
+			break;
+		case UP:
+			direction.x = -1; // others?
+			break;
+		case DOWN:
+			direction.y = 1;
+			break;
+	}
+}
+
+// this should be moved to player!!
 Vector2f Character::updateDirection()
 {
 

@@ -9,11 +9,19 @@ class Mon : public Character
 private:
 	std::string text_loc = "graphics / eevee.png"; // make this pickable with method/initializer
 	State state_;
+	FloatRect hitbox_;
+	unsigned int stepCounter_;
 
 public:
 	Mon(float new_x, float new_y, std::string text_loc); //https://stackoverflow.com/questions/14693745/string-as-parameter
 	Direction randDir(Time dt);
 	int randSteps(Time dt);
+	unsigned int get_stepCounter();
+	void set_stepCounter(unsigned int steps);
+	State getState();
+	FloatRect getGlobalHitbox();
+	void setState(State state);
+	bool willCollide(Time dt, Sprite obj, FloatRect objHB);
 
 	// randomly generated movement
 };
