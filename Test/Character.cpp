@@ -68,7 +68,7 @@ void Character::setSprite()
 	case UP:
 		/*if (Keyboard::isKeyPressed(Keyboard::Left)) sprite_.setTextureRect(IntRect(79, 182, 23, 23));
 		else if (Keyboard::isKeyPressed(Keyboard::Right)) sprite_.setTextureRect(IntRect(75, 105, 22, 22));
-		else*/ sprite_.setTextureRect(IntRect(73, 51, 22, 22));
+		else*/ sprite_.setTextureRect(IntRect(73, 51, 24, 24));
 		break;
 	case LEFT_UP:
 		sprite_.setTextureRect(IntRect(79, 182, 23, 23));
@@ -120,7 +120,7 @@ void Character::setDirection(Direction dir)
 			direction.x = 1;
 			break;
 		case UP:
-			direction.x = -1; // others?
+			direction.y = -1; // others?
 			break;
 		case DOWN:
 			direction.y = 1;
