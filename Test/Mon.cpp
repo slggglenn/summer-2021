@@ -1,5 +1,6 @@
 #include "Character.h"
 #include "Mon.h"
+#include <iostream>
 
 // constructor
 Mon::Mon(float new_x, float new_y, std::string text_loc) : Character(new_x, new_y, text_loc)
@@ -9,9 +10,23 @@ Mon::Mon(float new_x, float new_y, std::string text_loc) : Character(new_x, new_
 	Character::updatePosition(new_x, new_y);
 	state_ = IDLE;
 	stepCounter_ = 0;
-	hitbox_ = { 3, 3, 20, 20 }; // how to set location and ave follow?
+	hitbox_ = { 3, 3, 18, 18 }; // how to set location and ave follow?
 	getGlobalHitbox(); // sets hitbox to sprite location
+	rep.setSize(Vector2f(18 * 6, 18 * 6));
+	rep.setFillColor(Color(2, 207, 188, 40));
+	updateRep();
+
 };
+
+
+void Mon::updateRep()
+{
+	rep.setPosition(Character::getSprite().getPosition());
+}
+
+RectangleShape Mon::getRep() {
+	return rep;
+}
 
 FloatRect Mon::getGlobalHitbox()
 {
@@ -58,14 +73,13 @@ Direction Mon::randDir(Time dt)
 	srand((int) time(0));
 	int randFour = rand() % 4;
 	return (Direction) randFour;
-
 }
 
 int Mon::randSteps(Time dt)
 {
 	srand((int)time(0)); // make these different?
 	int randTen = rand() % 50; // 0-49
-	state_ = MOVING; // move?
+	state_ = MOVING;
 	if (randTen > 0 && randTen <= 5) {
 		stepCounter_ = 2;
 		return 2;

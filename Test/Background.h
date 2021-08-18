@@ -1,5 +1,8 @@
 #pragma once
 #include "Test.h"
+#include "Character.h"
+#include "Mon.h"
+#include <iostream>
 
 #define TREE_INDEX (0)
 #define SAPLING_INDEX (1)
@@ -23,6 +26,7 @@ private:
 	Image spritesheet;
 	Sprite sprites[NUM_OBJECT_SPRITES]; // somehow associate index number with what type of obj they are
 	FloatRect hitboxes[NUM_OBJECT_SPRITES + 4];
+	RectangleShape reps[NUM_OBJECT_SPRITES + 4];
 
 public:
 	Scene();
@@ -34,4 +38,5 @@ public:
 	Sprite* getSprites();
 	FloatRect* getHitboxes();
 	bool checkCollisions(Mon mon, Time dt);
+	RectangleShape* getReps();
 };

@@ -15,18 +15,15 @@ private:
 
 public:
 	Character(float x_start, float y_start, const std::string img_loc); //https://stackoverflow.com/questions/14693745/string-as-parameter
-	Vector2f getPosition(); // vector?
+	Vector2f getPosition();
 	void updatePosition(float new_x, float new_y);
-	//Animation setAnimation()
 	FloatRect getSpriteBounds(); // !!! MODIFY !!!
-	//void setPosition()
 	Texture getTexture();
 	void setTexture(std::string img_loc);
 	Sprite getSprite(); // !!! MODIFY !!!
 	void setSprite(); // !!! MODIFY !!!
 	void setOrientation(Direction new_orient);
 	Direction getOrientation();
-	//Direction* setmovementMatrix(Direction x, Direction y);
 	Vector2f updateDirection();
 	Vector2f zeroDirection();
 	float getSpeed();

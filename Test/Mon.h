@@ -11,6 +11,7 @@ private:
 	State state_;
 	FloatRect hitbox_;
 	unsigned int stepCounter_;
+	RectangleShape rep;
 
 public:
 	Mon(float new_x, float new_y, std::string text_loc); //https://stackoverflow.com/questions/14693745/string-as-parameter
@@ -22,6 +23,8 @@ public:
 	FloatRect getGlobalHitbox();
 	void setState(State state);
 	bool willCollide(Time dt, Sprite obj, FloatRect objHB);
+	void updateRep();
+	RectangleShape getRep();
 
 	// randomly generated movement
 };

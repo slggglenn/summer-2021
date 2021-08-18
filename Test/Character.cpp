@@ -7,12 +7,8 @@ Character::Character(float x_start, float y_start, const std::string img_loc) {
 	position_.x = x_start;
 	position_.y = y_start; // do i need parameter for this really?? when is orientation used
 	setTexture(img_loc);
-	sprite_.setTexture(texture_); //652/2/4/2 = 40.75, 267/11 = ~24.3 22x22
+	sprite_.setTexture(texture_);
 	setSprite();
-	//cout << img_loc;
-
-	// 73,29-95,29 --> 73, 47 - 95,47
-	//sprite_.setPosition(position_);
 }
 
 // gets position of the shape representation
@@ -61,22 +57,32 @@ void Character::setSprite()
 {
 	switch (orientation_) {
 	case DOWN:
-		if (Keyboard::isKeyPressed(Keyboard::Left)) sprite_.setTextureRect(IntRect(73, 80, 22, 22));
-		else if (Keyboard::isKeyPressed(Keyboard::Right)) sprite_.setTextureRect(IntRect(75, 105, 22, 22));
-		else sprite_.setTextureRect(IntRect(73, 29, 22, 22)); // parameters for coordinates!!
+		if (Keyboard::isKeyPressed(Keyboard::Left)) sprite_.setTextureRect(IntRect(78, 130, 21, 20));
+		else if (Keyboard::isKeyPressed(Keyboard::Right)) sprite_.setTextureRect(IntRect(77, 157, 20, 22));
+		else sprite_.setTextureRect(IntRect(73, 29, 20, 19)); // parameters for coordinates!!
 		break;
 	case UP:
-		/*if (Keyboard::isKeyPressed(Keyboard::Left)) sprite_.setTextureRect(IntRect(79, 182, 23, 23));
-		else if (Keyboard::isKeyPressed(Keyboard::Right)) sprite_.setTextureRect(IntRect(75, 105, 22, 22));
-		else*/ sprite_.setTextureRect(IntRect(73, 51, 24, 24));
+		if (Keyboard::isKeyPressed(Keyboard::Left)) sprite_.setTextureRect(IntRect(81, 182, 18, 22));
+		else if (Keyboard::isKeyPressed(Keyboard::Right)) sprite_.setTextureRect(IntRect(85, 209, 17, 21));
+		else sprite_.setTextureRect(IntRect(75, 57, 20, 20));
 		break;
 	case LEFT_UP:
-		sprite_.setTextureRect(IntRect(79, 182, 23, 23));
+		sprite_.setTextureRect(IntRect(81, 182, 18, 22));
+		break;
+	case LEFT_DOWN:
+		sprite_.setTextureRect(IntRect(78, 130, 21, 20));
+		break;
+	case RIGHT_UP:
+		sprite_.setTextureRect(IntRect(85, 209, 17, 21));
+		break;
+	case RIGHT_DOWN:
+		sprite_.setTextureRect(IntRect(77, 157, 20, 22));
+		break;
 	case LEFT:
-		sprite_.setTextureRect(IntRect(73, 80, 22, 22));
+		sprite_.setTextureRect(IntRect(75, 80, 21, 22));
 		break;
 	case RIGHT:
-		sprite_.setTextureRect(IntRect(75, 105, 22, 22));
+		sprite_.setTextureRect(IntRect(76, 105, 22, 21));
 		break;
 	}
 
@@ -103,12 +109,6 @@ void Character::isMoving(bool moving)
 	if (moving) speed_ = 130;
 	else speed_ = 0;
 }
-
-//void Character::setDirection(Direction dir) 
-//{
-//	direction.x = ;
-//
-//}
 
 void Character::setDirection(Direction dir)
 {
@@ -173,34 +173,12 @@ Vector2f Character::zeroDirection()
 	return direction;
 }
 
-//Direction* Character::setmovementMatrix(Direction x, Direction y)
-//{
-//	movementMatrix[0] = x;
-//	movementMatrix[1] = y;
-//}
-
 // updates position for movement speed, current direction, and time
 void Character::update(Time dt)
 {
 	position_.x += dt.asSeconds() * speed_ * direction.x;
 	position_.y += dt.asSeconds() * speed_ * direction.y;
-	//if (orientation_ == LEFT)
-	/*{
-		position_.x -= dt.asSeconds() * speed_;
-	}
-	if (orientation_ == RIGHT)
-	{
-		position_.x += dt.asSeconds() * speed_;
-	}
-	if (orientation_ == UP)
-	{
-		position_.y -= dt.asSeconds() * speed_;
-	}
-	if (orientation_ == DOWN)
-	{
-		position_.y += dt.asSeconds() * speed_;
-	}*/
-
+	
 	// moves shape representation to that location
 	sprite_.setPosition(position_);
 }
