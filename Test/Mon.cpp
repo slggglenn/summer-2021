@@ -40,14 +40,10 @@ FloatRect Mon::getGlobalHitbox()
 	return Character::getSprite().getTransform().transformRect(hitbox_);
 }
 
-bool Mon::willCollide(Time dt, Sprite obj, FloatRect objHB)
+bool Mon::willCollide(Sprite obj, FloatRect objHB)
 {
-	/*Character::updatePosition(Character::getPosition().x + dt.asSeconds() * Character::getSpeed() * Character::getDirection().x,
-		Character::getPosition().y + dt.asSeconds() * Character::getSpeed() * Character::getDirection().y);*/
-	std::cout << "Character: " << getGlobalHitbox().left << ", " << getGlobalHitbox().left << std::endl;
-	std::cout << "Obj: " << objHB.left << ", " << objHB.top << std::endl;
-	if (getGlobalHitbox().intersects(obj.getTransform().transformRect(objHB))) //something about this isn't working
-	{
+	return (getGlobalHitbox().intersects(obj.getTransform().transformRect(objHB))); //something about this isn't working
+	/*{
 		rep.setFillColor(Color(201, 114, 144, 40));
 		std::cout << "collision!";
 		return true;
@@ -56,7 +52,7 @@ bool Mon::willCollide(Time dt, Sprite obj, FloatRect objHB)
 	{
 		rep.setFillColor(Color(2, 207, 188, 40));
 		return false;
-	}
+	}*/
 	/*Character::updatePosition(Character::getPosition().x - dt.asSeconds() * Character::getSpeed() * Character::getDirection().x,
 		Character::getPosition().y - dt.asSeconds() * Character::getSpeed() * Character::getDirection().y);*/
 	// resets with our update (eevee.getSprite()) command in main none the wiser
@@ -86,8 +82,11 @@ State Mon::getState()
 Direction Mon::randDir(Time dt)
 {
 	srand((int) time(0));
-	int randFour = rand() % 4;
-	return (Direction) randFour;
+	int randFour = rand() % 2; // 4
+	if (!randFour) return UP;
+	else return DOWN;
+	//return UP;
+	//return (Direction) randFour;
 }
 
 int Mon::randSteps(Time dt)
@@ -113,3 +112,6 @@ int Mon::randSteps(Time dt)
 		return 0;
 	}
 }
+
+// getTransform().transformRect(m_hitbox);
+//const bool colliding = player.getGlobalHitbox().intersects(enemy.getGlobalHitbox());

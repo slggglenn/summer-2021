@@ -101,24 +101,24 @@ void Scene::makeHitboxes() {
 
 }
 
-bool Scene::checkCollisions(Mon mon, Time dt)
-{
-    //Sprite possibleCollisions[NUM_OBJECT_SPRITES]; // use this later
-    //for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++)
-    //{
-    if (mon.willCollide(dt, sprites[TREE_INDEX], hitboxes[TREE_INDEX]))
-    {
-        return true; // what if multiple collisions? only first returned
-      //  possibleCollisions[i] = sprites[i];
-    }
-    else return false;
-    //}
-
-    // get mon's position
-    // loop through sprites to see if sprite position within radius of mon's next move
-    // for each one that is, check to see if HB will intersect
-    // if any potential collision, false
-}
+//bool Scene::checkCollisions(Mon mon, Time dt)
+//{
+//    //Sprite possibleCollisions[NUM_OBJECT_SPRITES]; // use this later
+//    //for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++)
+//    //{
+//    if (mon.willCollide(dt, sprites[TREE_INDEX], hitboxes[TREE_INDEX]))
+//    {
+//        return true; // what if multiple collisions? only first returned
+//      //  possibleCollisions[i] = sprites[i];
+//    }
+//    else return false;
+//    //}
+//
+//    // get mon's position
+//    // loop through sprites to see if sprite position within radius of mon's next move
+//    // for each one that is, check to see if HB will intersect
+//    // if any potential collision, false
+//}
 
 VertexArray Scene::getBackground() { return background; }
 

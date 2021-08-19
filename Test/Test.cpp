@@ -157,10 +157,14 @@ int main()
         }
         
         // collisions checking
-        if (eevee.willCollide(dt, fieldScene.getSprites()[TREE_INDEX], fieldScene.getHitboxes()[TREE_INDEX]))
+        if (eevee.willCollide(fieldScene.getSprites()[TREE_INDEX], fieldScene.getHitboxes()[TREE_INDEX]))
         {
+            std::cout << "COLLISION";
             Direction old = eevee.getOrientation();
             while (eevee.getOrientation() == old) { eevee.setOrientation(eevee.randDir(dt)); }
+        }
+        else {
+            std::cout << "false";
         }
         //if (fieldScene.checkCollisions(eevee, dt))
         //{
@@ -170,7 +174,7 @@ int main()
         //    while (eevee.getOrientation() == old) { eevee.setOrientation(eevee.randDir(dt));}
         //}
         eevee.update(dt); // if no collisions, moves as normal
-        eevee.updateHitbox(); // right place??
+       // eevee.updateHitbox(); // right place??
 
         // reduces step counter after moving
         if (eevee.getState() == MOVING) eevee.set_stepCounter(eevee.get_stepCounter() - 1);

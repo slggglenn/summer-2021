@@ -22,7 +22,7 @@ public:
 	State getState();
 	FloatRect getGlobalHitbox();
 	void setState(State state);
-	bool willCollide(Time dt, Sprite obj, FloatRect objHB);
+	bool willCollide(Sprite obj, FloatRect objHB);
 	void updateRep();
 	void updateHitbox();
 	RectangleShape getRep();
