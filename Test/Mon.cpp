@@ -11,14 +11,48 @@ Mon::Mon(float new_x, float new_y, std::string text_loc) : Character(new_x, new_
 	state_ = IDLE;
 	stepCounter_ = 0;
 	hitbox_ = { 3, 3, 18, 18 }; // how to set location and ave follow?
-	getGlobalHitbox(); // sets hitbox to sprite location
-	updateHitbox();
+	//getGlobalHitbox(); // sets hitbox to sprite location
+	//updateHitbox();
 	rep.setSize(Vector2f(18 * 6, 18 * 6));
 	rep.setFillColor(Color(2, 207, 188, 40));
 	updateRep();
 
 };
 
+
+Direction Mon::oppDirection(Direction dir)
+{
+	switch (dir) {
+	case LEFT:
+		return RIGHT;
+		break;
+	case RIGHT:
+		return LEFT;
+		break;
+	case UP:
+		return DOWN;
+		break;
+	case DOWN:
+		return UP;
+		break;
+	case LEFT_UP:
+		return RIGHT_DOWN;
+		break;
+	case LEFT_DOWN:
+		return RIGHT_UP;
+		break;
+	case RIGHT_DOWN:
+		return LEFT_UP;
+		break;
+	case RIGHT_UP:
+		return LEFT_DOWN;
+		break;
+
+	}
+}
+// hitbox position
+// {} but first two are x and y from sprite's left
+// when colliding, getGlobalHitbox
 
 void Mon::updateRep()
 {
@@ -43,7 +77,7 @@ FloatRect Mon::getGlobalHitbox()
 bool Mon::willCollide(Sprite obj, FloatRect objHB)
 {
 	return (getGlobalHitbox().intersects(obj.getTransform().transformRect(objHB))); //something about this isn't working
-	/*{
+	/*{sprites[i].getTransform().transformRect(hitboxes[i]);
 		rep.setFillColor(Color(201, 114, 144, 40));
 		std::cout << "collision!";
 		return true;
@@ -82,11 +116,8 @@ State Mon::getState()
 Direction Mon::randDir(Time dt)
 {
 	srand((int) time(0));
-	int randFour = rand() % 2; // 4
-	if (!randFour) return UP;
-	else return DOWN;
-	//return UP;
-	//return (Direction) randFour;
+	int randFour = rand() % 4;
+	return (Direction) randFour;
 }
 
 int Mon::randSteps(Time dt)

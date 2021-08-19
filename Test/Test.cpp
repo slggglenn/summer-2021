@@ -155,23 +155,47 @@ int main()
                 eevee.isMoving(false);
             }
         }
+
+
         
         // collisions checking
-        if (eevee.willCollide(fieldScene.getSprites()[TREE_INDEX], fieldScene.getHitboxes()[TREE_INDEX]))
-        {
-            std::cout << "COLLISION";
-            Direction old = eevee.getOrientation();
-            while (eevee.getOrientation() == old) { eevee.setOrientation(eevee.randDir(dt)); }
-        }
-        else {
-            std::cout << "false";
-        }
-        //if (fieldScene.checkCollisions(eevee, dt))
+        //if (eevee.willCollide(fieldScene.getSprites()[TREE_INDEX], fieldScene.getHitboxes()[TREE_INDEX]))
         //{
-        //    // will stop moving; effectively resets movement
-        //    //eevee.set_stepCounter(0);
+        //    std::cout << "COLLISION";
+        //    fieldScene.getReps()[TREE_INDEX].setFillColor(Color(201, 114, 144, 40));
         //    Direction old = eevee.getOrientation();
-        //    while (eevee.getOrientation() == old) { eevee.setOrientation(eevee.randDir(dt));}
+        //    while (eevee.getOrientation() == old) { eevee.setOrientation(eevee.randDir(dt)); }
+        //    eevee.setDirection(eevee.getOrientation());
+        //    eevee.setSprite(); // isMoving??
+        //}
+
+        for (unsigned int i = 0; i < NUM_OBJECT_SPRITES + 4; i++)
+        {
+            if (eevee.willCollide(fieldScene.getSprites()[i], fieldScene.getHitboxes()[i])) // something added with this loop or implementation in Test.cpp that caused opengl
+            {
+                fieldScene.getReps()[i].setFillColor(Color(201, 114, 144, 40));
+                std::cout << "COLLISION";
+               // while (eevee.getOrientation() == old) { 
+                 //} // generated paused...jumped up and moved off !!
+                eevee.isMoving(false);
+                eevee.setDirection(eevee.oppDirection(eevee.getOrientation())); // generate opposite direction
+                eevee.isMoving(true);
+                eevee.setSprite(); // isMoving?? // what if multiple collisions? only first returned
+              //  possibleCollisions[i] = sprites[i];
+                break;
+            }
+            else {
+                fieldScene.getReps()[i].setFillColor(Color(2, 207, 188, 40));
+            }
+        }
+
+        //if (fieldScene.checkCollisions(eevee))
+        //{
+        //    std::cout << "COLLISION";
+        //    Direction old = eevee.getOrientation();
+        //    while (eevee.getOrientation() == old) { eevee.setOrientation(eevee.randDir(dt)); }
+        //    eevee.setDirection(eevee.getOrientation());
+        //    eevee.setSprite(); // isMoving??
         //}
         eevee.update(dt); // if no collisions, moves as normal
        // eevee.updateHitbox(); // right place??

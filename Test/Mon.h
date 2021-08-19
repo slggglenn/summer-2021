@@ -26,6 +26,7 @@ public:
 	void updateRep();
 	void updateHitbox();
 	RectangleShape getRep();
+	Direction oppDirection(Direction dir);
 
 	// randomly generated movement
 };

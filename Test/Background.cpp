@@ -46,6 +46,13 @@ void Scene::makeSprites() {
 
     // initializes properties:
     sprites[TREE_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));
+    sprites[TREE_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));
+    sprites[TREE_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));
+    sprites[TREE_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));
+    sprites[TREE_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));
+    sprites[TREE_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));
+
+
     sprites[SAPLING_INDEX].setTextureRect(IntRect(70, 1553, 20, 37));
     sprites[GRASS_INDEX].setTextureRect(IntRect(199, 2236, 19, 18));
     sprites[MUSHROOM_INDEX].setTextureRect(IntRect(40, 2301, 16, 17));
@@ -62,21 +69,26 @@ void Scene::makeSprites() {
     sprites[FRUIT_INDEX].setPosition((SCRN_W * 2 / 3) + 80, (2 * SCRN_H / 7) + 70);
     sprites[SPROUT_INDEX].setPosition((SCRN_W * 3 / 5) + 100, (SCRN_H / 4) + 80);
     sprites[FLOWERS_INDEX].setPosition(SCRN_W / 3, SCRN_H / 7);
+    sprites[lWINDOW_INDEX].setPosition(0, 0);
+    sprites[rWINDOW_INDEX].setPosition(1900, 0);
+    sprites[uWINDOW_INDEX].setPosition(0, 0);
+    sprites[bWINDOW_INDEX].setPosition(0, 1060);
 }
 
 void Scene::makeHitboxes() {
-    hitboxes[TREE_INDEX] = { (SCRN_W * 2 / 3) + 40, (SCRN_H / 4) + 50, 43, 55 };
-    hitboxes[SAPLING_INDEX] = { SCRN_W * 3 / 5, (SCRN_H / 4) + 20, 20, 37 };
-    hitboxes[GRASS_INDEX] = { SCRN_W / 3, SCRN_H / 3, 19, 18 };
-    hitboxes[MUSHROOM_INDEX] = { 5 * SCRN_W / 6, 2 * SCRN_H / 5, 16, 17 };
-    hitboxes[BUSH_INDEX] = { SCRN_W / 2, 3 * SCRN_H / 4, 18, 15 };
-    hitboxes[FRUIT_INDEX] = { (SCRN_W * 2 / 3) + 80, (2 * SCRN_H / 7) + 70, 34, 27 };
-    hitboxes[SPROUT_INDEX] = { (SCRN_W * 3 / 5) + 100, (SCRN_H / 4) + 80, 16, 14 };
-    hitboxes[FLOWERS_INDEX] = { SCRN_W / 3, SCRN_H / 7, 33, 33 };
+    // initial positions must be 0 so that they'll overlap when getTransform called ater
+    hitboxes[TREE_INDEX] = { 0, 0, 43, 55 };
+    hitboxes[SAPLING_INDEX] = { 0, 0, 20, 37 };
+    hitboxes[GRASS_INDEX] = { 0, 0, 19, 18 };
+    hitboxes[MUSHROOM_INDEX] = { 0, 0, 16, 17 };
+    hitboxes[BUSH_INDEX] = { 0, 0, 18, 15 };
+    hitboxes[FRUIT_INDEX] = { 0, 0, 34, 27 };
+    hitboxes[SPROUT_INDEX] = { 0, 0, 16, 14 };
+    hitboxes[FLOWERS_INDEX] = { 0, 0, 33, 33 };
     hitboxes[lWINDOW_INDEX] = { 0, 0, 1, 1080 };
-    hitboxes[rWINDOW_INDEX] = { 1900, 0, 1, 1080 };
+    hitboxes[rWINDOW_INDEX] = { 0, 0, 1, 1080 };
     hitboxes[uWINDOW_INDEX] = { 0, 0, 1920, 1 };
-    hitboxes[bWINDOW_INDEX] = { 0, 1060, 1920, 1 };
+    hitboxes[bWINDOW_INDEX] = { 0, 0, 1920, 1 };
 
     reps[TREE_INDEX].setSize(Vector2f(43 * 6, 55 * 6 ));
     reps[SAPLING_INDEX].setSize(Vector2f(20 * 6, 37 * 6));
@@ -93,32 +105,37 @@ void Scene::makeHitboxes() {
 
     // up until window stuff
     for (unsigned int i = 0; i < NUM_OBJECT_SPRITES + 4; i++) {
-        sprites[i].getTransform().transformRect(hitboxes[i]);
+        //sprites[i].getTransform().transformRect(hitboxes[i]);
         reps[i].setFillColor(Color(101, 5, 56, 70));
-        reps[i].setPosition(Vector2f(hitboxes[i].left, hitboxes[i].top));
+        reps[i].setPosition(Vector2f(sprites[i].getPosition().x, sprites[i].getPosition().y));
+        /*if (i == rWINDOW_INDEX) reps[i].setPosition(Vector2f(sprites[i].getPosition().x + ))*/
     }
 
 
 }
 
-//bool Scene::checkCollisions(Mon mon, Time dt)
-//{
-//    //Sprite possibleCollisions[NUM_OBJECT_SPRITES]; // use this later
-//    //for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++)
-//    //{
-//    if (mon.willCollide(dt, sprites[TREE_INDEX], hitboxes[TREE_INDEX]))
-//    {
-//        return true; // what if multiple collisions? only first returned
-//      //  possibleCollisions[i] = sprites[i];
-//    }
-//    else return false;
-//    //}
-//
-//    // get mon's position
-//    // loop through sprites to see if sprite position within radius of mon's next move
-//    // for each one that is, check to see if HB will intersect
-//    // if any potential collision, false
-//}
+bool Scene::checkCollisions(Mon mon)
+{
+    //Sprite possibleCollisions[NUM_OBJECT_SPRITES]; // use this later
+    for (unsigned int i = 0; i < NUM_OBJECT_SPRITES + 4; i++)
+    {
+        if (mon.willCollide(sprites[i], hitboxes[i])) // something added with this loop or implementation in Test.cpp that caused opengl
+        {
+            reps[i].setFillColor(Color(201, 114, 144, 40));
+            return true; // what if multiple collisions? only first returned
+          //  possibleCollisions[i] = sprites[i];
+        }
+        else {
+            reps[i].setFillColor(Color(2, 207, 188, 40));
+            return false;
+        }
+    }
+
+    // get mon's position
+    // loop through sprites to see if sprite position within radius of mon's next move
+    // for each one that is, check to see if HB will intersect
+    // if any potential collision, false
+}
 
 VertexArray Scene::getBackground() { return background; }
 

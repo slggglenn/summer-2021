@@ -16,15 +16,20 @@
 #define lWINDOW_INDEX (9)
 #define uWINDOW_INDEX (10)
 #define bWINDOW_INDEX (11)
-#define NUM_OBJECT_SPRITES (8)
+#define TREE1_INDEX (12)
+#define TREE2_INDEX (13)
+#define TREE3_INDEX (14)
+#define TREE4_INDEX (15)
+#define TREE5_INDEX (16)
+#define NUM_OBJECT_SPRITES (13) // added 5 more trees!!
 
 class Scene
 {
 private:
 	VertexArray background;
 	Texture ssTrans;
-	Image spritesheet;
-	Sprite sprites[NUM_OBJECT_SPRITES]; // somehow associate index number with what type of obj they are
+	Image spritesheet; // get rid of flower hitbox
+	Sprite sprites[NUM_OBJECT_SPRITES + 4]; // somehow associate index number with what type of obj they are
 	FloatRect hitboxes[NUM_OBJECT_SPRITES + 4];
 	RectangleShape reps[NUM_OBJECT_SPRITES + 4];
 
@@ -37,6 +42,6 @@ public:
 	Texture& getTexture();
 	Sprite* getSprites();
 	FloatRect* getHitboxes();
-	bool checkCollisions(Mon mon, Time dt);
+	bool checkCollisions(Mon mon);
 	RectangleShape* getReps();
 };
