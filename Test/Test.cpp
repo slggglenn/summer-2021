@@ -156,16 +156,21 @@ int main()
             }
         }
         
-
         // collisions checking
-        if (fieldScene.checkCollisions(eevee, dt))
+        if (eevee.willCollide(dt, fieldScene.getSprites()[TREE_INDEX], fieldScene.getHitboxes()[TREE_INDEX]))
         {
-            // will stop moving; effectively resets movement
-            eevee.set_stepCounter(0);
-            eevee.isMoving(false);
-            eevee.setState(IDLE);
-        } else 
+            Direction old = eevee.getOrientation();
+            while (eevee.getOrientation() == old) { eevee.setOrientation(eevee.randDir(dt)); }
+        }
+        //if (fieldScene.checkCollisions(eevee, dt))
+        //{
+        //    // will stop moving; effectively resets movement
+        //    //eevee.set_stepCounter(0);
+        //    Direction old = eevee.getOrientation();
+        //    while (eevee.getOrientation() == old) { eevee.setOrientation(eevee.randDir(dt));}
+        //}
         eevee.update(dt); // if no collisions, moves as normal
+        eevee.updateHitbox(); // right place??
 
         // reduces step counter after moving
         if (eevee.getState() == MOVING) eevee.set_stepCounter(eevee.get_stepCounter() - 1);

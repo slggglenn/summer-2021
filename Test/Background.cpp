@@ -103,18 +103,16 @@ void Scene::makeHitboxes() {
 
 bool Scene::checkCollisions(Mon mon, Time dt)
 {
-    bool coll = false;
-    Sprite possibleCollisions[NUM_OBJECT_SPRITES]; // use this later
-    Vector2f monPos = mon.getPosition();
-    for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++)
+    //Sprite possibleCollisions[NUM_OBJECT_SPRITES]; // use this later
+    //for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++)
+    //{
+    if (mon.willCollide(dt, sprites[TREE_INDEX], hitboxes[TREE_INDEX]))
     {
-        if (mon.willCollide(dt, sprites[i], hitboxes[i]))
-        {
-            coll = true; // what if multiple collisions? only first returned
-            possibleCollisions[i] = sprites[i];
-        }
+        return true; // what if multiple collisions? only first returned
+      //  possibleCollisions[i] = sprites[i];
     }
-    return coll;
+    else return false;
+    //}
 
     // get mon's position
     // loop through sprites to see if sprite position within radius of mon's next move

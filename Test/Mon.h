@@ -24,6 +24,7 @@ public:
 	void setState(State state);
 	bool willCollide(Time dt, Sprite obj, FloatRect objHB);
 	void updateRep();
+	void updateHitbox();
 	RectangleShape getRep();
 
 	// randomly generated movement

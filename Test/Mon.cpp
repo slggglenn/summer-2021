@@ -12,6 +12,7 @@ Mon::Mon(float new_x, float new_y, std::string text_loc) : Character(new_x, new_
 	stepCounter_ = 0;
 	hitbox_ = { 3, 3, 18, 18 }; // how to set location and ave follow?
 	getGlobalHitbox(); // sets hitbox to sprite location
+	updateHitbox();
 	rep.setSize(Vector2f(18 * 6, 18 * 6));
 	rep.setFillColor(Color(2, 207, 188, 40));
 	updateRep();
@@ -22,6 +23,12 @@ Mon::Mon(float new_x, float new_y, std::string text_loc) : Character(new_x, new_
 void Mon::updateRep()
 {
 	rep.setPosition(Character::getSprite().getPosition());
+}
+
+void Mon::updateHitbox()
+{
+	hitbox_.left = Character::getSprite().getGlobalBounds().left;
+	hitbox_.top = Character::getSprite().getGlobalBounds().top;
 }
 
 RectangleShape Mon::getRep() {
@@ -35,15 +42,24 @@ FloatRect Mon::getGlobalHitbox()
 
 bool Mon::willCollide(Time dt, Sprite obj, FloatRect objHB)
 {
-	bool res;
-	Character::updatePosition(Character::getPosition().x + dt.asSeconds() * Character::getSpeed() * Character::getDirection().x,
-		Character::getPosition().y + dt.asSeconds() * Character::getSpeed() * Character::getDirection().y);
-	if (getGlobalHitbox().intersects(obj.getTransform().transformRect(objHB))) res = true;
-	else res = false;
-	Character::updatePosition(Character::getPosition().x - dt.asSeconds() * Character::getSpeed() * Character::getDirection().x,
-		Character::getPosition().y - dt.asSeconds() * Character::getSpeed() * Character::getDirection().y);
+	/*Character::updatePosition(Character::getPosition().x + dt.asSeconds() * Character::getSpeed() * Character::getDirection().x,
+		Character::getPosition().y + dt.asSeconds() * Character::getSpeed() * Character::getDirection().y);*/
+	std::cout << "Character: " << getGlobalHitbox().left << ", " << getGlobalHitbox().left << std::endl;
+	std::cout << "Obj: " << objHB.left << ", " << objHB.top << std::endl;
+	if (getGlobalHitbox().intersects(obj.getTransform().transformRect(objHB))) //something about this isn't working
+	{
+		rep.setFillColor(Color(201, 114, 144, 40));
+		std::cout << "collision!";
+		return true;
+	}
+	else
+	{
+		rep.setFillColor(Color(2, 207, 188, 40));
+		return false;
+	}
+	/*Character::updatePosition(Character::getPosition().x - dt.asSeconds() * Character::getSpeed() * Character::getDirection().x,
+		Character::getPosition().y - dt.asSeconds() * Character::getSpeed() * Character::getDirection().y);*/
 	// resets with our update (eevee.getSprite()) command in main none the wiser
-	return res;
 }
 
 
@@ -66,7 +82,6 @@ State Mon::getState()
 {
 	return state_;
 }
-
 
 Direction Mon::randDir(Time dt)
 {
