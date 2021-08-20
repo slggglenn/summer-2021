@@ -25,75 +25,9 @@ int main()
     ssTrans.loadFromImage(spritesheet);
 
     // creates Mon character
-    Mon eevee = Mon((SCRN_W * 2 / 3) + 70, (SCRN_H / 4) + 450, "graphics/eevee.png");
+    Mon eevee = Mon(SCRN_W / 2, SCRN_H / 2, "graphics/eevee.png");
 
     Scene fieldScene;
-
-    //// makes background object sprites
-    //Sprite tree, sapling, grass, mushroom, bush, fruit, sprout, flowers;
-    //tree.setTexture(ssTrans);
-    //sapling.setTexture(ssTrans);
-    //grass.setTexture(ssTrans);
-    //mushroom.setTexture(ssTrans);
-    //bush.setTexture(ssTrans);
-    //fruit.setTexture(ssTrans);
-    //sprout.setTexture(ssTrans);
-    //flowers.setTexture(ssTrans);
-
-    //// initializes properties:
-    //tree.setTextureRect(IntRect(10, 1535, 43, 55));
-    //sapling.setTextureRect(IntRect(70, 1553, 20, 37));
-    //grass.setTextureRect(IntRect(199, 2236, 19, 18));
-    //mushroom.setTextureRect(IntRect(40, 2301, 16, 17));
-    //bush.setTextureRect(IntRect(106, 6998, 18, 15));
-    //fruit.setTextureRect(IntRect(159, 1557, 34, 27));
-    //sprout.setTextureRect(IntRect(135, 2847, 16, 14));
-    //flowers.setTextureRect(IntRect(95, 2420, 33, 33));
-
-    //tree.setScale(6, 6);
-    //sapling.setScale(6, 6);
-    //grass.setScale(6, 6);
-    //mushroom.setScale(6, 6);
-    //bush.setScale(6, 6);
-    //fruit.setScale(6, 6);
-    //sprout.setScale(6, 6);
-    //flowers.setScale(6, 6);
-
-    //tree.setPosition((SCRN_W * 2/ 3) + 40, (SCRN_H / 4) + 50);
-    //sapling.setPosition(SCRN_W * 3 / 5, (SCRN_H / 4) + 20);
-    //grass.setPosition(SCRN_W / 3, SCRN_H / 3);
-    //mushroom.setPosition(5 * SCRN_W / 6, 2 * SCRN_H / 5);
-    //bush.setPosition(SCRN_W / 2, 3 * SCRN_H / 4);
-    //fruit.setPosition((SCRN_W * 2 / 3) + 80, (2 * SCRN_H / 7) + 70);
-    //sprout.setPosition((SCRN_W * 3 / 5) + 100, (SCRN_H / 4) + 80);
-    //flowers.setPosition(SCRN_W / 3, SCRN_H / 7);
-
-    //// makes hitboxes for each sprite
-    //FloatRect treeHB, saplingHB, grassHB, mushroomHB, bushHB, fruitHB, sproutHB, flowersHB, rWindowHB, lWindowHB, uWindowHB, bWindowHB;
-    //treeHB = { 0, 0, 43, 55 };
-    //saplingHB = { 0, 0, 20, 37 };
-    //grassHB = { 0, 0, 19, 18 };
-    //mushroomHB = { 0, 0, 16, 17 };
-    //bushHB = { 0, 0, 18, 15 };
-    //fruitHB = { 0, 0, 34, 27 };
-    //sproutHB = { 0, 0, 16, 14 };
-    //flowersHB = { 0, 0, 33, 33 };
-    //
-    //// hitboxes for boundaries of world
-    //lWindowHB = { 0, 0, 1, 1080 };
-    //rWindowHB = { 1920, 0, 1, 1080 };
-    //uWindowHB = { 0, 0, 1920, 1 };
-    //bWindowHB = { 0, 1080, 1920, 1 };
-
-    //// sets hitbox to the object
-    //tree.getTransform().transformRect(treeHB);
-    //sapling.getTransform().transformRect(saplingHB);
-    //grass.getTransform().transformRect(grassHB);
-    //mushroom.getTransform().transformRect(mushroomHB);
-    //bush.getTransform().transformRect(bushHB);
-    //fruit.getTransform().transformRect(fruitHB);
-    //sprout.getTransform().transformRect(sproutHB);
-    //flowers.getTransform().transformRect(flowersHB);
 
     // game loop
     while (window.isOpen())
@@ -169,11 +103,11 @@ int main()
         //    eevee.setSprite(); // isMoving??
         //}
 
-        for (unsigned int i = 0; i < NUM_OBJECT_SPRITES + 4; i++)
+        for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++)
         {
             if (eevee.willCollide(fieldScene.getSprites()[i], fieldScene.getHitboxes()[i])) // something added with this loop or implementation in Test.cpp that caused opengl
             {
-                fieldScene.getReps()[i].setFillColor(Color(201, 114, 144, 40));
+               // fieldScene.getReps()[i].setFillColor(Color(201, 114, 144, 40));
                 std::cout << "COLLISION";
                // while (eevee.getOrientation() == old) { 
                  //} // generated paused...jumped up and moved off !!
@@ -184,9 +118,9 @@ int main()
               //  possibleCollisions[i] = sprites[i];
                 break;
             }
-            else {
+            /*else {
                 fieldScene.getReps()[i].setFillColor(Color(2, 207, 188, 40));
-            }
+            }*/
         }
 
         //if (fieldScene.checkCollisions(eevee))
@@ -210,16 +144,16 @@ int main()
         for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++)
         {
             window.draw(fieldScene.getSprites()[i]);
-            window.draw(fieldScene.getReps()[i]);
+           // window.draw(fieldScene.getReps()[i]);
         }
-        for (unsigned int j = 8; j < 12; j++)
+        /*for (unsigned int j = 8; j < 12; j++)
         {
             window.draw(fieldScene.getReps()[j]);
-        }
+        }*/
 
         window.draw(eevee.getSprite());
-        eevee.updateRep();
-        window.draw(eevee.getRep());
+        /*eevee.updateRep();
+        window.draw(eevee.getRep());*/
 
         // show everything just drawn
         window.display();
