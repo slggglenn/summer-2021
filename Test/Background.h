@@ -20,8 +20,8 @@
 //#define TREE2_INDEX (9)
 //#define TREE3_INDEX (10)
 //#define TREE4_INDEX (11)
-#define TREE5_INDEX (3)
-#define NUM_OBJECT_SPRITES (13) // +9 trees
+//#define TREE5_INDEX (3)
+#define NUM_OBJECT_SPRITES (19) // +4 trees
 
 class Scene
 {
@@ -36,7 +36,7 @@ private:
 public:
 	Scene();
 	void makeBackground(VertexArray& background);
-	void makeForest(unsigned int r, unsigned int c, unsigned int startIndex);
+	void makeForest(unsigned int startIndex);
 	void makeSprites();
 	void makeHitboxes();
 	VertexArray getBackground();

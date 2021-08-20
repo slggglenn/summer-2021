@@ -1,2 +1,45 @@
-﻿  Test.cpp
+﻿  Background.cpp
+C:\Users\sydneylu\source\repos\Test\Background.cpp(25,73): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\sydneylu\source\repos\Test\Background.cpp(25,58): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\sydneylu\source\repos\Test\Background.cpp(26,91): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\sydneylu\source\repos\Test\Background.cpp(26,76): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\sydneylu\source\repos\Test\Background.cpp(27,105): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\sydneylu\source\repos\Test\Background.cpp(27,76): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\sydneylu\source\repos\Test\Background.cpp(28,91): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\sydneylu\source\repos\Test\Background.cpp(28,62): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\sydneylu\source\repos\Test\Background.cpp(52,84): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\sydneylu\source\repos\Test\Background.cpp(52,59): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\sydneylu\source\repos\Test\Background.cpp(164): warning C4715: 'Scene::checkCollisions': not all control paths return a value
   Test.vcxproj -> C:\Users\sydneylu\source\repos\Test\Debug\Test.exe

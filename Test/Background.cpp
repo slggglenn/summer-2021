@@ -2,6 +2,7 @@
 #include "Character.h"
 #include "Mon.h"
 #include <iostream>
+#include <math.h>
 using namespace std;
 
 Scene::Scene() {
@@ -36,23 +37,19 @@ void Scene::makeBackground(VertexArray &background) {
     }
 }
 
-// 4 - 13
+// 4 - 13 (row * r) + col + 1)
 // 0, 0, 0, 
 //4 --> 12
-void Scene::makeForest(unsigned int r, unsigned int c, unsigned int startIndex) {
-    for (unsigned int row = 0; row <= r; row++)
+// r = 5, c = 4
+void Scene::makeForest(unsigned int startIndex) {
+    int index = startIndex; //3, 4, 5,  6, 7 --> 8, 9, 10, 11 
+    int nums[6] = { 6, 4, 2, 2, 1, 1 };
+    for (int i = 5; i >= 0; i--) // 0-6, i++
     {
-        for (unsigned int col = 0; col <= c; col++)
-        {// 0, 1, 2 = 3, 4, 5 = 6, 7, 8
-            sprites[startIndex + ((row * r) + col)].setTextureRect(IntRect(10, 1535, 43, 55));
-            if (row % 2) // even row
-            {
-                sprites[startIndex + ((row * r) + col)].setPosition(SCRN_W - (col * 250) - 350, (130 * row));
-            }
-            else {
-                sprites[startIndex + ((row * r) + col)].setPosition(SCRN_W - (col * 250) - 250, (130 * row));
-            }
-            
+        for (int j = nums[i]; j > 0; j--, index++) /// 6 4 2 2 1 1
+        {
+            sprites[index].setTextureRect(IntRect(10, 1535, 43, 55));
+            sprites[index].setPosition(SCRN_W - (j * 250) + 50, SCRN_H - (170 * i) - 200);
         }
     }
 }
@@ -71,7 +68,7 @@ void Scene::makeSprites() {
     sprites[TREE2_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));
     sprites[TREE3_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));
     sprites[TREE4_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));*/
-    sprites[TREE5_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));
+    //sprites[TREE5_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));
 
 
    // sprites[SAPLING_INDEX].setTextureRect(IntRect(70, 1553, 20, 37));
@@ -88,7 +85,7 @@ void Scene::makeSprites() {
     sprites[TREE2_INDEX].setPosition((SCRN_W * 3 / 5) - 190, 10);
     sprites[TREE3_INDEX].setPosition((SCRN_W * 4 / 5) - 110, (SCRN_H / 6) + 50);
     sprites[TREE4_INDEX].setPosition((SCRN_W * 3 / 5) - 100, (SCRN_H / 9) + 100);*/
-    sprites[TREE5_INDEX].setPosition((SCRN_W / 2) + 140, (4 * SCRN_H / 5) + 100);
+    //sprites[TREE5_INDEX].setPosition((SCRN_W / 2) + 140, (4 * SCRN_H / 5) + 100);
 
     //sprites[SAPLING_INDEX].setPosition(SCRN_W * 5 / 7, (SCRN_H / 4) + 250);
     sprites[GRASS_INDEX].setPosition(SCRN_W / 3, SCRN_H / 3);
@@ -96,9 +93,9 @@ void Scene::makeSprites() {
     sprites[BUSH_INDEX].setPosition(SCRN_W / 2, 3 * SCRN_H / 4);
   //  sprites[FRUIT_INDEX].setPosition((SCRN_W * 2 / 3) + 80, (2 * SCRN_H / 7) + 70);
   //  sprites[SPROUT_INDEX].setPosition((SCRN_W * 3 / 5) + 100, (SCRN_H / 4) + 80);
-    sprites[FLOWERS_INDEX].setPosition(SCRN_W / 3, SCRN_H / 7);
+    sprites[FLOWERS_INDEX].setPosition(SCRN_W / 3, 0);
 
-    makeForest(3, 3, TREE5_INDEX + 1);
+    makeForest(FLOWERS_INDEX + 1);
     /*sprites[lWINDOW_INDEX].setPosition(0, 0);
     sprites[rWINDOW_INDEX].setPosition(1900, 0);
     sprites[uWINDOW_INDEX].setPosition(0, 0);
