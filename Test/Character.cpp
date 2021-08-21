@@ -86,7 +86,7 @@ void Character::setSprite()
 		break;
 	}
 
-	sprite_.setScale(6, 6);
+	sprite_.setScale(5, 5);
 }
 
 float Character::getSpeed()

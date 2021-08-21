@@ -37,29 +37,68 @@ void Scene::makeBackground(VertexArray &background) {
     }
 }
 
+void Scene::makeDecoLayer(VertexArray& layer) {
+    layer.setPrimitiveType(Quads);
+    layer.resize(((SCRN_H / TILE_SIZE) + TILE_SIZE) * (SCRN_W / TILE_SIZE) * TILE_TYPES);
+
+    int currVertex = 0;
+    for (unsigned int c = 0; c < SCRN_W / TILE_SIZE; c++) {
+
+        for (unsigned int r = 0; r < (SCRN_H / TILE_SIZE) + TILE_SIZE; r++) {
+            background[currVertex].position = Vector2f(c * TILE_SIZE, r * TILE_SIZE);
+            background[currVertex + 1].position = Vector2f((c * TILE_SIZE) + TILE_SIZE, r * TILE_SIZE);
+            background[currVertex + 2].position = Vector2f((c * TILE_SIZE) + TILE_SIZE, (r * TILE_SIZE) + TILE_SIZE);
+            background[currVertex + 3].position = Vector2f(c * TILE_SIZE, (r * TILE_SIZE) + TILE_SIZE);
+
+            background[currVertex].texCoords = Vector2f(96, 2230);
+            background[currVertex + 1].texCoords = Vector2f(128, 2230);
+            background[currVertex + 2].texCoords = Vector2f(128, 2262);
+            background[currVertex + 3].texCoords = Vector2f(96, 2262);
+
+            currVertex += 4; // incrementing for # of vertices in quad
+        }
+    }
+}
+
 // 4 - 13 (row * r) + col + 1)
 // 0, 0, 0, 
 //4 --> 12
 // r = 5, c = 4
 void Scene::makeForest(unsigned int startIndex) {
+    // randomize certain # of trees 10-25
     int index = startIndex; //3, 4, 5,  6, 7 --> 8, 9, 10, 11 
-    int nums[6] = { 6, 4, 2, 2, 1, 1 };
-    for (int i = 5; i >= 0; i--) // 0-6, i++
+    int nums[7] = { 7, 4, 2, 2, 2, 1, 1 }; //19
+    for (int i = 6; i >= 0; i--) // 0-6, i++
     {
         for (int j = nums[i]; j > 0; j--, index++) /// 6 4 2 2 1 1
         {
             sprites[index].setTextureRect(IntRect(10, 1535, 43, 55));
-            sprites[index].setPosition(SCRN_W - (j * 250) + 50, SCRN_H - (170 * i) - 200);
+            sprites[index].setPosition(SCRN_W - (j * 220) + 50, SCRN_H - (130 * i) - 150);
+            hitboxes[index] = { 0, 0, 43, 55 };
         }
+    
+    }
+    sprites[index].setPosition(SCRN_W * 6 / 7 - 150, 100);
+    sprites[index + 1].setPosition(SCRN_W * 2 / 5, SCRN_H * 2 / 5);
+    sprites[index + 2].setPosition(50, SCRN_H - 120);
+    sprites[index + 3].setPosition(SCRN_W / 2, SCRN_H / 4);
+    sprites[index + 4].setPosition(0, SCRN_H * 2 / 5);
+    sprites[index + 5].setPosition(SCRN_W / 15, 20);
+    sprites[index + 6].setPosition(SCRN_W / 3, 80);
+    for (int i = index; i < index + 7; i++)
+    {
+        sprites[i].setTextureRect(IntRect(10, 1535, 43, 55));
+        hitboxes[i] = { 0, 0, 43, 55 };
     }
 }
+
 
 void Scene::makeSprites() {
     Sprite tree, sapling, grass, mushroom, bush, fruit, sprout, flowers;
     for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++)
     {
         sprites[i].setTexture(ssTrans);
-        sprites[i].setScale(6, 6);
+        sprites[i].setScale(5, 5);
     }
 
     // initializes properties:
@@ -72,12 +111,12 @@ void Scene::makeSprites() {
 
 
    // sprites[SAPLING_INDEX].setTextureRect(IntRect(70, 1553, 20, 37));
-    sprites[GRASS_INDEX].setTextureRect(IntRect(199, 2236, 19, 18));
-    //sprites[MUSHROOM_INDEX].setTextureRect(IntRect(40, 2301, 16, 17));
-    sprites[BUSH_INDEX].setTextureRect(IntRect(106, 6998, 18, 15));
-    //sprites[FRUIT_INDEX].setTextureRect(IntRect(159, 1557, 34, 27));
-    //sprites[SPROUT_INDEX].setTextureRect(IntRect(135, 2847, 16, 14));
-    sprites[FLOWERS_INDEX].setTextureRect(IntRect(95, 2420, 33, 33));
+    //sprites[GRASS_INDEX].setTextureRect(IntRect(199, 2236, 19, 18));
+    ////sprites[MUSHROOM_INDEX].setTextureRect(IntRect(40, 2301, 16, 17));
+    //sprites[BUSH_INDEX].setTextureRect(IntRect(106, 6998, 18, 15));
+    ////sprites[FRUIT_INDEX].setTextureRect(IntRect(159, 1557, 34, 27));
+    ////sprites[SPROUT_INDEX].setTextureRect(IntRect(135, 2847, 16, 14));
+    //sprites[FLOWERS_INDEX].setTextureRect(IntRect(95, 2420, 33, 33));
 
 
     /*sprites[TREE_INDEX].setPosition((SCRN_W * 3 / 5) + 100, -10);
@@ -88,14 +127,14 @@ void Scene::makeSprites() {
     //sprites[TREE5_INDEX].setPosition((SCRN_W / 2) + 140, (4 * SCRN_H / 5) + 100);
 
     //sprites[SAPLING_INDEX].setPosition(SCRN_W * 5 / 7, (SCRN_H / 4) + 250);
-    sprites[GRASS_INDEX].setPosition(SCRN_W / 3, SCRN_H / 3);
-   // sprites[MUSHROOM_INDEX].setPosition(6 * SCRN_W / 7, 1.5 * SCRN_H / 5);
-    sprites[BUSH_INDEX].setPosition(SCRN_W / 2, 3 * SCRN_H / 4);
-  //  sprites[FRUIT_INDEX].setPosition((SCRN_W * 2 / 3) + 80, (2 * SCRN_H / 7) + 70);
-  //  sprites[SPROUT_INDEX].setPosition((SCRN_W * 3 / 5) + 100, (SCRN_H / 4) + 80);
-    sprites[FLOWERS_INDEX].setPosition(SCRN_W / 3, 0);
+  //  sprites[GRASS_INDEX].setPosition(SCRN_W / 3, SCRN_H / 3);
+  // // sprites[MUSHROOM_INDEX].setPosition(6 * SCRN_W / 7, 1.5 * SCRN_H / 5);
+  //  sprites[BUSH_INDEX].setPosition(SCRN_W / 2, 3 * SCRN_H / 4);
+  ////  sprites[FRUIT_INDEX].setPosition((SCRN_W * 2 / 3) + 80, (2 * SCRN_H / 7) + 70);
+  ////  sprites[SPROUT_INDEX].setPosition((SCRN_W * 3 / 5) + 100, (SCRN_H / 4) + 80);
+  //  sprites[FLOWERS_INDEX].setPosition(SCRN_W / 3, 0);
 
-    makeForest(FLOWERS_INDEX + 1);
+    makeForest(0);
     /*sprites[lWINDOW_INDEX].setPosition(0, 0);
     sprites[rWINDOW_INDEX].setPosition(1900, 0);
     sprites[uWINDOW_INDEX].setPosition(0, 0);
@@ -106,12 +145,12 @@ void Scene::makeHitboxes() {
     // initial positions must be 0 so that they'll overlap when getTransform called ater
   //  hitboxes[TREE_INDEX] = { 0, 0, 43, 55 };
    // hitboxes[SAPLING_INDEX] = { 0, 0, 20, 37 };
-    hitboxes[GRASS_INDEX] = { 0, 0, 19, 18 };
-   // hitboxes[MUSHROOM_INDEX] = { 0, 0, 16, 17 };
-    hitboxes[BUSH_INDEX] = { 0, 0, 18, 15 };
-  //  hitboxes[FRUIT_INDEX] = { 0, 0, 34, 27 };
-   // hitboxes[SPROUT_INDEX] = { 0, 0, 16, 14 };
-    hitboxes[FLOWERS_INDEX] = { 0, 0, 33, 33 };
+  //  hitboxes[GRASS_INDEX] = { 0, 0, 19, 18 };
+  // // hitboxes[MUSHROOM_INDEX] = { 0, 0, 16, 17 };
+  //  hitboxes[BUSH_INDEX] = { 0, 0, 18, 15 };
+  ////  hitboxes[FRUIT_INDEX] = { 0, 0, 34, 27 };
+  // // hitboxes[SPROUT_INDEX] = { 0, 0, 16, 14 };
+  //  hitboxes[FLOWERS_INDEX] = { 0, 0, 33, 33 };
     /*hitboxes[lWINDOW_INDEX] = { 0, 0, 1, 1080 };
     hitboxes[rWINDOW_INDEX] = { 0, 0, 1, 1080 };
     hitboxes[uWINDOW_INDEX] = { 0, 0, 1920, 1 };

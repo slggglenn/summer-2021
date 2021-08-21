@@ -7,10 +7,10 @@
 //#define TREE_INDEX (0)
 #define GRASS_INDEX (0)
 //#define MUSHROOM_INDEX (1)
-#define BUSH_INDEX (1)
+//#define BUSH_INDEX (1)
 //#define FRUIT_INDEX (3)
 //#define SPROUT_INDEX (4)
-#define FLOWERS_INDEX (2)
+//#define FLOWERS_INDEX (2)
 //#define rWINDOW_INDEX (8)
 //#define lWINDOW_INDEX (9)
 //#define uWINDOW_INDEX (10)
@@ -21,7 +21,7 @@
 //#define TREE3_INDEX (10)
 //#define TREE4_INDEX (11)
 //#define TREE5_INDEX (3)
-#define NUM_OBJECT_SPRITES (19) // +4 trees
+#define NUM_OBJECT_SPRITES (47) // +4 trees
 
 class Scene
 {
@@ -36,6 +36,7 @@ private:
 public:
 	Scene();
 	void makeBackground(VertexArray& background);
+	void makeDecoLayer(VertexArray& layer);
 	void makeForest(unsigned int startIndex);
 	void makeSprites();
 	void makeHitboxes();

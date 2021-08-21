@@ -12,7 +12,7 @@ int main()
     // setting up window and time
     VideoMode vm(1920, 1080);
     RenderWindow window(vm, "Test");
-    window.setSize(sf::Vector2u(640, 360));
+    window.setSize(sf::Vector2u(960, 540));
     Clock clock;
 
     // initializing textures and background constants
@@ -25,7 +25,7 @@ int main()
     ssTrans.loadFromImage(spritesheet);
 
     // creates Mon character
-    Mon eevee = Mon(SCRN_W / 2, SCRN_H / 2, "graphics/eevee.png");
+    //Mon eevee = Mon(SCRN_W / 2, SCRN_H / 2, "graphics/eevee.png");
 
     Scene fieldScene;
 
@@ -67,28 +67,28 @@ int main()
         Time dt = clock.restart();
 
         // if eevee doesn't have steps remaining, will generate more
-        if (!eevee.get_stepCounter())
-        {
-            int steps = eevee.randSteps(dt);
-            Direction dir = eevee.randDir(dt); // sets here so if no movement, sprite has chance of turning
-            if (steps) {
-                eevee.setDirection(dir);
-                eevee.setOrientation(dir);
-                eevee.setSprite();
-                eevee.set_stepCounter(steps); // !!! type convo !!!
-                eevee.isMoving(true); // update speed
-            }
-            else { // random chance of turning in place
-                srand((int)time(0));
-                int still = rand() % 10;
-                if (!still) {
-                    eevee.setDirection(dir);
-                    eevee.setOrientation(dir);
-                    eevee.setSprite();
-                }
-                eevee.isMoving(false);
-            }
-        }
+        //if (!eevee.get_stepCounter())
+        //{
+        //    int steps = eevee.randSteps(dt);
+        //    Direction dir = eevee.randDir(dt); // sets here so if no movement, sprite has chance of turning
+        //    if (steps) {
+        //        eevee.setDirection(dir);
+        //        eevee.setOrientation(dir);
+        //        eevee.setSprite();
+        //        eevee.set_stepCounter(steps); // !!! type convo !!!
+        //        eevee.isMoving(true); // update speed
+        //    }
+        //    else { // random chance of turning in place
+        //        srand((int)time(0));
+        //        int still = rand() % 10;
+        //        if (!still) {
+        //            eevee.setDirection(dir);
+        //            eevee.setOrientation(dir);
+        //            eevee.setSprite();
+        //        }
+        //        eevee.isMoving(false);
+        //    }
+        //}
 
 
         
@@ -103,39 +103,39 @@ int main()
         //    eevee.setSprite(); // isMoving??
         //}
 
-        for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++)
-        {
-            if (eevee.willCollide(fieldScene.getSprites()[i], fieldScene.getHitboxes()[i])) // something added with this loop or implementation in Test.cpp that caused opengl
-            {
-               // fieldScene.getReps()[i].setFillColor(Color(201, 114, 144, 40));
-                std::cout << "COLLISION";
-               // while (eevee.getOrientation() == old) { 
-                 //} // generated paused...jumped up and moved off !!
-                eevee.isMoving(false);
-                eevee.setDirection(eevee.oppDirection(eevee.getOrientation())); // generate opposite direction
-                eevee.isMoving(true);
-                eevee.setSprite(); // isMoving?? // what if multiple collisions? only first returned
-              //  possibleCollisions[i] = sprites[i];
-                break;
-            }
-            /*else {
-                fieldScene.getReps()[i].setFillColor(Color(2, 207, 188, 40));
-            }*/
-        }
+       // for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++)
+       // {
+       //     if (eevee.willCollide(fieldScene.getSprites()[i], fieldScene.getHitboxes()[i])) // something added with this loop or implementation in Test.cpp that caused opengl
+       //     {
+       //        // fieldScene.getReps()[i].setFillColor(Color(201, 114, 144, 40));
+       //         std::cout << "COLLISION";
+       //        // while (eevee.getOrientation() == old) { 
+       //          //} // generated paused...jumped up and moved off !!
+       //         eevee.isMoving(false);
+       //         eevee.setDirection(eevee.oppDirection(eevee.getOrientation())); // generate opposite direction
+       //         eevee.isMoving(true);
+       //         eevee.setSprite(); // isMoving?? // what if multiple collisions? only first returned
+       //       //  possibleCollisions[i] = sprites[i];
+       //         break;
+       //     }
+       //     /*else {
+       //         fieldScene.getReps()[i].setFillColor(Color(2, 207, 188, 40));
+       //     }*/
+       // }
 
-        //if (fieldScene.checkCollisions(eevee))
-        //{
-        //    std::cout << "COLLISION";
-        //    Direction old = eevee.getOrientation();
-        //    while (eevee.getOrientation() == old) { eevee.setOrientation(eevee.randDir(dt)); }
-        //    eevee.setDirection(eevee.getOrientation());
-        //    eevee.setSprite(); // isMoving??
-        //}
-        eevee.update(dt); // if no collisions, moves as normal
-       // eevee.updateHitbox(); // right place??
+       // //if (fieldScene.checkCollisions(eevee))
+       // //{
+       // //    std::cout << "COLLISION";
+       // //    Direction old = eevee.getOrientation();
+       // //    while (eevee.getOrientation() == old) { eevee.setOrientation(eevee.randDir(dt)); }
+       // //    eevee.setDirection(eevee.getOrientation());
+       // //    eevee.setSprite(); // isMoving??
+       // //}
+       // eevee.update(dt); // if no collisions, moves as normal
+       //// eevee.updateHitbox(); // right place??
 
-        // reduces step counter after moving
-        if (eevee.getState() == MOVING) eevee.set_stepCounter(eevee.get_stepCounter() - 1);
+       // // reduces step counter after moving
+       // if (eevee.getState() == MOVING) eevee.set_stepCounter(eevee.get_stepCounter() - 1);
 
 
         /* draw scene */
@@ -151,7 +151,7 @@ int main()
             window.draw(fieldScene.getReps()[j]);
         }*/
 
-        window.draw(eevee.getSprite());
+       // window.draw(eevee.getSprite());
         /*eevee.updateRep();
         window.draw(eevee.getRep());*/
 
