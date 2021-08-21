@@ -9,4 +9,3 @@ enum Direction { LEFT, RIGHT, UP, DOWN, LEFT_UP, RIGHT_UP, LEFT_DOWN, RIGHT_DOWN
 enum State { IDLE, MOVING, ASLEEP, INTERACTING };
 
 const unsigned int TILE_SIZE = 128;
-const unsigned int TILE_TYPES = 4;

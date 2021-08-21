@@ -10,13 +10,14 @@ Scene::Scene() {
     spritesheet.createMaskFromColor(Color::White, 0);
     ssTrans.loadFromImage(spritesheet);
     makeBackground(background);
-    makeSprites();
-    makeHitboxes();
+   // makeSprites();
+    makeForest(0);
+   // makeHitboxes();
 }
 
 void Scene::makeBackground(VertexArray &background) {
     background.setPrimitiveType(Quads);
-    background.resize(((SCRN_H / TILE_SIZE) + TILE_SIZE) * (SCRN_W / TILE_SIZE) * TILE_TYPES);
+    background.resize(((SCRN_H / TILE_SIZE) + TILE_SIZE) * (SCRN_W / TILE_SIZE) * 4);
 
     int currVertex = 0;
     for (unsigned int c = 0; c < SCRN_W / TILE_SIZE; c++) {
@@ -37,109 +38,96 @@ void Scene::makeBackground(VertexArray &background) {
     }
 }
 
-void Scene::makeDecoLayer(VertexArray& layer) {
-    layer.setPrimitiveType(Quads);
-    layer.resize(((SCRN_H / TILE_SIZE) + TILE_SIZE) * (SCRN_W / TILE_SIZE) * TILE_TYPES);
-
-    int currVertex = 0;
-    for (unsigned int c = 0; c < SCRN_W / TILE_SIZE; c++) {
-
-        for (unsigned int r = 0; r < (SCRN_H / TILE_SIZE) + TILE_SIZE; r++) {
-            background[currVertex].position = Vector2f(c * TILE_SIZE, r * TILE_SIZE);
-            background[currVertex + 1].position = Vector2f((c * TILE_SIZE) + TILE_SIZE, r * TILE_SIZE);
-            background[currVertex + 2].position = Vector2f((c * TILE_SIZE) + TILE_SIZE, (r * TILE_SIZE) + TILE_SIZE);
-            background[currVertex + 3].position = Vector2f(c * TILE_SIZE, (r * TILE_SIZE) + TILE_SIZE);
-
-            background[currVertex].texCoords = Vector2f(96, 2230);
-            background[currVertex + 1].texCoords = Vector2f(128, 2230);
-            background[currVertex + 2].texCoords = Vector2f(128, 2262);
-            background[currVertex + 3].texCoords = Vector2f(96, 2262);
-
-            currVertex += 4; // incrementing for # of vertices in quad
-        }
-    }
-}
 
 // 4 - 13 (row * r) + col + 1)
 // 0, 0, 0, 
 //4 --> 12
 // r = 5, c = 4
 void Scene::makeForest(unsigned int startIndex) {
-    // randomize certain # of trees 10-25
-    int index = startIndex; //3, 4, 5,  6, 7 --> 8, 9, 10, 11 
-    int nums[7] = { 7, 4, 2, 2, 2, 1, 1 }; //19
-    for (int i = 6; i >= 0; i--) // 0-6, i++
+   /* const unsigned int TREE_WIDTH = 43 * 5;
+    const unsigned int TREE_HEIGHT = 55 * 5;*/
+
+    srand(time(0));
+   //3% chance for tree, 1% flower
+
+    int currVertex = 0;
+    int index = startIndex;
+
+    for (unsigned int r = 0; r < ((SCRN_H / TILE_SIZE) + TILE_SIZE); r++)
     {
-        for (int j = nums[i]; j > 0; j--, index++) /// 6 4 2 2 1 1
+        for (unsigned int c = 0; c < SCRN_W / TILE_SIZE; c++)
         {
-            sprites[index].setTextureRect(IntRect(10, 1535, 43, 55));
-            sprites[index].setPosition(SCRN_W - (j * 220) + 50, SCRN_H - (130 * i) - 150);
-            hitboxes[index] = { 0, 0, 43, 55 };
+
+            unsigned int chance = (rand() % 3);
+            switch (chance) {
+            case 1: // flowers
+                sprites[index].setTexture(ssTrans);
+                sprites[index].setScale(5, 5);
+                sprites[index].setTextureRect(IntRect(10, 1535, 43, 55));
+                sprites[index].setPosition(r * TILE_SIZE, c * TILE_SIZE);
+                index++;
+                //hitboxes[startIndex + (r * SCRN_W / TREE_WIDTH) + c] = { 0, 0, 33, 33 };
+                break;
+            case 2: // trees
+                break;
+            case 3:
+           // case 4:
+                sprites[index].setTexture(ssTrans);
+                sprites[index].setScale(5, 5);
+                sprites[index].setTextureRect(IntRect(95, 2420, 33, 33));
+                sprites[index].setPosition(r * TILE_SIZE, c * TILE_SIZE);
+                index++;
+                //hitboxes[startIndex + (r * SCRN_W / TREE_WIDTH) + c] = { 0, 0, 43, 55 };
+                break;
+            default:
+                break;
+            }
         }
-    
     }
-    sprites[index].setPosition(SCRN_W * 6 / 7 - 150, 100);
-    sprites[index + 1].setPosition(SCRN_W * 2 / 5, SCRN_H * 2 / 5);
-    sprites[index + 2].setPosition(50, SCRN_H - 120);
-    sprites[index + 3].setPosition(SCRN_W / 2, SCRN_H / 4);
-    sprites[index + 4].setPosition(0, SCRN_H * 2 / 5);
-    sprites[index + 5].setPosition(SCRN_W / 15, 20);
-    sprites[index + 6].setPosition(SCRN_W / 3, 80);
-    for (int i = index; i < index + 7; i++)
-    {
-        sprites[i].setTextureRect(IntRect(10, 1535, 43, 55));
-        hitboxes[i] = { 0, 0, 43, 55 };
-    }
+
+    //for (unsigned int c = 0; c < SCRN_W / TREE_WIDTH; c++) {
+
+    //    for (unsigned int r = 0; r < SCRN_H / TREE_HEIGHT; r++) {
+    //        background[currVertex].position = Vector2f(c * TREE_WIDTH, r * TREE_HEIGHT);
+    //        background[currVertex + 1].position = Vector2f((c * TREE_WIDTH) + TREE_WIDTH, r * TREE_HEIGHT);
+    //        background[currVertex + 2].position = Vector2f((c * TREE_WIDTH) + TREE_WIDTH, (r * TREE_HEIGHT) + TREE_HEIGHT);
+    //        background[currVertex + 3].position = Vector2f(c * TREE_WIDTH, (r * TREE_HEIGHT) + TREE_HEIGHT);
+
+    //        unsigned int chance = (rand() % 100) + 1;
+    //        switch (chance) {
+    //        case 1: // flowers
+    //            background[currVertex].texCoords = Vector2f(95, 2420);
+    //            background[currVertex + 1].texCoords = Vector2f(128, 2420);
+    //            background[currVertex + 2].texCoords = Vector2f(128, 2453);
+    //            background[currVertex + 3].texCoords = Vector2f(95, 2453);
+    //            //hitboxes[startIndex + (r * SCRN_W / TREE_WIDTH) + c] = { 0, 0, 33, 33 };
+    //            break;
+    //        case 2: // trees
+    //        case 3:
+    //        case 4:
+    //            background[currVertex].texCoords = Vector2f(10, 1535);
+    //            background[currVertex + 1].texCoords = Vector2f(53, 1535);
+    //            background[currVertex + 2].texCoords = Vector2f(53, 1590);
+    //            background[currVertex + 3].texCoords = Vector2f(10, 1590);
+    //            //hitboxes[startIndex + (r * SCRN_W / TREE_WIDTH) + c] = { 0, 0, 43, 55 };
+    //            break;
+    //        default:
+    //            break;
+    //        }
+
+    //        currVertex += 4; // incrementing for # of vertices in quad
+    //    }
+    //}
 }
 
 
-void Scene::makeSprites() {
-    Sprite tree, sapling, grass, mushroom, bush, fruit, sprout, flowers;
-    for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++)
-    {
-        sprites[i].setTexture(ssTrans);
-        sprites[i].setScale(5, 5);
-    }
-
-    // initializes properties:
-    /*sprites[TREE_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));
-    sprites[TREE1_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));
-    sprites[TREE2_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));
-    sprites[TREE3_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));
-    sprites[TREE4_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));*/
-    //sprites[TREE5_INDEX].setTextureRect(IntRect(10, 1535, 43, 55));
-
-
-   // sprites[SAPLING_INDEX].setTextureRect(IntRect(70, 1553, 20, 37));
-    //sprites[GRASS_INDEX].setTextureRect(IntRect(199, 2236, 19, 18));
-    ////sprites[MUSHROOM_INDEX].setTextureRect(IntRect(40, 2301, 16, 17));
-    //sprites[BUSH_INDEX].setTextureRect(IntRect(106, 6998, 18, 15));
-    ////sprites[FRUIT_INDEX].setTextureRect(IntRect(159, 1557, 34, 27));
-    ////sprites[SPROUT_INDEX].setTextureRect(IntRect(135, 2847, 16, 14));
-    //sprites[FLOWERS_INDEX].setTextureRect(IntRect(95, 2420, 33, 33));
-
-
-    /*sprites[TREE_INDEX].setPosition((SCRN_W * 3 / 5) + 100, -10);
-    sprites[TREE1_INDEX].setPosition((SCRN_W * 3 / 4) + 110, (SCRN_H / 9) - 75);
-    sprites[TREE2_INDEX].setPosition((SCRN_W * 3 / 5) - 190, 10);
-    sprites[TREE3_INDEX].setPosition((SCRN_W * 4 / 5) - 110, (SCRN_H / 6) + 50);
-    sprites[TREE4_INDEX].setPosition((SCRN_W * 3 / 5) - 100, (SCRN_H / 9) + 100);*/
-    //sprites[TREE5_INDEX].setPosition((SCRN_W / 2) + 140, (4 * SCRN_H / 5) + 100);
-
-    //sprites[SAPLING_INDEX].setPosition(SCRN_W * 5 / 7, (SCRN_H / 4) + 250);
-  //  sprites[GRASS_INDEX].setPosition(SCRN_W / 3, SCRN_H / 3);
-  // // sprites[MUSHROOM_INDEX].setPosition(6 * SCRN_W / 7, 1.5 * SCRN_H / 5);
-  //  sprites[BUSH_INDEX].setPosition(SCRN_W / 2, 3 * SCRN_H / 4);
-  ////  sprites[FRUIT_INDEX].setPosition((SCRN_W * 2 / 3) + 80, (2 * SCRN_H / 7) + 70);
-  ////  sprites[SPROUT_INDEX].setPosition((SCRN_W * 3 / 5) + 100, (SCRN_H / 4) + 80);
-  //  sprites[FLOWERS_INDEX].setPosition(SCRN_W / 3, 0);
-
-    makeForest(0);
-    /*sprites[lWINDOW_INDEX].setPosition(0, 0);
-    sprites[rWINDOW_INDEX].setPosition(1900, 0);
-    sprites[uWINDOW_INDEX].setPosition(0, 0);
-    sprites[bWINDOW_INDEX].setPosition(0, 1060);*/
-}
+//void Scene::makeSprites() {
+//    for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++)
+//    {
+//        sprites[i].setTexture(ssTrans);
+//        sprites[i].setScale(5, 5);
+//    }
+//}
 
 void Scene::makeHitboxes() {
     // initial positions must be 0 so that they'll overlap when getTransform called ater
@@ -179,35 +167,37 @@ void Scene::makeHitboxes() {
 
 }
 
-bool Scene::checkCollisions(Mon mon)
-{
-    //Sprite possibleCollisions[NUM_OBJECT_SPRITES]; // use this later
-    for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++)
-    {
-        if (mon.willCollide(sprites[i], hitboxes[i])) // something added with this loop or implementation in Test.cpp that caused opengl
-        {
-          //  reps[i].setFillColor(Color(201, 114, 144, 40));
-            return true; // what if multiple collisions? only first returned
-          //  possibleCollisions[i] = sprites[i];
-        }
-        else {
-           // reps[i].setFillColor(Color(2, 207, 188, 40));
-            return false;
-        }
-    }
-
-    // get mon's position
-    // loop through sprites to see if sprite position within radius of mon's next move
-    // for each one that is, check to see if HB will intersect
-    // if any potential collision, false
-}
+//bool Scene::checkCollisions(Mon mon)
+//{
+//    //Sprite possibleCollisions[NUM_OBJECT_SPRITES]; // use this later
+//    for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++)
+//    {
+//        if (mon.willCollide(sprites[i], hitboxes[i])) // something added with this loop or implementation in Test.cpp that caused opengl
+//        {
+//          //  reps[i].setFillColor(Color(201, 114, 144, 40));
+//            return true; // what if multiple collisions? only first returned
+//          //  possibleCollisions[i] = sprites[i];
+//        }
+//        else {
+//           // reps[i].setFillColor(Color(2, 207, 188, 40));
+//            return false;
+//        }
+//    }
+//
+//    // get mon's position
+//    // loop through sprites to see if sprite position within radius of mon's next move
+//    // for each one that is, check to see if HB will intersect
+//    // if any potential collision, false
+//}
 
 VertexArray Scene::getBackground() { return background; }
+
+VertexArray Scene::getForestLayer() { return forestLayer; }
 
 Texture& Scene::getTexture() { return ssTrans; }
 
 Sprite* Scene::getSprites() { return sprites; }
 
-FloatRect* Scene::getHitboxes() { return hitboxes; }
+//FloatRect* Scene::getHitboxes() { return hitboxes; }
 
 RectangleShape* Scene::getReps() { return reps; }

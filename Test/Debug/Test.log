@@ -1,25 +1,15 @@
 ﻿  Background.cpp
-C:\Users\sydneylu\source\repos\Test\Background.cpp(25,73): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\sydneylu\source\repos\Test\Background.cpp(26,73): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\sydneylu\source\repos\Test\Background.cpp(25,58): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\sydneylu\source\repos\Test\Background.cpp(26,58): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\sydneylu\source\repos\Test\Background.cpp(26,91): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\sydneylu\source\repos\Test\Background.cpp(26,76): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\sydneylu\source\repos\Test\Background.cpp(27,105): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\sydneylu\source\repos\Test\Background.cpp(27,91): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
           with
           [
               T=float
@@ -29,57 +19,29 @@ C:\Users\sydneylu\source\repos\Test\Background.cpp(27,76): warning C4244: 'argum
           [
               T=float
           ]
-C:\Users\sydneylu\source\repos\Test\Background.cpp(28,91): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\sydneylu\source\repos\Test\Background.cpp(28,105): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\sydneylu\source\repos\Test\Background.cpp(28,62): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\sydneylu\source\repos\Test\Background.cpp(28,76): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\sydneylu\source\repos\Test\Background.cpp(48,73): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\sydneylu\source\repos\Test\Background.cpp(29,91): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\sydneylu\source\repos\Test\Background.cpp(48,58): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\sydneylu\source\repos\Test\Background.cpp(29,62): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-C:\Users\sydneylu\source\repos\Test\Background.cpp(49,91): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\sydneylu\source\repos\Test\Background.cpp(49,76): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\sydneylu\source\repos\Test\Background.cpp(50,105): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\sydneylu\source\repos\Test\Background.cpp(50,76): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\sydneylu\source\repos\Test\Background.cpp(51,91): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\sydneylu\source\repos\Test\Background.cpp(51,62): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\sydneylu\source\repos\Test\Background.cpp(75,84): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\sydneylu\source\repos\Test\Background.cpp(75,59): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\sydneylu\source\repos\Test\Background.cpp(202): warning C4715: 'Scene::checkCollisions': not all control paths return a value
+C:\Users\sydneylu\source\repos\Test\Background.cpp(50,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\sydneylu\source\repos\Test\Background.cpp(67,61): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\sydneylu\source\repos\Test\Background.cpp(67,46): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\sydneylu\source\repos\Test\Background.cpp(78,61): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+C:\Users\sydneylu\source\repos\Test\Background.cpp(78,46): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
   Test.vcxproj -> C:\Users\sydneylu\source\repos\Test\Debug\Test.exe

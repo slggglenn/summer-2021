@@ -113,14 +113,14 @@ State Mon::getState()
 	return state_;
 }
 
-Direction Mon::randDir(Time dt)
+Direction Mon::randDir()
 {
 	srand((int) time(0));
 	int randFour = rand() % 4;
 	return (Direction) randFour;
 }
 
-int Mon::randSteps(Time dt)
+int Mon::randSteps()
 {
 	srand((int)time(0)); // make these different?
 	int randTen = rand() % 50; // 0-49

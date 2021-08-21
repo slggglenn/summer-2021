@@ -15,8 +15,8 @@ private:
 
 public:
 	Mon(float new_x, float new_y, std::string text_loc); //https://stackoverflow.com/questions/14693745/string-as-parameter
-	Direction randDir(Time dt);
-	int randSteps(Time dt);
+	Direction randDir();
+	int randSteps();
 	unsigned int get_stepCounter();
 	void set_stepCounter(unsigned int steps);
 	State getState();

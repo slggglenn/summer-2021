@@ -21,29 +21,29 @@
 //#define TREE3_INDEX (10)
 //#define TREE4_INDEX (11)
 //#define TREE5_INDEX (3)
-#define NUM_OBJECT_SPRITES (47) // +4 trees
+#define NUM_OBJECT_SPRITES (30) // +4 trees
 
 class Scene
 {
 private:
-	VertexArray background;
+	VertexArray background, forestLayer;
 	Texture ssTrans; // transparent texture; loaded from spritesheet
 	Image spritesheet; // get rid of flower hitbox
 	Sprite sprites[NUM_OBJECT_SPRITES]; // somehow associate index number with what type of obj they are
-	FloatRect hitboxes[NUM_OBJECT_SPRITES];
+	//FloatRect hitboxes[NUM_OBJECT_SPRITES];
 	RectangleShape reps[NUM_OBJECT_SPRITES];
 
 public:
 	Scene();
 	void makeBackground(VertexArray& background);
-	void makeDecoLayer(VertexArray& layer);
 	void makeForest(unsigned int startIndex);
-	void makeSprites();
+	//void makeSprites();
 	void makeHitboxes();
 	VertexArray getBackground();
+	VertexArray getForestLayer();
 	Texture& getTexture();
 	Sprite* getSprites();
-	FloatRect* getHitboxes();
-	bool checkCollisions(Mon mon);
+	/*FloatRect* getHitboxes();
+	bool checkCollisions(Mon mon);*/
 	RectangleShape* getReps();
 };
