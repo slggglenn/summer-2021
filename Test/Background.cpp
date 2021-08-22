@@ -11,9 +11,12 @@ Scene::Scene() {
     ssTrans.loadFromImage(spritesheet);
     makeBackground(background);
    // makeSprites();
-    makeForest(0);
+    initialize_spriteMap(); // reference
    // makeHitboxes();
 }
+
+
+int* Scene::getNumObj() { return numObj;  }
 
 void Scene::makeBackground(VertexArray &background) {
     background.setPrimitiveType(Quads);
@@ -38,87 +41,128 @@ void Scene::makeBackground(VertexArray &background) {
     }
 }
 
+// functino to give obj type, switch to randomly generate number of them --> store in map
+// 
+// or map initialization randomly gens obj numbs --> stores
+// during draw, creates sprite and initializes and draws (can go through in layers so no unwanted overlapping)
+
+void Scene::initialize_spriteMap() // start with 0
+{
+    srand(time(0));
+    int index = 0;
+    for (unsigned int i = 0; i < 2; i++) // 2 is # of Object types
+    {
+        OBJECT curr = (OBJECT)i;
+        int num;
+        
+        switch (curr)
+        {
+        case TREE:
+            num = (rand() % 20) + 10;
+            if (num > 20) num = 20; // between 10-20 trees
+            //std::cout << "tree: #: " << num << "pos: " << pos.x << ", " << pos.y << endl;
+            break;
+        case FLOWER:
+            num = (rand() % 30) + 1;
+           // std::cout << "flower: #: " << num << "pos: " << pos.x << ", " << pos.y << endl;
+            break;
+        default:
+            num = 0;
+            break;
+        }
+        
+        for (int k = index; k < index + num; k++)
+        {
+            float r = rand() % 9; // update with TILE stuff!! float convo ok?
+            float c = rand() % 13;
+            Vector2f pos = Vector2f(c, r);
+            std::cout << k << " pos: " << c << ", " << r << endl;
+            spriteMap[k] = pos;
+            numObj[i] = num;
+        }
+    }
+}
+
+Vector2f Scene::randomPos()
+{
+    srand(time(0));
+    float r = rand() % 9; // update with TILE stuff!! float convo ok?
+    float c = rand() % 13;
+    return Vector2f(c * TILE_SIZE, r * TILE_SIZE); // i want it to generate position once and then never be called
+}
+
+std::map<int, Vector2f> Scene::get_spriteMap() { return spriteMap; }
 
 // 4 - 13 (row * r) + col + 1)
 // 0, 0, 0, 
 //4 --> 12
-// r = 5, c = 4
-void Scene::makeForest(unsigned int startIndex) {
-   /* const unsigned int TREE_WIDTH = 43 * 5;
-    const unsigned int TREE_HEIGHT = 55 * 5;*/
-
-    srand(time(0));
-   //3% chance for tree, 1% flower
-
-    int currVertex = 0;
-    int index = startIndex;
-
-    for (unsigned int r = 0; r < ((SCRN_H / TILE_SIZE) + TILE_SIZE); r++)
-    {
-        for (unsigned int c = 0; c < SCRN_W / TILE_SIZE; c++)
-        {
-
-            unsigned int chance = (rand() % 3);
-            switch (chance) {
-            case 1: // flowers
-                sprites[index].setTexture(ssTrans);
-                sprites[index].setScale(5, 5);
-                sprites[index].setTextureRect(IntRect(10, 1535, 43, 55));
-                sprites[index].setPosition(r * TILE_SIZE, c * TILE_SIZE);
-                index++;
-                //hitboxes[startIndex + (r * SCRN_W / TREE_WIDTH) + c] = { 0, 0, 33, 33 };
-                break;
-            case 2: // trees
-                break;
-            case 3:
-           // case 4:
-                sprites[index].setTexture(ssTrans);
-                sprites[index].setScale(5, 5);
-                sprites[index].setTextureRect(IntRect(95, 2420, 33, 33));
-                sprites[index].setPosition(r * TILE_SIZE, c * TILE_SIZE);
-                index++;
-                //hitboxes[startIndex + (r * SCRN_W / TREE_WIDTH) + c] = { 0, 0, 43, 55 };
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
-    //for (unsigned int c = 0; c < SCRN_W / TREE_WIDTH; c++) {
-
-    //    for (unsigned int r = 0; r < SCRN_H / TREE_HEIGHT; r++) {
-    //        background[currVertex].position = Vector2f(c * TREE_WIDTH, r * TREE_HEIGHT);
-    //        background[currVertex + 1].position = Vector2f((c * TREE_WIDTH) + TREE_WIDTH, r * TREE_HEIGHT);
-    //        background[currVertex + 2].position = Vector2f((c * TREE_WIDTH) + TREE_WIDTH, (r * TREE_HEIGHT) + TREE_HEIGHT);
-    //        background[currVertex + 3].position = Vector2f(c * TREE_WIDTH, (r * TREE_HEIGHT) + TREE_HEIGHT);
-
-    //        unsigned int chance = (rand() % 100) + 1;
-    //        switch (chance) {
-    //        case 1: // flowers
-    //            background[currVertex].texCoords = Vector2f(95, 2420);
-    //            background[currVertex + 1].texCoords = Vector2f(128, 2420);
-    //            background[currVertex + 2].texCoords = Vector2f(128, 2453);
-    //            background[currVertex + 3].texCoords = Vector2f(95, 2453);
-    //            //hitboxes[startIndex + (r * SCRN_W / TREE_WIDTH) + c] = { 0, 0, 33, 33 };
-    //            break;
-    //        case 2: // trees
-    //        case 3:
-    //        case 4:
-    //            background[currVertex].texCoords = Vector2f(10, 1535);
-    //            background[currVertex + 1].texCoords = Vector2f(53, 1535);
-    //            background[currVertex + 2].texCoords = Vector2f(53, 1590);
-    //            background[currVertex + 3].texCoords = Vector2f(10, 1590);
-    //            //hitboxes[startIndex + (r * SCRN_W / TREE_WIDTH) + c] = { 0, 0, 43, 55 };
-    //            break;
-    //        default:
-    //            break;
-    //        }
-
-    //        currVertex += 4; // incrementing for # of vertices in quad
-    //    }
-    //}
-}
+//// r = 5, c = 4
+//void Scene::makeForest(unsigned int startIndex) {
+//   /* const unsigned int TREE_WIDTH = 43 * 5;
+//    const unsigned int TREE_HEIGHT = 55 * 5;*/
+//
+//    srand(time(0));
+//   //3% chance for tree, 1% flower
+//
+//    int currVertex = 0;
+//    int index = startIndex;
+//    int limit = NUM_OBJECT_SPRITES;
+//
+//    //((SCRN_H / TILE_SIZE) + TILE_SIZE)
+//    //SCRN_W / TILE_SIZE
+//    for (int r = 0; r < 9; r++) // 9
+//    {
+//        /*sprites[index].setTexture(ssTrans);
+//        sprites[index].setScale(5, 5);
+//        sprites[index].setTextureRect(IntRect(10, 1535, 43, 55));
+//        sprites[index].setPosition(0, r * TILE_SIZE);
+//        std::cout << "tree" << index << ", " << r << ", 0" << endl;
+//        index++, limit--;*/
+//
+//        // random gen # of each thing... put in map?
+//        // then when drawing, randomize location
+//        for (int c = 0; c < 15; c++) // 15
+//        {
+//            if (limit)
+//            {
+//                unsigned int chance = (rand() % 100);
+//                if (chance >= 1 && chance <= 2) {
+//                    // flowers
+//                    sprites[index] = 1;
+//                    /*sprites[index].setTexture(ssTrans);
+//                    sprites[index].setScale(5, 5);
+//                    sprites[index].setTextureRect(IntRect(10, 1535, 43, 55));
+//                    sprites[index].setPosition(c * TILE_SIZE, r * TILE_SIZE);*/
+//                    index++, limit--;
+//                    std::cout << "flower" << index << ", " << c << ", " << r << endl;
+//                    //hitboxes[startIndex + (r * SCRN_W / TREE_WIDTH) + c] = { 0, 0, 33, 33 };
+//                } 
+//                else if (chance >= 3 && chance <= 6) {
+//                    // trees
+//                    sprites[index] = 2;
+//                    /* sprites[index].setTexture(ssTrans);
+//                     sprites[index].setScale(5, 5);
+//                     sprites[index].setTextureRect(IntRect(95, 2420, 33, 33));
+//                     sprites[index].setPosition(c * TILE_SIZE, r * TILE_SIZE);*/
+//                     //hitboxes[startIndex + (r * SCRN_W / TREE_WIDTH) + c] = { 0, 0, 43, 55 };
+//                    index++, limit--;
+//                    std::cout << "tree" << index << ", " << c << ", " << r << endl;
+//                }
+//                else sprites[index] = 0;
+//                }
+//            }
+//            
+//        }
+//    }
+//
+//    //while (limit)
+//    //{
+//    //    sprites[index].setTexture(ssTrans);
+//    //    sprites[index].setColor(Color::Transparent);
+//    //    //sprites[index].setTextureRect(IntRect(95, 2420, 33, 33));
+//    //    index++, limit--;
+//    //}
+//}
 
 
 //void Scene::makeSprites() {
@@ -128,8 +172,24 @@ void Scene::makeForest(unsigned int startIndex) {
 //        sprites[i].setScale(5, 5);
 //    }
 //}
+void Scene::makeSprite(OBJECT type, Vector2f pos, Sprite& sprite)
+{
+    sprite.setTexture(ssTrans);
+    sprite.setScale(5, 5);
+    switch (type)
+    {
+    case TREE:
+        sprite.setTextureRect(IntRect(95, 2420, 33, 33));
+        break;
+    case FLOWER:
+        sprite.setTextureRect(IntRect(10, 1535, 43, 55));
+        break;
+    }
+    sprite.setPosition(pos);
+}
 
-void Scene::makeHitboxes() {
+
+//void Scene::makeHitboxes() {
     // initial positions must be 0 so that they'll overlap when getTransform called ater
   //  hitboxes[TREE_INDEX] = { 0, 0, 43, 55 };
    // hitboxes[SAPLING_INDEX] = { 0, 0, 20, 37 };
@@ -165,7 +225,7 @@ void Scene::makeHitboxes() {
     //    /*if (i == rWINDOW_INDEX) reps[i].setPosition(Vector2f(sprites[i].getPosition().x + ))*/
     //}
 
-}
+//}
 
 //bool Scene::checkCollisions(Mon mon)
 //{
@@ -192,12 +252,10 @@ void Scene::makeHitboxes() {
 
 VertexArray Scene::getBackground() { return background; }
 
-VertexArray Scene::getForestLayer() { return forestLayer; }
+//VertexArray Scene::getForestLayer() { return forestLayer; }
 
 Texture& Scene::getTexture() { return ssTrans; }
 
-Sprite* Scene::getSprites() { return sprites; }
+//Sprite* Scene::getSprites() { return sprites; }
 
 //FloatRect* Scene::getHitboxes() { return hitboxes; }
-
-RectangleShape* Scene::getReps() { return reps; }
