@@ -53,30 +53,31 @@ void Scene::initialize_treeMap()
     srand(time(0));
     
     int num, count;
-    count = 0;
+    count = 0; // num = 5
 
     num = (rand() % 20) + 10;
     if (num > 20) num = 20; // between 10-20 trees
-    numObj[1] = num;
+    numObj[1] = num; // numobj = 0 prevents any from being drawn but still generated
+
     //std::cout << "tree: #: " << num << "pos: " << pos.x << ", " << pos.y << endl;
     for (int r = 0; r < 6; r++) // 6, 9 always going to be misevenly distributed
     {
         for (int c = 0; c < 12; c++)
         {
-           // cout << c << r << endl;
             int tree = (rand() % 100) + 1;
-
-            //if (tree >= 1 && tree <= 10) // temp to figure out how many rows + cs needed
-            //{
-            //    if (count == num) break;
-            //    else {
-            //        treeMap[count].x = c * TREE_TILE;
-            //        treeMap[count].y = r * TREE_TILE;
-            //        std::cout << "tree: #: " << count << "pos: " << c << ", " << r << endl;
-            //        count++;
-            //    }
-            //}
+            if (tree >= 1 && tree <= 10) // temp to figure out how many rows + cs needed
+            {
+                cout << c << " " << r << endl;
+                if (count == num) break;
+                else {
+                    treeMap[count].x = c * TREE_TILE;
+                    treeMap[count].y = r * TREE_TILE;
+                  //  std::cout << "tree: #: " << count << "pos: " << c << ", " << r << endl;
+                    count++;
+                }
+            }
         }
+        numObj[1] = count; // count in case gets through all without making num of trees
     }
 } // alwats tree at (0, 0)
 
@@ -120,7 +121,7 @@ void Scene::initialize_spriteMap() // start with 0
             break;
         }
 
-        numObj[i] = num;
+        numObj[i] = count; // count in case gets through all without making num of trees
         // 0, num = 15, k < 15 --> (0-14) --> 15
         // 15, num= 20, k < 35 --> (15-34) --> 35
     }
@@ -233,6 +234,7 @@ void Scene::makeSprite(OBJECT type, Vector2f pos, Sprite& sprite)
     {
     case TREE:
         sprite.setTextureRect(IntRect(10, 1535, 43, 55));
+        cout << "tree: " << (pos.x) / TILE_SIZE << ", " << pos.y / TILE_SIZE << endl;
         break;
     case FLOWER:
         sprite.setTextureRect(IntRect(95, 2420, 33, 33));
