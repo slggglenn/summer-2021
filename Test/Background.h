@@ -23,7 +23,7 @@
 //#define TREE5_INDEX (3)
 #define NUM_OBJECT_SPRITES (20) // +4 trees
 
-enum OBJECT { FLOWER, TREE }; // organized in terms of priority drawn
+enum OBJECT { FLOWER, TREE }; // organized in terms of priority drawn (why is tree first??)
 
 class Scene
 {
@@ -33,6 +33,7 @@ private:
 	Image spritesheet; // get rid of flower hitbox
 	Sprite sprites[NUM_OBJECT_SPRITES]; // somehow associate index number with what type of obj they are
 	std::map<int, Vector2f> spriteMap;
+	std::map<int, Vector2f> treeMap;
 	int numObj[2];
 	//FloatRect hitboxes[NUM_OBJECT_SPRITES];
 
@@ -51,6 +52,8 @@ public:
 	void makeSprite(OBJECT type, Vector2f pos, Sprite &sprite);
 	//Sprite* getSprites();
 	void initialize_spriteMap();
+	void initialize_treeMap();
+	std::map<int, Vector2f> get_treeMap();
 	/*FloatRect* getHitboxes();
 	bool checkCollisions(Mon mon);*/
 };

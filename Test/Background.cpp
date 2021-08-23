@@ -11,7 +11,8 @@ Scene::Scene() {
     ssTrans.loadFromImage(spritesheet);
     makeBackground(background);
    // makeSprites();
-    initialize_spriteMap(); // reference
+    initialize_spriteMap();
+    initialize_treeMap();
    // makeHitboxes();
 }
 
@@ -46,45 +47,95 @@ void Scene::makeBackground(VertexArray &background) {
 // or map initialization randomly gens obj numbs --> stores
 // during draw, creates sprite and initializes and draws (can go through in layers so no unwanted overlapping)
 
+
+void Scene::initialize_treeMap()
+{
+    srand(time(0));
+    
+    int num, count;
+    count = 0;
+
+    num = (rand() % 20) + 10;
+    if (num > 20) num = 20; // between 10-20 trees
+    numObj[1] = num;
+    //std::cout << "tree: #: " << num << "pos: " << pos.x << ", " << pos.y << endl;
+    for (int r = 0; r < 6; r++) // 6, 9 always going to be misevenly distributed
+    {
+        for (int c = 0; c < 12; c++)
+        {
+           // cout << c << r << endl;
+            int tree = (rand() % 100) + 1;
+
+            //if (tree >= 1 && tree <= 10) // temp to figure out how many rows + cs needed
+            //{
+            //    if (count == num) break;
+            //    else {
+            //        treeMap[count].x = c * TREE_TILE;
+            //        treeMap[count].y = r * TREE_TILE;
+            //        std::cout << "tree: #: " << count << "pos: " << c << ", " << r << endl;
+            //        count++;
+            //    }
+            //}
+        }
+    }
+} // alwats tree at (0, 0)
+
 void Scene::initialize_spriteMap() // start with 0
 {
     srand(time(0));
-    int index = 0;
-    for (unsigned int i = 0; i < 2; i++) // 2 is # of Object types
+    for (unsigned int i = 0; i < 1; i++) // 2 is # of Object types
     {
         OBJECT curr = (OBJECT)i;
-        int num;
+        int num, count;
+        count = 0;
         
         switch (curr)
         {
-        case TREE:
-            num = (rand() % 20) + 10;
-            if (num > 20) num = 20; // between 10-20 trees
-            //std::cout << "tree: #: " << num << "pos: " << pos.x << ", " << pos.y << endl;
-            break;
         case FLOWER:
             num = (rand() % 30) + 1;
+            if (num < 10) num = 10;
+            for (int r = 0; r < 9; r++) // 6, 9 always going to be misevenly distributed
+            {
+                for (int c = 0; c < 12; c++) // lesss rows to get rid of overlap
+                {
+                    int flow = (rand() % 100) + 1;
+
+                    if (flow >= 1 && flow <= 15) // temp to figure out how many rows + cs needed
+                    { // have rowcount instead ?? (implement for both)
+                        if (count == num) break;
+                        else {
+                            spriteMap[count].x = c * (TILE_SIZE + 20);
+                            spriteMap[count].y = r * (TILE_SIZE + 20);
+                            std::cout << "flow: #: " << count << "pos: " << c << ", " << r << endl;
+                            count++;
+                        }
+                    }
+                }
+            }
+
            // std::cout << "flower: #: " << num << "pos: " << pos.x << ", " << pos.y << endl;
             break;
         default:
             num = 0;
             break;
         }
-        
-        for (int k = index; k < index + num; k++)
-        {
-            float r = rand() % 9; // update with TILE stuff!! float convo ok?
-            float c = rand() % 13;
-            Vector2f pos = Vector2f(c, r);
-            std::cout << k << " pos: " << c << ", " << r << endl;
-            spriteMap[k] = pos;
-            numObj[i] = num;
-        }
+
+        numObj[i] = num;
+        // 0, num = 15, k < 15 --> (0-14) --> 15
+        // 15, num= 20, k < 35 --> (15-34) --> 35
     }
 }
 
 Vector2f Scene::randomPos()
 {
+    srand(time(0));
+    for (int r = 0; r < 9; r++)
+    {
+        for (int c = 0; c < 13; c++)
+        {
+
+        }
+    }
     srand(time(0));
     float r = rand() % 9; // update with TILE stuff!! float convo ok?
     float c = rand() % 13;
@@ -92,6 +143,8 @@ Vector2f Scene::randomPos()
 }
 
 std::map<int, Vector2f> Scene::get_spriteMap() { return spriteMap; }
+
+std::map<int, Vector2f> Scene::get_treeMap() { return treeMap; }
 
 // 4 - 13 (row * r) + col + 1)
 // 0, 0, 0, 
@@ -179,10 +232,10 @@ void Scene::makeSprite(OBJECT type, Vector2f pos, Sprite& sprite)
     switch (type)
     {
     case TREE:
-        sprite.setTextureRect(IntRect(95, 2420, 33, 33));
+        sprite.setTextureRect(IntRect(10, 1535, 43, 55));
         break;
     case FLOWER:
-        sprite.setTextureRect(IntRect(10, 1535, 43, 55));
+        sprite.setTextureRect(IntRect(95, 2420, 33, 33));
         break;
     }
     sprite.setPosition(pos);
