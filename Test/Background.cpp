@@ -57,7 +57,7 @@ void Scene::initialize_treeMap()
 
     num = (rand() % 20) + 10;
     if (num > 20) num = 20; // between 10-20 trees
-    numObj[1] = num; // numobj = 0 prevents any from being drawn but still generated
+    numObj[TREE_INDEX] = num; // numobj = 0 prevents any from being drawn but still generated
 
     //std::cout << "tree: #: " << num << "pos: " << pos.x << ", " << pos.y << endl;
     for (int r = 0; r < 6; r++) // 6, 9 always going to be misevenly distributed
@@ -67,7 +67,6 @@ void Scene::initialize_treeMap()
             int tree = (rand() % 100) + 1;
             if (tree >= 1 && tree <= 10) // temp to figure out how many rows + cs needed
             {
-                cout << c << " " << r << endl;
                 if (count == num) break;
                 else {
                     treeMap[count].x = c * TREE_TILE;
@@ -77,49 +76,76 @@ void Scene::initialize_treeMap()
                 }
             }
         }
-        numObj[1] = count; // count in case gets through all without making num of trees
+        numObj[TREE_INDEX] = count; // count in case gets through all without making num of trees
     }
 } // alwats tree at (0, 0)
+
+int Scene::initializeSubtype(OBJECT type, int num, int rMax, int cMax, int percentMax, int randNum)
+{
+    srand(time(0) / randNum);
+    int count = 0;
+    for (int r = 0; r < rMax; r++) // 6, 9 always going to be misevenly distributed
+    {
+        for (int c = 0; c < cMax; c++) // lesss rows to get rid of overlap
+        {
+            int flow = (rand() % 100) + 1;
+
+            if (flow >= 1 && flow <= percentMax) // temp to figure out how many rows + cs needed
+            { // have rowcount instead ?? (implement for both)
+                if (count == num) break;
+                else {
+                    spriteMap[count].x = c * (TILE_SIZE + 20);
+                    spriteMap[count].y = r * (TILE_SIZE + 20);
+                    //std::cout << "flow: #: " << count << "pos: " << c << ", " << r << endl;
+                    count++;
+                }
+            }
+        }
+    }
+    return count;
+}
 
 void Scene::initialize_spriteMap() // start with 0
 {
     srand(time(0));
-    for (unsigned int i = 0; i < 1; i++) // 2 is # of Object types
+    for (unsigned int i = 0; i < NUM_OBJ_TYPES; i++) // 2 is # of Object types
     {
         OBJECT curr = (OBJECT)i;
-        int num, count;
+        int num, count, rMax, cMax, percentMax;
         count = 0;
         
-        switch (curr)
+        srand(rand() % (i + 1));
+
+        if (curr == FLOWER)
         {
-        case FLOWER:
             num = (rand() % 30) + 1;
             if (num < 10) num = 10;
-            for (int r = 0; r < 9; r++) // 6, 9 always going to be misevenly distributed
-            {
-                for (int c = 0; c < 12; c++) // lesss rows to get rid of overlap
-                {
-                    int flow = (rand() % 100) + 1;
-
-                    if (flow >= 1 && flow <= 15) // temp to figure out how many rows + cs needed
-                    { // have rowcount instead ?? (implement for both)
-                        if (count == num) break;
-                        else {
-                            spriteMap[count].x = c * (TILE_SIZE + 20);
-                            spriteMap[count].y = r * (TILE_SIZE + 20);
-                            std::cout << "flow: #: " << count << "pos: " << c << ", " << r << endl;
-                            count++;
-                        }
-                    }
-                }
-            }
-
-           // std::cout << "flower: #: " << num << "pos: " << pos.x << ", " << pos.y << endl;
-            break;
-        default:
-            num = 0;
-            break;
+            cout << rand() * num << endl;
+            count = initializeSubtype(curr, num, 9, 12, 15, rand() * num);
         }
+        else if (curr == MUSHROOM) {
+            num = (rand() % 6) + 1;
+            cout << rand() * num / 2 << endl;
+            count = initializeSubtype(curr, num, 9, 12, 15, -rand() * num / 2);
+        }
+        else if (curr == SPROUT) {
+            num = (rand() % 6) + 1;
+            cout << rand() * num / 2 << endl;
+            count = initializeSubtype(curr, num, 9, 12, 15, rand() * num / 3);
+        }
+        else if (curr == BUSH) {
+            num = rand() % 8 + 1;
+            cout << rand() + num << endl;
+            count = initializeSubtype(curr, num, 9, 12, 15, rand() + num);
+        }
+        else if (curr == SAPLING) {
+            num = rand() % 8 + 1;
+            cout << rand() + num << endl;
+            count = initializeSubtype(curr, num, 9, 12, 15, -rand() / num);
+        }
+        /*else if (curr == FRUIT) {
+            count = initializeSubtype(curr, (rand() % 6) + 1, 9, 12, 15);
+        }*/
 
         numObj[i] = count; // count in case gets through all without making num of trees
         // 0, num = 15, k < 15 --> (0-14) --> 15
@@ -234,10 +260,26 @@ void Scene::makeSprite(OBJECT type, Vector2f pos, Sprite& sprite)
     {
     case TREE:
         sprite.setTextureRect(IntRect(10, 1535, 43, 55));
-        cout << "tree: " << (pos.x) / TILE_SIZE << ", " << pos.y / TILE_SIZE << endl;
+       // cout << "tree: " << (pos.x) / TILE_SIZE << ", " << pos.y / TILE_SIZE << endl;
         break;
     case FLOWER:
         sprite.setTextureRect(IntRect(95, 2420, 33, 33));
+        break;
+    case MUSHROOM:
+        sprite.setTextureRect(IntRect(40, 2301, 16, 17));
+        //sprites[FRUIT_INDEX].setTextureRect(IntRect(159, 1557, 34, 27));
+        break;
+    case SPROUT:
+        sprite.setTextureRect(IntRect(135, 2847, 16, 14));
+        break;
+    case SAPLING:
+        sprite.setTextureRect(IntRect(70, 1553, 20, 37));
+        break;
+    case BUSH:
+        sprite.setTextureRect(IntRect(106, 6998, 18, 15));
+        break;
+    case FRUIT:
+        sprite.setTextureRect(IntRect(159, 1557, 34, 27));
         break;
     }
     sprite.setPosition(pos);
