@@ -25,7 +25,7 @@
 #define NUM_OBJ_TYPES (6)
 #define TREE_INDEX (5)
 
-enum OBJECT { FLOWER, MUSHROOM, SPROUT, BUSH, SAPLING, TREE, FRUIT }; // organized in terms of priority drawn (why is tree first??)
+enum OBJECT { FLOWER, MUSHROOM, SPROUT, BUSH, SAPLING, TREE }; // organized in terms of priority drawn (why is tree first??)
 
 class Scene
 {
@@ -34,8 +34,8 @@ private:
 	Texture ssTrans; // transparent texture; loaded from spritesheet
 	Image spritesheet; // get rid of flower hitbox
 	Sprite sprites[NUM_OBJECT_SPRITES]; // somehow associate index number with what type of obj they are
-	std::map<int, Vector2f> spriteMap;
-	std::map<int, Vector2f> treeMap;
+	//std::map<int, Vector2f> treeMap;
+	std::map<std::pair<OBJECT, int>, Vector2f> spriteMap;
 	int numObj[NUM_OBJ_TYPES];
 	//FloatRect hitboxes[NUM_OBJECT_SPRITES];
 
@@ -49,14 +49,15 @@ public:
 	VertexArray getBackground();
 	//VertexArray getForestLayer();
 	Texture& getTexture();
-	std::map<int, Vector2f> get_spriteMap();
+	std::map<std::pair<OBJECT, int>, Vector2f> get_spriteMap();
 	Vector2f randomPos();
 	void makeSprite(OBJECT type, Vector2f pos, Sprite &sprite);
 	//Sprite* getSprites();
 	int initializeSubtype(OBJECT type, int num, int rMax, int cMax, int percentMax, int randNum); // use for tree?
 	void initialize_spriteMap();
-	void initialize_treeMap();
-	std::map<int, Vector2f> get_treeMap();
+	bool isNearby(int x, int y, OBJECT* obj);
+	//void initialize_treeMap();
+	//std::map<int, Vector2f> get_treeMap();
 	/*FloatRect* getHitboxes();
 	bool checkCollisions(Mon mon);*/
 };
