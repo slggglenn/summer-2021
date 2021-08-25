@@ -5,9 +5,9 @@
 #include <iostream>
 
 #define NUM_OBJECT_SPRITES (20) // +4 trees
-#define NUM_OBJ_TYPES (6)
+#define NUM_OBJ_TYPES (7)
 
-enum OBJECT { FLOWER, MUSHROOM, SPROUT, BUSH, SAPLING, TREE }; // organized in terms of priority drawn (why is tree first??)
+enum OBJECT { FLOWER, MUSHROOM, SPROUT, BUSH, SAPLING, TREE, FRUIT }; // organized in terms of priority drawn (why is tree first??)
 // NONE is temp!!
 class Scene
 {

@@ -80,11 +80,11 @@ void Scene::initialize_spriteMap() // start with 0
     //{
     //    randNums[j] = rand() % (j + 1) + 1;
     //} // better to generatet
-    int percent[NUM_OBJ_TYPES] = { 5, 7, 3, 4, 3, 9 };
-    int densityBuffer[NUM_OBJ_TYPES] = { 0,0,0,0,0,0 };
+    int percent[NUM_OBJ_TYPES - 1] = { 5, 7, 3, 4, 3, 9}; // WO FRUIT
+    int densityBuffer[NUM_OBJ_TYPES - 1] = { 0,0,0,0,0,0 };
     int willPlaceObj = 0;
 
-    for (int i = 0; i < NUM_OBJ_TYPES; i++)
+    for (int i = 0; i < NUM_OBJ_TYPES - 1; i++) // DON"T INCLUDE FRUIT
     {
         //std::cout << percent[i] << ", ";
         willPlaceObj += percent[i];
@@ -121,21 +121,24 @@ void Scene::initialize_spriteMap() // start with 0
                 // more efficient way to trigger nearby updates
                 for (unsigned int i = 0; i < 8; i++)
                 {
+                    if ((OBJECT)i == SAPLING) continue;
+
                     if (isNearby(adjCoords[i][0], adjCoords[i][1], &nearby)) densityBuffer[(int)nearby] += 1;
                     else if (adjCoords[i][0] && adjCoords[i][1] && !isNearby(adjCoords[i][0], adjCoords[i][1], &nearby))
                     {
                         if (densityBuffer[(int)nearby]) densityBuffer[(int)nearby] -= 1; // decreases is none around
+                        // for flower 
                     }
                     
                 }
 
                 OBJECT currType;
-                int fP, mP, spP, bP, saP, tP;
+                int fP, mP, spP, bP, saP, tP, frP;
                 fP = percent[(int)FLOWER] + densityBuffer[(int)FLOWER];
                 mP = percent[(int)MUSHROOM] + densityBuffer[(int)MUSHROOM];
                 spP = percent[(int)SPROUT] + densityBuffer[(int)SPROUT];
                 bP = percent[(int)BUSH] + densityBuffer[(int)BUSH];
-                saP = percent[(int)SAPLING] + densityBuffer[(int)SAPLING];
+                saP = percent[(int)SAPLING];
                 tP = percent[(int)TREE] + densityBuffer[(int)TREE];
 
                 if (randObj <= fP) currType = FLOWER;
@@ -143,7 +146,19 @@ void Scene::initialize_spriteMap() // start with 0
                 else if (randObj > fP + mP && randObj <= fP + mP + spP) currType = SPROUT;
                 else if (randObj > fP + mP + spP && randObj <= fP + mP + spP + bP) currType = BUSH;
                 else if (randObj > fP + mP + spP + bP && randObj <= fP + mP + spP + bP + saP) currType = SAPLING;
-                else if (randObj > fP + mP + spP + bP + saP && randObj <= fP + mP + spP + bP + saP + tP) currType = TREE;
+                else if (randObj > fP + mP + spP + bP + saP && randObj <= fP + mP + spP + bP + saP + tP)
+                {
+                    currType = TREE;
+
+                    // random chance of having fruit
+                    int hasFruit = rand() % - 1;
+                    if (hasFruit)
+                    {
+                        makeSprite(FRUIT, Vector2f(c * TILE_SIZE, r * TILE_SIZE), spriteMap[std::make_pair(FRUIT, numObj[(int)FRUIT])]); // makes fruit
+                        (numObj[(int)FRUIT])++;
+                    }
+                }
+                
                 
                 makeSprite(currType, Vector2f(c * TILE_SIZE, r * TILE_SIZE), spriteMap[std::make_pair(currType, numObj[(int)currType])]); // start at 0, then you increment as index
                 //spriteMap[std::make_pair(currType, numObj[(int)currType])].y = r * TILE_SIZE;
@@ -159,7 +174,7 @@ bool Scene::isNearby(int x, int y, OBJECT* nearby)
 {
     if (!x || !y) return false;
 
-    for (int i = 0; i < NUM_OBJ_TYPES; i++)
+    for (int i = 0; i < NUM_OBJ_TYPES - 1; i++) // excludes fruit
     {
         for (int j = 0; j < numObj[i]; j++)
         {
@@ -182,16 +197,18 @@ void Scene::makeSprite(OBJECT type, Vector2f pos, Sprite& sprite)
     switch (type)
     {
     case TREE:
+        //if (modified) sprite.setTextureRect(IntRect(10, 1535, 43, 55)); differet
+        //else
         sprite.setTextureRect(IntRect(10, 1535, 43, 55));
-       // cout << "tree: " << (pos.x) / TILE_SIZE << ", " << pos.y / TILE_SIZE << endl;
         break;
     case FLOWER:
+        //if (modified) sprite.setTextureRect(IntRect(105, 2462, 17, 16)); // change hitbox! if nec 
+       // else 
         sprite.setTextureRect(IntRect(95, 2420, 33, 33));
         sprite.setScale(4, 4); // necessary, but tech redundant
         break;
     case MUSHROOM:
         sprite.setTextureRect(IntRect(40, 2301, 16, 17));
-        //sprites[FRUIT_INDEX].setTextureRect(IntRect(159, 1557, 34, 27));
         break;
     case SPROUT:
         sprite.setTextureRect(IntRect(135, 2847, 16, 14));
@@ -203,9 +220,13 @@ void Scene::makeSprite(OBJECT type, Vector2f pos, Sprite& sprite)
         sprite.setTextureRect(IntRect(106, 6998, 18, 15));
         sprite.setScale(6, 6);
         break;
-    /*case FRUIT:
-        sprite.setTextureRect(IntRect(159, 1557, 34, 27));
-        break;*/
+    case FRUIT:
+        // determines fruit color
+        srand(time(0));
+        int isBlue = rand() % 2;
+        if (isBlue) sprite.setTextureRect(IntRect(160, 1557, 33, 24));
+        else sprite.setTextureRect(IntRect(160, 1526, 33, 24));
+        break;
     }
     sprite.setPosition(pos);
 }
@@ -214,7 +235,7 @@ void Scene::makeSprite(OBJECT type, Vector2f pos, Sprite& sprite)
 void Scene::makeHitboxes() {
 
 
-    for (int i = 0; i < NUM_OBJ_TYPES; i++)
+    for (int i = (int)BUSH; i < NUM_OBJ_TYPES - 1; i++)
     {
         for (int j = 0; j < numObj[i]; j++)
         {
@@ -224,10 +245,6 @@ void Scene::makeHitboxes() {
 
             switch (i)
             {
-            case FLOWER:
-                objWidth = 33;
-                objHeight = 33;
-                break;
             case TREE:
                 objWidth = 43;
                 objHeight = 55;
@@ -236,17 +253,9 @@ void Scene::makeHitboxes() {
                 objWidth = 20;
                 objHeight = 37;
                 break;
-            case MUSHROOM:
-                objWidth = 16;
-                objHeight = 17;
-                break;
             case BUSH:
                 objWidth = 18;
                 objHeight = 15;
-                break;
-            case SPROUT:
-                objWidth = 16;
-                objHeight = 14;
                 break;
             }
             hitboxMap[std::make_pair((OBJECT)i, j)].left = spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x;//0; // else messes with transform call in test? spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x;

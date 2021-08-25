@@ -117,8 +117,9 @@ int main()
         //    eevee.setSprite(); // isMoving??
         //}
 
-
-        for (int i = (int)BUSH; i < NUM_OBJ_TYPES; i++) // bush->tree
+        
+        // collisions
+        for (int i = (int)BUSH; i < NUM_OBJ_TYPES - 1; i++) // bush->tree
         {
             for (int j = 0; j < fieldScene.getNumObj()[i]; j++)
             {
@@ -237,3 +238,4 @@ int main()
 // creature interactions
 // no sprite overlap (NASTY overlap between sapling and tree)
 // more backgrounds
+// if flower by itslef, sprite with 2, else full
