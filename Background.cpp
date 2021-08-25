@@ -15,9 +15,9 @@ Scene::Scene() {
 }
 
 
-int* Scene::getNumObj() { return numObj;  }
+int* Scene::getNumObj() { return numObj; }
 
-void Scene::makeBackground(VertexArray &background) {
+void Scene::makeBackground(VertexArray& background) {
     background.setPrimitiveType(Quads);
     background.resize(((SCRN_H / TILE_SIZE) + TILE_SIZE) * (SCRN_W / TILE_SIZE) * 4);
 
@@ -80,16 +80,16 @@ void Scene::initialize_spriteMap() // start with 0
     //{
     //    randNums[j] = rand() % (j + 1) + 1;
     //} // better to generatet
-    int percent[NUM_OBJ_TYPES - 1] = { 5, 7, 3, 4, 3, 9}; // WO FRUIT
-    int densityBuffer[NUM_OBJ_TYPES - 1] = { 0,0,0,0,0,0 };
+    int percent[NUM_OBJ_TYPES] = { 5, 7, 3, 4, 3, 9 };
+    int densityBuffer[NUM_OBJ_TYPES] = { 0,0,0,0,0,0 };
     int willPlaceObj = 0;
 
-    for (int i = 0; i < NUM_OBJ_TYPES - 1; i++) // DON"T INCLUDE FRUIT
+    for (int i = 0; i < NUM_OBJ_TYPES; i++)
     {
         //std::cout << percent[i] << ", ";
         willPlaceObj += percent[i];
     }
-   // cout << endl << endl;
+    // cout << endl << endl;
 
     for (int r = 0; r < 9; r++)
     {
@@ -121,24 +121,21 @@ void Scene::initialize_spriteMap() // start with 0
                 // more efficient way to trigger nearby updates
                 for (unsigned int i = 0; i < 8; i++)
                 {
-                    if ((OBJECT)i == SAPLING) continue;
-
                     if (isNearby(adjCoords[i][0], adjCoords[i][1], &nearby)) densityBuffer[(int)nearby] += 1;
                     else if (adjCoords[i][0] && adjCoords[i][1] && !isNearby(adjCoords[i][0], adjCoords[i][1], &nearby))
                     {
                         if (densityBuffer[(int)nearby]) densityBuffer[(int)nearby] -= 1; // decreases is none around
-                        // for flower 
                     }
-                    
+
                 }
 
                 OBJECT currType;
-                int fP, mP, spP, bP, saP, tP, frP;
+                int fP, mP, spP, bP, saP, tP;
                 fP = percent[(int)FLOWER] + densityBuffer[(int)FLOWER];
                 mP = percent[(int)MUSHROOM] + densityBuffer[(int)MUSHROOM];
                 spP = percent[(int)SPROUT] + densityBuffer[(int)SPROUT];
                 bP = percent[(int)BUSH] + densityBuffer[(int)BUSH];
-                saP = percent[(int)SAPLING];
+                saP = percent[(int)SAPLING] + densityBuffer[(int)SAPLING];
                 tP = percent[(int)TREE] + densityBuffer[(int)TREE];
 
                 if (randObj <= fP) currType = FLOWER;
@@ -146,20 +143,8 @@ void Scene::initialize_spriteMap() // start with 0
                 else if (randObj > fP + mP && randObj <= fP + mP + spP) currType = SPROUT;
                 else if (randObj > fP + mP + spP && randObj <= fP + mP + spP + bP) currType = BUSH;
                 else if (randObj > fP + mP + spP + bP && randObj <= fP + mP + spP + bP + saP) currType = SAPLING;
-                else if (randObj > fP + mP + spP + bP + saP && randObj <= fP + mP + spP + bP + saP + tP)
-                {
-                    currType = TREE;
+                else if (randObj > fP + mP + spP + bP + saP && randObj <= fP + mP + spP + bP + saP + tP) currType = TREE;
 
-                    // random chance of having fruit
-                    int hasFruit = rand() % - 1;
-                    if (hasFruit)
-                    {
-                        makeSprite(FRUIT, Vector2f(c * TILE_SIZE, r * TILE_SIZE), spriteMap[std::make_pair(FRUIT, numObj[(int)FRUIT])]); // makes fruit
-                        (numObj[(int)FRUIT])++;
-                    }
-                }
-                
-                
                 makeSprite(currType, Vector2f(c * TILE_SIZE, r * TILE_SIZE), spriteMap[std::make_pair(currType, numObj[(int)currType])]); // start at 0, then you increment as index
                 //spriteMap[std::make_pair(currType, numObj[(int)currType])].y = r * TILE_SIZE;
                 (numObj[(int)currType])++;
@@ -174,16 +159,16 @@ bool Scene::isNearby(int x, int y, OBJECT* nearby)
 {
     if (!x || !y) return false;
 
-    for (int i = 0; i < NUM_OBJ_TYPES - 1; i++) // excludes fruit
+    for (int i = 0; i < NUM_OBJ_TYPES; i++)
     {
         for (int j = 0; j < numObj[i]; j++)
         {
             if (spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x / TILE_SIZE == x &&
                 spriteMap[std::make_pair((OBJECT)i, j)].getPosition().y / TILE_SIZE == y)
-                {// idk if this'll work for tree
-                    (*nearby) = (OBJECT)i;
-                    return true; // will this break??
-                }
+            {// idk if this'll work for tree
+                (*nearby) = (OBJECT)i;
+                return true; // will this break??
+            }
         }
     }
     return false;
@@ -197,18 +182,16 @@ void Scene::makeSprite(OBJECT type, Vector2f pos, Sprite& sprite)
     switch (type)
     {
     case TREE:
-        //if (modified) sprite.setTextureRect(IntRect(10, 1535, 43, 55)); differet
-        //else
         sprite.setTextureRect(IntRect(10, 1535, 43, 55));
+        // cout << "tree: " << (pos.x) / TILE_SIZE << ", " << pos.y / TILE_SIZE << endl;
         break;
     case FLOWER:
-        //if (modified) sprite.setTextureRect(IntRect(105, 2462, 17, 16)); // change hitbox! if nec 
-       // else 
         sprite.setTextureRect(IntRect(95, 2420, 33, 33));
         sprite.setScale(4, 4); // necessary, but tech redundant
         break;
     case MUSHROOM:
         sprite.setTextureRect(IntRect(40, 2301, 16, 17));
+        //sprites[FRUIT_INDEX].setTextureRect(IntRect(159, 1557, 34, 27));
         break;
     case SPROUT:
         sprite.setTextureRect(IntRect(135, 2847, 16, 14));
@@ -220,13 +203,9 @@ void Scene::makeSprite(OBJECT type, Vector2f pos, Sprite& sprite)
         sprite.setTextureRect(IntRect(106, 6998, 18, 15));
         sprite.setScale(6, 6);
         break;
-    case FRUIT:
-        // determines fruit color
-        srand(time(0));
-        int isBlue = rand() % 2;
-        if (isBlue) sprite.setTextureRect(IntRect(160, 1557, 33, 24));
-        else sprite.setTextureRect(IntRect(160, 1526, 33, 24));
-        break;
+        /*case FRUIT:
+            sprite.setTextureRect(IntRect(159, 1557, 34, 27));
+            break;*/
     }
     sprite.setPosition(pos);
 }
@@ -235,7 +214,7 @@ void Scene::makeSprite(OBJECT type, Vector2f pos, Sprite& sprite)
 void Scene::makeHitboxes() {
 
 
-    for (int i = (int)BUSH; i < NUM_OBJ_TYPES - 1; i++)
+    for (int i = 0; i < NUM_OBJ_TYPES; i++)
     {
         for (int j = 0; j < numObj[i]; j++)
         {
@@ -245,6 +224,10 @@ void Scene::makeHitboxes() {
 
             switch (i)
             {
+            case FLOWER:
+                objWidth = 33;
+                objHeight = 33;
+                break;
             case TREE:
                 objWidth = 43;
                 objHeight = 55;
@@ -253,9 +236,17 @@ void Scene::makeHitboxes() {
                 objWidth = 20;
                 objHeight = 37;
                 break;
+            case MUSHROOM:
+                objWidth = 16;
+                objHeight = 17;
+                break;
             case BUSH:
                 objWidth = 18;
                 objHeight = 15;
+                break;
+            case SPROUT:
+                objWidth = 16;
+                objHeight = 14;
                 break;
             }
             hitboxMap[std::make_pair((OBJECT)i, j)].left = spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x;//0; // else messes with transform call in test? spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x;
@@ -263,56 +254,56 @@ void Scene::makeHitboxes() {
             hitboxMap[std::make_pair((OBJECT)i, j)].width = objWidth * spriteMap[std::make_pair((OBJECT)i, j)].getScale().x;
             hitboxMap[std::make_pair((OBJECT)i, j)].height = objHeight * spriteMap[std::make_pair((OBJECT)i, j)].getScale().y;
 
-           // spriteMap[std::make_pair((OBJECT)i, j)].getTransform().transformRect(hitboxMap[std::make_pair((OBJECT)i, j)]); // may not need toput this here?? called another time in test
+            // spriteMap[std::make_pair((OBJECT)i, j)].getTransform().transformRect(hitboxMap[std::make_pair((OBJECT)i, j)]); // may not need toput this here?? called another time in test
             reps[std::make_pair((OBJECT)i, j)].setSize(Vector2f(hitboxMap[std::make_pair((OBJECT)i, j)].width, hitboxMap[std::make_pair((OBJECT)i, j)].height));
-           // hitboxMap[std::make_pair((OBJECT)i, j)].
-            // run
+            // hitboxMap[std::make_pair((OBJECT)i, j)].
+             // run
 
-            /*reps[std::make_pair((OBJECT)i, j)].setSize(Vector2f
-                                                                (objWidth * spriteMap[std::make_pair((OBJECT)i, j)].getScale().x, 
-                                                                 objHeight * spriteMap[std::make_pair((OBJECT)i, j)].getScale().y)); */// scale exception for bushes and other!
+             /*reps[std::make_pair((OBJECT)i, j)].setSize(Vector2f
+                                                                 (objWidth * spriteMap[std::make_pair((OBJECT)i, j)].getScale().x,
+                                                                  objHeight * spriteMap[std::make_pair((OBJECT)i, j)].getScale().y)); */// scale exception for bushes and other!
             reps[std::make_pair((OBJECT)i, j)].setFillColor(Color(101, 5, 56, 70));
             //reps[std::make_pair((OBJECT)i, j)].setPosition(Vector2f(hitboxMap[std::make_pair((OBJECT)i, j)].left, hitboxMap[std::make_pair((OBJECT)i, j)].top));
             reps[std::make_pair((OBJECT)i, j)].setPosition(hitboxMap[std::make_pair((OBJECT)i, j)].left, hitboxMap[std::make_pair((OBJECT)i, j)].top);
-                //Vector2f(spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x, spriteMap[std::make_pair((OBJECT)i, j)].getPosition().y));
+            //Vector2f(spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x, spriteMap[std::make_pair((OBJECT)i, j)].getPosition().y));
         };
-            
-        }
+
     }
-    // initial positions must be 0 so that they'll overlap when getTransform called ater
-   // hitboxes[TREE_INDEX] = { 0, 0, 43, 55 };
-   // hitboxes[SAPLING_INDEX] = { 0, 0, 20, 37 };
-   // hitboxes[GRASS_INDEX] = { 0, 0, 19, 18 };
-   // hitboxes[MUSHROOM_INDEX] = { 0, 0, 16, 17 };
-   // hitboxes[BUSH_INDEX] = { 0, 0, 18, 15 };
-   // hitboxes[FRUIT_INDEX] = { 0, 0, 34, 27 };
-   //// hitboxes[SPROUT_INDEX] = { 0, 0, 16, 14 };
-   // hitboxes[FLOWERS_INDEX] = { 0, 0, 33, 33 };
-    /*hitboxes[lWINDOW_INDEX] = { 0, 0, 1, 1080 };
-    hitboxes[rWINDOW_INDEX] = { 0, 0, 1, 1080 };
-    hitboxes[uWINDOW_INDEX] = { 0, 0, 1920, 1 };
-    hitboxes[bWINDOW_INDEX] = { 0, 0, 1920, 1 };*/
+}
+// initial positions must be 0 so that they'll overlap when getTransform called ater
+// hitboxes[TREE_INDEX] = { 0, 0, 43, 55 };
+// hitboxes[SAPLING_INDEX] = { 0, 0, 20, 37 };
+// hitboxes[GRASS_INDEX] = { 0, 0, 19, 18 };
+// hitboxes[MUSHROOM_INDEX] = { 0, 0, 16, 17 };
+// hitboxes[BUSH_INDEX] = { 0, 0, 18, 15 };
+// hitboxes[FRUIT_INDEX] = { 0, 0, 34, 27 };
+//// hitboxes[SPROUT_INDEX] = { 0, 0, 16, 14 };
+// hitboxes[FLOWERS_INDEX] = { 0, 0, 33, 33 };
+ /*hitboxes[lWINDOW_INDEX] = { 0, 0, 1, 1080 };
+ hitboxes[rWINDOW_INDEX] = { 0, 0, 1, 1080 };
+ hitboxes[uWINDOW_INDEX] = { 0, 0, 1920, 1 };
+ hitboxes[bWINDOW_INDEX] = { 0, 0, 1920, 1 };*/
 
-  //  reps[TREE_INDEX].setSize(Vector2f(43 * 6, 55 * 6 ));
- //   reps[SAPLING_INDEX].setSize(Vector2f(20 * 6, 37 * 6));
-   // reps[GRASS_INDEX].setSize(Vector2f(19 * 6, 18 * 6));
-   //// reps[MUSHROOM_INDEX].setSize(Vector2f(16 * 6, 17 * 6));
-   // reps[BUSH_INDEX].setSize(Vector2f(18 * 6, 15 * 6));
-   // //reps[FRUIT_INDEX].setSize(Vector2f(34 * 6, 27 * 6));
-   ///// reps[SPROUT_INDEX].setSize(Vector2f(16 * 6, 14 * 6));
-   // reps[FLOWERS_INDEX].setSize(Vector2f(33 * 6, 33 * 6));
-    /*reps[lWINDOW_INDEX].setSize(Vector2f(20, 1080));
-    reps[rWINDOW_INDEX].setSize(Vector2f(20, 1080));
-    reps[uWINDOW_INDEX].setSize(Vector2f(1920, 20));
-    reps[bWINDOW_INDEX].setSize(Vector2f(1920, 20));*/
+ //  reps[TREE_INDEX].setSize(Vector2f(43 * 6, 55 * 6 ));
+//   reps[SAPLING_INDEX].setSize(Vector2f(20 * 6, 37 * 6));
+  // reps[GRASS_INDEX].setSize(Vector2f(19 * 6, 18 * 6));
+  //// reps[MUSHROOM_INDEX].setSize(Vector2f(16 * 6, 17 * 6));
+  // reps[BUSH_INDEX].setSize(Vector2f(18 * 6, 15 * 6));
+  // //reps[FRUIT_INDEX].setSize(Vector2f(34 * 6, 27 * 6));
+  ///// reps[SPROUT_INDEX].setSize(Vector2f(16 * 6, 14 * 6));
+  // reps[FLOWERS_INDEX].setSize(Vector2f(33 * 6, 33 * 6));
+   /*reps[lWINDOW_INDEX].setSize(Vector2f(20, 1080));
+   reps[rWINDOW_INDEX].setSize(Vector2f(20, 1080));
+   reps[uWINDOW_INDEX].setSize(Vector2f(1920, 20));
+   reps[bWINDOW_INDEX].setSize(Vector2f(1920, 20));*/
 
-    // up until window stuff
-    //for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++) { // how to do this if sprites not made???
-    //    spriteMap[i].getTransform().transformRect(hitboxes[i]);
-    //   // reps[i].setFillColor(Color(101, 5, 56, 70));
-    //   // reps[i].setPosition(Vector2f(sprites[i].getPosition().x, sprites[i].getPosition().y));
-    //    /*if (i == rWINDOW_INDEX) reps[i].setPosition(Vector2f(sprites[i].getPosition().x + ))*/
-    //}
+   // up until window stuff
+   //for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++) { // how to do this if sprites not made???
+   //    spriteMap[i].getTransform().transformRect(hitboxes[i]);
+   //   // reps[i].setFillColor(Color(101, 5, 56, 70));
+   //   // reps[i].setPosition(Vector2f(sprites[i].getPosition().x, sprites[i].getPosition().y));
+   //    /*if (i == rWINDOW_INDEX) reps[i].setPosition(Vector2f(sprites[i].getPosition().x + ))*/
+   //}
 
 //}
 

@@ -48,26 +48,26 @@ int main()
 
         if (Keyboard::isKeyPressed(Keyboard::Tab)) showRep = !showRep;
 
-       //Event event;
+        //Event event;
 
-       // while (window.pollEvent(event))
-       // {
-       //     if (event.type == Event::KeyPressed)
-       //     {
-       //         player.isMoving(true);
-       //         player.setSprite();
-       //         player.updateDirection(); // try switching with setSprite to see if detects LEFT_UP
-       //     }
-       //     if (event.type == Event::KeyReleased)
-       //     {
-       //         player.isMoving(false);
-       //         player.zeroDirection();
-       //     }
-       // }
+        // while (window.pollEvent(event))
+        // {
+        //     if (event.type == Event::KeyPressed)
+        //     {
+        //         player.isMoving(true);
+        //         player.setSprite();
+        //         player.updateDirection(); // try switching with setSprite to see if detects LEFT_UP
+        //     }
+        //     if (event.type == Event::KeyReleased)
+        //     {
+        //         player.isMoving(false);
+        //         player.zeroDirection();
+        //     }
+        // }
 
 
 
-        // update time
+         // update time
         Time dt = clock.restart();
 
         // if eevee doesn't have steps remaining, will generate more
@@ -93,33 +93,9 @@ int main()
                 eevee.isMoving(false);
             }
         }
-        
-        // tree, bush, sapling 
-        // 
-        // collisions checking
-        //if (eevee.willCollide(fieldScene.getSprites()[TREE_INDEX], fieldScene.getHitboxes()[TREE_INDEX]))
-        //{
-        //    std::cout << "COLLISION";
-        //   // fieldScene.getReps()[TREE_INDEX].setFillColor(Color(201, 114, 144, 40));
-        //    Direction old = eevee.getOrientation();
-        //    while (eevee.getOrientation() == old) { eevee.setOrientation(eevee.randDir()); }
-        //    eevee.setDirection(eevee.getOrientation());
-        //    eevee.setSprite(); // isMoving??
-        //}
 
-        // works kinda but opengl error
-        //if (fieldScene.checkCollisions(eevee))
-        //{
-        //    //std::cout << "COLLISION";
-        //    Direction old = eevee.getOrientation();
-        //    while (eevee.getOrientation() == old) { eevee.setOrientation(eevee.randDir()); }
-        //    eevee.setDirection(eevee.getOrientation());
-        //    eevee.setSprite(); // isMoving??
-        //}
 
-        
-        // collisions
-        for (int i = (int)BUSH; i < NUM_OBJ_TYPES - 1; i++) // bush->tree
+        for (int i = (int)BUSH; i < NUM_OBJ_TYPES; i++) // bush->tree
         {
             for (int j = 0; j < fieldScene.getNumObj()[i]; j++)
             {
@@ -127,37 +103,28 @@ int main()
                 //if (eevee.willCollide(fieldScene.get_spriteMap[std::make_pair((OBJECT)i, j)], 
                 //                      fieldScene.get_hitboxMap[std::make_pair((OBJECT)i, j)])) // something added with this loop or implementation in Test.cpp that caused opengl
                 //{
-                    Sprite obj = fieldScene.get_spriteMap()[std::make_pair((OBJECT)i, j)];
-                    FloatRect objHB = fieldScene.get_hitboxMap()[std::make_pair((OBJECT)i, j)];
+                Sprite obj = fieldScene.get_spriteMap()[std::make_pair((OBJECT)i, j)];
+                FloatRect objHB = fieldScene.get_hitboxMap()[std::make_pair((OBJECT)i, j)];
 
-                    if (eevee.getGlobalHitbox().intersects(obj.getTransform().transformRect(objHB)))
-                    {
-                        fieldScene.get_Reps()[std::make_pair((OBJECT)i, j)].setFillColor(Color(201, 114, 144, 40)); // this isn't triggering
-                        std::cout << "COLLISION: " << (OBJECT)i << j << std::endl;
-                        // while (eevee.getOrientation() == old) { 
-                            //} // generated paused...jumped up and moved off !!
-                        eevee.isMoving(false);
-                        eevee.setDirection(eevee.oppDirection(eevee.getOrientation())); // generate opposite direction
-                        eevee.isMoving(true);
-                        eevee.setSprite(); // isMoving?? // what if multiple collisions? only first returned
-                        //  possibleCollisions[i] = sprites[i];
-                    //break; // or continue? // maybe instead accumulates all directions it can't go in and chooses from remaining
-                    }
+                if (eevee.getGlobalHitbox().intersects(obj.getTransform().transformRect(objHB)))
+                {
+                    fieldScene.get_Reps()[std::make_pair((OBJECT)i, j)].setFillColor(Color(201, 114, 144, 40)); // this isn't triggering
+                    std::cout << "COLLISION: " << (OBJECT)i << j << std::endl;
+                    // while (eevee.getOrientation() == old) { 
+                        //} // generated paused...jumped up and moved off !!
+                    eevee.isMoving(false);
+                    eevee.setDirection(eevee.oppDirection(eevee.getOrientation())); // generate opposite direction
+                    eevee.isMoving(true);
+                    eevee.setSprite(); // isMoving?? // what if multiple collisions? only first returned
+                    //  possibleCollisions[i] = sprites[i];
+                //break; // or continue? // maybe instead accumulates all directions it can't go in and chooses from remaining
+                }
                 else {
                     fieldScene.get_Reps()[std::make_pair((OBJECT)i, j)].setFillColor(Color(101, 5, 56, 70));
                 }
             }
         }
 
-            // does this one not work??
-        //if (fieldScene.checkCollisions(eevee))
-        //{
-        //    std::cout << "COLLISION";
-        //    Direction old = eevee.getOrientation();
-        //    while (eevee.getOrientation() == old) { eevee.setOrientation(eevee.randDir()); }
-        //    eevee.setDirection(eevee.getOrientation());
-        //    eevee.setSprite(); // isMoving??
-        //}
         eevee.update(dt); // if no collisions, moves as normal
         eevee.updateHitbox(); // right place??
 
@@ -176,39 +143,15 @@ int main()
             {
                 //std::cout << fieldScene.getNumObj()[i] << std::endl;
                 Vector2f pos;
-                
-               // if ((OBJECT)i == TREE) pos = fieldScene.get_treeMap()[j];
-                //else
-                
-                //std::cout << "pos: " << pos.x << ", " << pos.y << std::endl; // all have same pos
+
+                 //std::cout << "pos: " << pos.x << ", " << pos.y << std::endl; // all have same pos
                 window.draw(fieldScene.get_spriteMap()[std::make_pair((OBJECT)i, j)]);
                 if (showRep) window.draw(fieldScene.get_Reps()[std::make_pair((OBJECT)i, j)]);
-
-                //if ((OBJECT)i == TREE) { // apples blink on and off
-                //    srand(time(0));
-                //    int notFruit = rand() % 10;
-                //    if (!notFruit) {
-                //        Sprite fruit;
-                //        Vector2f fruitPos;
-                //        fruitPos = pos;
-                //        fruitPos.y += 45;
-                //        fruitPos.x += 15;
-                //        fieldScene.makeSprite(FRUIT, fruitPos, fruit);
-                //        window.draw(fruit);
-                //    }
-                //}
             }
-            //std::cout << std::endl << std::endl;
-            
-           // window.draw(fieldScene.getReps()[i]);
-        }
-        /*for (unsigned int j = 8; j < 12; j++)
-        {
-            window.draw(fieldScene.getReps()[j]);
-        }*/
 
+        }
         window.draw(eevee.getSprite());
-       // window.draw(player.getSprite());
+        // window.draw(player.getSprite());
         eevee.updateRep();
         window.draw(eevee.getRep());
 
@@ -238,4 +181,3 @@ int main()
 // creature interactions
 // no sprite overlap (NASTY overlap between sapling and tree)
 // more backgrounds
-// if flower by itslef, sprite with 2, else full

@@ -5,9 +5,9 @@
 #include <iostream>
 
 #define NUM_OBJECT_SPRITES (20) // +4 trees
-#define NUM_OBJ_TYPES (7)
+#define NUM_OBJ_TYPES (6)
 
-enum OBJECT { FLOWER, MUSHROOM, SPROUT, BUSH, SAPLING, TREE, FRUIT }; // organized in terms of priority drawn (why is tree first??)
+enum OBJECT { FLOWER, MUSHROOM, SPROUT, BUSH, SAPLING, TREE }; // organized in terms of priority drawn (why is tree first??)
 // NONE is temp!!
 class Scene
 {
@@ -32,7 +32,7 @@ public:
 	//VertexArray getForestLayer();
 	Texture& getTexture();
 	std::map<std::pair<OBJECT, int>, Sprite> get_spriteMap();
-	void makeSprite(OBJECT type, Vector2f pos, Sprite &sprite);
+	void makeSprite(OBJECT type, Vector2f pos, Sprite& sprite);
 	void initialize_spriteMap();
 	bool isNearby(int x, int y, OBJECT* nearby);
 	std::map<std::pair<OBJECT, int>, FloatRect> get_hitboxMap();
