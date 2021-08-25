@@ -16,27 +16,36 @@ private:
 	Texture ssTrans; // transparent texture; loaded from spritesheet
 	Image spritesheet; // get rid of flower hitbox
 	//Sprite sprites[NUM_OBJECT_SPRITES]; // somehow associate index number with what type of obj they are
-	std::map<std::pair<OBJECT, int>, Vector2f> spriteMap;
+	std::map<std::pair<OBJECT, int>, Sprite> spriteMap;
 	int numObj[NUM_OBJ_TYPES];
 	FloatRect hitboxes[NUM_OBJ_TYPES];
 	std::map<std::pair<OBJECT, int>, FloatRect> hitboxMap;
+	std::map<std::pair<OBJECT, int>, RectangleShape> reps;
 
 public:
 	Scene();
 	int* getNumObj();
 	void makeBackground(VertexArray& background);
 	//void makeForest(unsigned int startIndex);
-	//void makeSprites();
 	void makeHitboxes();
 	VertexArray getBackground();
 	//VertexArray getForestLayer();
 	Texture& getTexture();
-	std::map<std::pair<OBJECT, int>, Vector2f> get_spriteMap();
+	std::map<std::pair<OBJECT, int>, Sprite> get_spriteMap();
 	void makeSprite(OBJECT type, Vector2f pos, Sprite &sprite);
-	//Sprite* getSprites();
-	int initializeSubtype(OBJECT type, int num, int rMax, int cMax, int percentMax, int randNum); // use for tree?
 	void initialize_spriteMap();
 	bool isNearby(int x, int y, OBJECT* nearby);
-	FloatRect* getHitboxes();
-	bool checkCollisions(Mon mon);
+	std::map<std::pair<OBJECT, int>, FloatRect> get_hitboxMap();
+	//bool checkCollisions(Mon mon);
+	std::map<std::pair<OBJECT, int>, RectangleShape> get_Reps();
 };
+
+
+// TODO
+// spritemap --> map of sprites
+// hitbox implementation
+// debug collisions
+
+// add a couple of random events and extra mons
+// maybe different backgrounds?
+// music

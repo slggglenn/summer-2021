@@ -45,30 +45,30 @@ void Scene::makeBackground(VertexArray &background) {
 // or map initialization randomly gens obj numbs --> stores
 // during draw, creates sprite and initializes and draws (can go through in layers so no unwanted overlapping)
 
-int Scene::initializeSubtype(OBJECT type, int num, int rMax, int cMax, int percentMax, int randNum)
-{
-    srand(randNum);
-    int count = 0;
-    for (int r = 0; r < rMax; r++) // 6, 9 always going to be misevenly distributed
-    {
-        for (int c = 0; c < cMax; c++) // lesss rows to get rid of overlap
-        {
-            int flow = (rand() % 99) + 1;
-
-            if (flow >= 1 && flow <= percentMax) // temp to figure out how many rows + cs needed
-            { // have rowcount instead ?? (implement for both)
-                if (count == num) break;
-                else {
-                    spriteMap[std::make_pair(type, count)].x = c * (TILE_SIZE + 20);
-                    spriteMap[std::make_pair(type, count)].y = r * (TILE_SIZE + 20);
-                    //std::cout << "flow: #: " << count << "pos: " << c << ", " << r << endl;
-                    count++;
-                }
-            }
-        }
-    }
-    return count;
-}
+//int Scene::initializeSubtype(OBJECT type, int num, int rMax, int cMax, int percentMax, int randNum)
+//{
+//    srand(randNum);
+//    int count = 0;
+//    for (int r = 0; r < rMax; r++) // 6, 9 always going to be misevenly distributed
+//    {
+//        for (int c = 0; c < cMax; c++) // lesss rows to get rid of overlap
+//        {
+//            int flow = (rand() % 99) + 1;
+//
+//            if (flow >= 1 && flow <= percentMax) // temp to figure out how many rows + cs needed
+//            { // have rowcount instead ?? (implement for both)
+//                if (count == num) break;
+//                else {
+//                    spriteMap[std::make_pair(type, count)].x = c * (TILE_SIZE + 20);
+//                    spriteMap[std::make_pair(type, count)].y = r * (TILE_SIZE + 20);
+//                    //std::cout << "flow: #: " << count << "pos: " << c << ", " << r << endl;
+//                    count++;
+//                }
+//            }
+//        }
+//    }
+//    return count;
+//}
 
 
 
@@ -145,8 +145,8 @@ void Scene::initialize_spriteMap() // start with 0
                 else if (randObj > fP + mP + spP + bP && randObj <= fP + mP + spP + bP + saP) currType = SAPLING;
                 else if (randObj > fP + mP + spP + bP + saP && randObj <= fP + mP + spP + bP + saP + tP) currType = TREE;
                 
-                spriteMap[std::make_pair(currType, numObj[(int)currType])].x = c * TILE_SIZE; // start at 0, then you increment as index
-                spriteMap[std::make_pair(currType, numObj[(int)currType])].y = r * TILE_SIZE;
+                makeSprite(currType, Vector2f(c * TILE_SIZE, r * TILE_SIZE), spriteMap[std::make_pair(currType, numObj[(int)currType])]); // start at 0, then you increment as index
+                //spriteMap[std::make_pair(currType, numObj[(int)currType])].y = r * TILE_SIZE;
                 (numObj[(int)currType])++;
             }
         }
@@ -163,8 +163,8 @@ bool Scene::isNearby(int x, int y, OBJECT* nearby)
     {
         for (int j = 0; j < numObj[i]; j++)
         {
-            if (spriteMap[std::make_pair((OBJECT)i, j)].x / TILE_SIZE == x &&
-                spriteMap[std::make_pair((OBJECT)i, j)].y / TILE_SIZE == y)
+            if (spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x / TILE_SIZE == x &&
+                spriteMap[std::make_pair((OBJECT)i, j)].getPosition().y / TILE_SIZE == y)
                 {// idk if this'll work for tree
                     (*nearby) = (OBJECT)i;
                     return true; // will this break??
@@ -173,9 +173,6 @@ bool Scene::isNearby(int x, int y, OBJECT* nearby)
     }
     return false;
 }
-
-
-std::map<std::pair<OBJECT, int>, Vector2f> Scene::get_spriteMap() { return spriteMap; }
 
 
 void Scene::makeSprite(OBJECT type, Vector2f pos, Sprite& sprite)
@@ -223,6 +220,8 @@ void Scene::makeHitboxes() {
         {
             int objWidth, objHeight;
 
+            objWidth = 10;
+
             switch (i)
             {
             case FLOWER:
@@ -250,7 +249,24 @@ void Scene::makeHitboxes() {
                 objHeight = 14;
                 break;
             }
-            hitboxMap[std::make_pair((OBJECT)i, j)] = {0, 0, objWidth, objHeight};
+            hitboxMap[std::make_pair((OBJECT)i, j)].left = spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x;//0; // else messes with transform call in test? spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x;
+            hitboxMap[std::make_pair((OBJECT)i, j)].top = spriteMap[std::make_pair((OBJECT)i, j)].getPosition().y; // spriteMap[std::make_pair((OBJECT)i, j)].getPosition().y;
+            hitboxMap[std::make_pair((OBJECT)i, j)].width = objWidth * spriteMap[std::make_pair((OBJECT)i, j)].getScale().x;
+            hitboxMap[std::make_pair((OBJECT)i, j)].height = objHeight * spriteMap[std::make_pair((OBJECT)i, j)].getScale().y;
+
+           // spriteMap[std::make_pair((OBJECT)i, j)].getTransform().transformRect(hitboxMap[std::make_pair((OBJECT)i, j)]); // may not need toput this here?? called another time in test
+            reps[std::make_pair((OBJECT)i, j)].setSize(Vector2f(hitboxMap[std::make_pair((OBJECT)i, j)].width, hitboxMap[std::make_pair((OBJECT)i, j)].height));
+           // hitboxMap[std::make_pair((OBJECT)i, j)].
+            // run
+
+            /*reps[std::make_pair((OBJECT)i, j)].setSize(Vector2f
+                                                                (objWidth * spriteMap[std::make_pair((OBJECT)i, j)].getScale().x, 
+                                                                 objHeight * spriteMap[std::make_pair((OBJECT)i, j)].getScale().y)); */// scale exception for bushes and other!
+            reps[std::make_pair((OBJECT)i, j)].setFillColor(Color(101, 5, 56, 70));
+            //reps[std::make_pair((OBJECT)i, j)].setPosition(Vector2f(hitboxMap[std::make_pair((OBJECT)i, j)].left, hitboxMap[std::make_pair((OBJECT)i, j)].top));
+            reps[std::make_pair((OBJECT)i, j)].setPosition(hitboxMap[std::make_pair((OBJECT)i, j)].left, hitboxMap[std::make_pair((OBJECT)i, j)].top);
+                //Vector2f(spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x, spriteMap[std::make_pair((OBJECT)i, j)].getPosition().y));
+        };
             
         }
     }
@@ -282,29 +298,32 @@ void Scene::makeHitboxes() {
     reps[bWINDOW_INDEX].setSize(Vector2f(1920, 20));*/
 
     // up until window stuff
-    for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++) { // how to do this if sprites not made???
-        //sprites[i].getTransform().transformRect(hitboxes[i]);
-       // reps[i].setFillColor(Color(101, 5, 56, 70));
-       // reps[i].setPosition(Vector2f(sprites[i].getPosition().x, sprites[i].getPosition().y));
-        /*if (i == rWINDOW_INDEX) reps[i].setPosition(Vector2f(sprites[i].getPosition().x + ))*/
-    }
+    //for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++) { // how to do this if sprites not made???
+    //    spriteMap[i].getTransform().transformRect(hitboxes[i]);
+    //   // reps[i].setFillColor(Color(101, 5, 56, 70));
+    //   // reps[i].setPosition(Vector2f(sprites[i].getPosition().x, sprites[i].getPosition().y));
+    //    /*if (i == rWINDOW_INDEX) reps[i].setPosition(Vector2f(sprites[i].getPosition().x + ))*/
+    //}
 
-}
+//}
 
 //bool Scene::checkCollisions(Mon mon)
 //{
 //    //Sprite possibleCollisions[NUM_OBJECT_SPRITES]; // use this later
-//    for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++)
+//    for (int i = (int) BUSH; i < NUM_OBJ_TYPES; i++)
 //    {
-//        if (mon.willCollide(sprites[i], hitboxes[i])) // something added with this loop or implementation in Test.cpp that caused opengl
+//        for (int j = 0; j < numObj[i]; j++)
 //        {
-//          //  reps[i].setFillColor(Color(201, 114, 144, 40));
-//            return true; // what if multiple collisions? only first returned
-//          //  possibleCollisions[i] = sprites[i];
-//        }
-//        else {
-//           // reps[i].setFillColor(Color(2, 207, 188, 40));
-//            return false;
+//            if (mon.willCollide(spriteMap[std::make_pair((OBJECT)i, j)], hitboxMap[std::make_pair((OBJECT)i, j)])) // something added with this loop or implementation in Test.cpp that caused opengl
+//            {
+//              //  reps[i].setFillColor(Color(201, 114, 144, 40));
+//                return true; // what if multiple collisions? only first returned
+//              //  possibleCollisions[i] = sprites[i];
+//            }
+//            else {
+//                // reps[i].setFillColor(Color(2, 207, 188, 40));
+//                return false;
+//            }
 //        }
 //    }
 //
@@ -320,6 +339,8 @@ VertexArray Scene::getBackground() { return background; }
 
 Texture& Scene::getTexture() { return ssTrans; }
 
-//Sprite* Scene::getSprites() { return sprites; }
+std::map<std::pair<OBJECT, int>, Sprite> Scene::get_spriteMap() { return spriteMap; }
 
-//FloatRect* Scene::getHitboxes() { return hitboxes; }
+std::map<std::pair<OBJECT, int>, FloatRect> Scene::get_hitboxMap() { return hitboxMap; }
+
+std::map<std::pair<OBJECT, int>, RectangleShape> Scene::get_Reps() { return reps; }
