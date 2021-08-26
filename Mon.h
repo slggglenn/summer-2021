@@ -16,6 +16,7 @@ private:
 	Texture texture_;
 	//Animation animation_;
 	float speed_ = 0;
+	bool isOption[8] = { true, true, true, true, true, true, true, true };
 
 	Vector2f direction = { 0, 0 };
 	Image textBack_; //!!!
@@ -54,7 +55,7 @@ public:
 	void setDirection(Direction dir);
 	Vector2f getDirection();
 
-	Direction randDir();
+	Direction randDir(Direction constr1, Direction constr2, Direction constr3);
 	int randSteps();
 	unsigned int get_stepCounter();
 	void set_stepCounter(unsigned int steps);

@@ -74,7 +74,7 @@ int main()
         if (!eevee.get_stepCounter())
         {
             int steps = eevee.randSteps();
-            Direction dir = eevee.randDir(); // sets here so if no movement, sprite has chance of turning
+            Direction dir = eevee.randDir(NONE, NONE, NONE); // sets here so if no movement, sprite has chance of turning
             if (steps) {
                 eevee.setDirection(dir); // updates frames
                 eevee.setOrientation(dir);

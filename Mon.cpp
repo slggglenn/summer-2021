@@ -336,6 +336,8 @@ Vector2f Mon::zeroDirection()
 // updates position for movement speed, current direction, and time
 void Mon::update(Time dt)
 {
+	for (int i = 0; i < 8; i++) isOption[i] = true;
+
 	waitFrame_++;
 	// cases:
 	// idle running (0,1,0,1...)
@@ -351,10 +353,27 @@ void Mon::update(Time dt)
 	position_.x += dt.asSeconds() * speed_ * direction.x;
 	position_.y += dt.asSeconds() * speed_ * direction.y;
 
-	if (position_.x == 0 || position_.x == 1920 || position_.y == 0 || position_.y == 1080)
+	if (position_.x <= 1 || position_.x >= 1919 || position_.y <= 1 || position_.y >= 1079)
 	{
+		srand(time(0));
+		std::cout << "barrier!";
 		isMoving(false);
-		setDirection(oppDirection(orientation_)); // generate opposite direction
+		set_stepCounter(0);
+
+		// only due to barrier rn
+		Direction restricted[3] = { NONE, NONE, NONE };
+		for (int i = 0; i < 3; i++)
+		{
+			if (restricted[i] == NONE)
+			{
+				if (position_.x <= 1) restricted[i] = LEFT;
+				else if (position_.x >= 1919) restricted[i] = RIGHT;
+				else if (position_.y <= 1) restricted[i] = UP;
+				else if (position_.y >= 1079) restricted[i] = DOWN;
+			}
+		}
+
+		setDirection(randDir(restricted[0], restricted[1], restricted[2])); // generate opposite direction
 		isMoving(true);
 		setSprite();
 	} // update collision protocol: if near obj HB, remove direction from possibility
@@ -460,11 +479,41 @@ State Mon::getState()
 	return state_;
 }
 
-Direction Mon::randDir()
+Direction Mon::randDir(Direction constr1, Direction constr2, Direction constr3)
 {
+	int numChoices = 4; // try first w/o the combos
+	//ol isOption[8];// = { true, true, true, true, true, true, true, true }
+	if (constr1 == LEFT || constr2 == LEFT || constr3 == LEFT)
+	{// need to counteract when out of bounds??
+		numChoices--;
+		isOption[(int)LEFT] = false;
+		isOption[(int)LEFT_UP] = false;
+		isOption[(int)LEFT_DOWN] = false; // get rid fo extras if unnec
+	}
+	else if (constr1 == RIGHT || constr2 == RIGHT || constr3 == RIGHT)
+	{
+		numChoices--;
+		isOption[(int)RIGHT] = false;
+		isOption[(int)RIGHT_UP] = false;
+		isOption[(int)RIGHT_DOWN] = false;
+	}
+	else if (constr1 == UP || constr2 == UP || constr3 == UP)
+	{
+		numChoices--;
+		isOption[(int)UP] = false;
+		isOption[(int)LEFT_UP] = false;
+		isOption[(int)RIGHT_UP] = false;
+	}
+	else if (constr1 == DOWN || constr2 == DOWN || constr3 == DOWN)
+	{
+		numChoices--;
+		isOption[(int)DOWN] = false;
+		isOption[(int)LEFT_DOWN] = false;
+		isOption[(int)RIGHT_DOWN] = false;
+	}
+	// error case + make available 
 	srand((int)time(0));
-	int randFour = rand() % 4;
-	return (Direction)randFour;
+	return (Direction)(rand() % numChoices);
 }
 
 int Mon::randSteps()
