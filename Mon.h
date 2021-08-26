@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Test.h"
-// don't forget ifndef
 
 class Mon
 {
@@ -14,47 +13,39 @@ private:
 
 	Vector2f position_;
 	Texture texture_;
-	//Animation animation_;
 	float speed_ = 0;
 	bool isOption[8] = { true, true, true, true, true, true, true, true };
 
 	Vector2f direction = { 0, 0 };
-	Image textBack_; //!!!
+	Image textBack_;
 	Sprite sprite_;
 	Direction orientation_ = DOWN;
 	int frame_ = 0;
 	int waitFrame_ = 0;
 	Direction orientLastFrame_ = DOWN;
-
-	//IntRect idleL[2], idleR[2], idleU[2], idleD[2];
 	std::map<std::tuple<State, Direction, int>, IntRect> frameMap;
-	//IntRect idleRects[2] = {};
-	//Int 
 
 public:
+	void updateFrames(Direction dir);
 	Mon(float new_x, float new_y, std::string img_loc); //https://stackoverflow.com/questions/14693745/string-as-parameter
-
 	void initialize_frameMap();
 	void updateFrames(Direction dir);
 	Vector2f getPosition();
 	void updatePosition(float new_x, float new_y);
-	FloatRect getSpriteBounds(); // !!! MODIFY !!!
+	FloatRect getSpriteBounds();
 	Texture getTexture();
 	void setTexture(std::string img_loc);
-	Sprite getSprite(); // !!! MODIFY !!!
-	void setSprite(); // !!! MODIFY !!!
+	Sprite getSprite();
+	void setSprite();
 	void setOrientation(Direction new_orient);
 	Direction getOrientation();
-	Vector2f updateDirection();
+	//Vector2f updateDirection();
 	Vector2f zeroDirection();
 	float getSpeed();
 	void isMoving(bool moving);
 	void update(Time dt);
-	// randomly generated movement
-	// set orientation
 	void setDirection(Direction dir);
 	Vector2f getDirection();
-
 	Direction randDir(Direction constr1, Direction constr2, Direction constr3);
 	int randSteps();
 	unsigned int get_stepCounter();
@@ -62,11 +53,8 @@ public:
 	State getState();
 	FloatRect getGlobalHitbox();
 	void setState(State state);
-	//bool willCollide(Sprite obj, FloatRect objHB);
 	void updateRep();
 	void updateHitbox();
 	RectangleShape getRep();
 	Direction oppDirection(Direction dir);
-
-	// randomly generated movement
 };

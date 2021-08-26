@@ -8,14 +8,12 @@ using namespace std;
 Scene::Scene() {
     if (!spritesheet.loadFromFile("graphics/SPRITESHEET.png")) std::cout << "ERROR" << std::endl;
     spritesheet.createMaskFromColor(Color::White, 0);
-    ssTrans.loadFromImage(spritesheet);
+    transSS.loadFromImage(spritesheet);
     makeBackground(background);
     initialize_spriteMap();
-    makeHitboxes();
 }
 
-int* Scene::getNumObj() { return numObj; }
-
+// TODO: more concise way? no need for vertex array??
 void Scene::makeBackground(VertexArray& background) {
     background.setPrimitiveType(Quads);
     background.resize(((SCRN_H / TILE_SIZE) + TILE_SIZE) * (SCRN_W / TILE_SIZE) * 4);
@@ -39,59 +37,49 @@ void Scene::makeBackground(VertexArray& background) {
     }
 }
 
-void Scene::initialize_spriteMap() // start with 0
+void Scene::initialize_spriteMap()
 {
     srand(time(0));
-    int percent[NUM_OBJ_TYPES] = { 5, 7, 3, 4, 3, 9 };
-    int densityBuffer[NUM_OBJ_TYPES] = { 0,0,0,0,0,0 };
+    int percent[NUM_OBJ_TYPES] = { 5, 7, 3, 4, 0, 0 }; // percent that each obj will spawn
+    int densityBuffer[NUM_OBJ_TYPES] = { 0,0,0,0,0,0 }; // exxtra likelihood based on density of same type obj nearby
     int willPlaceObj = 0;
 
-    for (int i = 0; i < NUM_OBJ_TYPES; i++)
-    {
-        //std::cout << percent[i] << ", ";
-        willPlaceObj += percent[i];
-    }
-    // cout << endl << endl;
+    for (int i = 0; i < NUM_OBJ_TYPES; i++) willPlaceObj += percent[i]; // threshold for placing any object
 
+    // moves through board
     for (int r = 0; r < 9; r++)
     {
-        for (int c = 0; c < 15; c++) // not enough columns so increased to 15.. check if offscreen stuff
-        {// clause to check nearby to skip (tree overlap) or increase odds of obj (if more nearby)
-
-            // if row = 0 --> can't check y - 1; if col = 0 --> can't check x - 1
-            // if row = 8 --> can't check y + 1; if col = 14 --> can't check x + 1
-            //Q: generates random first right?
-
-            // mushrooms near trees and othermushrooms
-            // saplings near trees and other saplings
-            // flowers near each other
+        for (int c = 0; c < 15; c++)
+        {
             int randObj = rand() % 99 + 1;
-            if (randObj <= willPlaceObj)
+            if (randObj <= willPlaceObj) // obj will be placed
             {
-                // boost //
-                // checks adj
-               // OBJECT nearby = TREE;
                 static OBJECT nearby = TREE; // just placeholder
-                int xL, xR, yL, yR, mult;// 4 potential adjacents for a tile
+
+                int xL, xR, yL, yR; // 4 potential adjacents for a tile
                 xL = c - 1;
                 xR = c + 1;
                 yL = r - 1;
                 yR = r + 1;
 
+                // coords for all possible adj tiles
                 int adjCoords[8][2] = { {xL, yL}, {xL, r}, {xL, yL}, {c, yL}, {xR, yL}, {xR, r}, {xR, yR}, {c, yR} };
 
                 // more efficient way to trigger nearby updates
                 for (unsigned int i = 0; i < 8; i++)
                 {
                     if (isNearby(adjCoords[i][0], adjCoords[i][1], &nearby)) densityBuffer[(int)nearby] += 1;
-                    else if (adjCoords[i][0] && adjCoords[i][1] && !isNearby(adjCoords[i][0], adjCoords[i][1], &nearby))
-                    {
-                        if (densityBuffer[(int)nearby]) densityBuffer[(int)nearby] -= 1; // decreases is none around
-                    }
-
+                    else if (adjCoords[i][0] && adjCoords[i][1] &&
+                             !isNearby(adjCoords[i][0], adjCoords[i][1], &nearby))
+                            {
+                                if (densityBuffer[(int)nearby]) densityBuffer[(int)nearby] -= 1; // decreases is none around
+                            }
                 }
 
+                // making the object
                 OBJECT currType;
+
+                // calculating percent
                 int fP, mP, spP, bP, saP, tP;
                 fP = percent[(int)FLOWER] + densityBuffer[(int)FLOWER];
                 mP = percent[(int)MUSHROOM] + densityBuffer[(int)MUSHROOM];
@@ -100,6 +88,7 @@ void Scene::initialize_spriteMap() // start with 0
                 saP = percent[(int)SAPLING];
                 tP = percent[(int)TREE] + densityBuffer[(int)TREE];
 
+                // determining type
                 if (randObj <= fP) currType = FLOWER;
                 else if (randObj > fP && randObj <= fP + mP) currType = MUSHROOM;
                 else if (randObj > fP + mP && randObj <= fP + mP + spP) currType = SPROUT;
@@ -107,45 +96,24 @@ void Scene::initialize_spriteMap() // start with 0
                 else if (randObj > fP + mP + spP + bP && randObj <= fP + mP + spP + bP + saP) currType = SAPLING;
                 else if (randObj > fP + mP + spP + bP + saP && randObj <= fP + mP + spP + bP + saP + tP) currType = TREE;
 
-                makeSprite(currType, Vector2f(c * TILE_SIZE, r * TILE_SIZE), spriteMap[std::make_pair(currType, numObj[(int)currType])]); // start at 0, then you increment as index
-                //spriteMap[std::make_pair(currType, numObj[(int)currType])].y = r * TILE_SIZE;
+                makeSprite(currType, Vector2f(c * TILE_SIZE, r * TILE_SIZE), spriteMap[std::make_pair(currType, numObj[(int)currType])]); 
+                
+                // start at 0, then you increment as index
                 (numObj[(int)currType])++;
             }
         }
     }
 }
 
-
-// https://stackoverflow.com/questions/28690526/c-how-to-pass-an-uninitialized-pointer-to-a-function
-bool Scene::isNearby(int x, int y, OBJECT* nearby)
-{
-    if (!x || !y) return false;
-
-    for (int i = 0; i < NUM_OBJ_TYPES; i++)
-    {
-        for (int j = 0; j < numObj[i]; j++)
-        {
-            if (spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x / TILE_SIZE == x &&
-                spriteMap[std::make_pair((OBJECT)i, j)].getPosition().y / TILE_SIZE == y)
-            {// idk if this'll work for tree
-                (*nearby) = (OBJECT)i;
-                return true; // will this break??
-            }
-        }
-    }
-    return false;
-}
-
-
+// initializes texture, scale, and position
 void Scene::makeSprite(OBJECT type, Vector2f pos, Sprite& sprite)
 {
-    sprite.setTexture(ssTrans);
+    sprite.setTexture(transSS);
     sprite.setScale(5, 5);
     switch (type)
     {
     case TREE:
         sprite.setTextureRect(IntRect(10, 1535, 43, 55));
-        // cout << "tree: " << (pos.x) / TILE_SIZE << ", " << pos.y / TILE_SIZE << endl;
         break;
     case FLOWER:
         sprite.setTextureRect(IntRect(95, 2420, 33, 33));
@@ -153,7 +121,6 @@ void Scene::makeSprite(OBJECT type, Vector2f pos, Sprite& sprite)
         break;
     case MUSHROOM:
         sprite.setTextureRect(IntRect(40, 2301, 16, 17));
-        //sprites[FRUIT_INDEX].setTextureRect(IntRect(159, 1557, 34, 27));
         break;
     case SPROUT:
         sprite.setTextureRect(IntRect(135, 2847, 16, 14));
@@ -172,10 +139,7 @@ void Scene::makeSprite(OBJECT type, Vector2f pos, Sprite& sprite)
     sprite.setPosition(pos);
 }
 
-
 void Scene::makeHitboxes() {
-
-
     for (int i = 0; i < NUM_OBJ_TYPES; i++)
     {
         for (int j = 0; j < numObj[i]; j++)
@@ -211,96 +175,46 @@ void Scene::makeHitboxes() {
                 objHeight = 14;
                 break;
             }
-            hitboxMap[std::make_pair((OBJECT)i, j)].left = spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x;//0; // else messes with transform call in test? spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x;
-            hitboxMap[std::make_pair((OBJECT)i, j)].top = spriteMap[std::make_pair((OBJECT)i, j)].getPosition().y; // spriteMap[std::make_pair((OBJECT)i, j)].getPosition().y;
-            hitboxMap[std::make_pair((OBJECT)i, j)].width = objWidth;// *spriteMap[std::make_pair((OBJECT)i, j)].getScale().x;
-            hitboxMap[std::make_pair((OBJECT)i, j)].height = objHeight;// *spriteMap[std::make_pair((OBJECT)i, j)].getScale().y;
+            hitboxMap[std::make_pair((OBJECT)i, j)].left = spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x;
+            hitboxMap[std::make_pair((OBJECT)i, j)].top = spriteMap[std::make_pair((OBJECT)i, j)].getPosition().y;
 
-            // spriteMap[std::make_pair((OBJECT)i, j)].getTransform().transformRect(hitboxMap[std::make_pair((OBJECT)i, j)]); // may not need toput this here?? called another time in test
+            hitboxMap[std::make_pair((OBJECT)i, j)].width = objWidth;
+            hitboxMap[std::make_pair((OBJECT)i, j)].height = objHeight;
+
             reps[std::make_pair((OBJECT)i, j)].setSize(Vector2f(hitboxMap[std::make_pair((OBJECT)i, j)].width * spriteMap[std::make_pair((OBJECT)i, j)].getScale().x,
                                                                 hitboxMap[std::make_pair((OBJECT)i, j)].height * spriteMap[std::make_pair((OBJECT)i, j)].getScale().y)); // DOES THIS CHANGE WORK
-            // hitboxMap[std::make_pair((OBJECT)i, j)].
-             // run
-
-             /*reps[std::make_pair((OBJECT)i, j)].setSize(Vector2f
-                                                                 (objWidth * spriteMap[std::make_pair((OBJECT)i, j)].getScale().x,
-                                                                  objHeight * spriteMap[std::make_pair((OBJECT)i, j)].getScale().y)); */// scale exception for bushes and other!
             reps[std::make_pair((OBJECT)i, j)].setFillColor(Color(101, 5, 56, 70));
-            //reps[std::make_pair((OBJECT)i, j)].setPosition(Vector2f(hitboxMap[std::make_pair((OBJECT)i, j)].left, hitboxMap[std::make_pair((OBJECT)i, j)].top));
             reps[std::make_pair((OBJECT)i, j)].setPosition(hitboxMap[std::make_pair((OBJECT)i, j)].left, hitboxMap[std::make_pair((OBJECT)i, j)].top);
-            //Vector2f(spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x, spriteMap[std::make_pair((OBJECT)i, j)].getPosition().y));
         };
 
     }
 }
-// initial positions must be 0 so that they'll overlap when getTransform called ater
-// hitboxes[TREE_INDEX] = { 0, 0, 43, 55 };
-// hitboxes[SAPLING_INDEX] = { 0, 0, 20, 37 };
-// hitboxes[GRASS_INDEX] = { 0, 0, 19, 18 };
-// hitboxes[MUSHROOM_INDEX] = { 0, 0, 16, 17 };
-// hitboxes[BUSH_INDEX] = { 0, 0, 18, 15 };
-// hitboxes[FRUIT_INDEX] = { 0, 0, 34, 27 };
-//// hitboxes[SPROUT_INDEX] = { 0, 0, 16, 14 };
-// hitboxes[FLOWERS_INDEX] = { 0, 0, 33, 33 };
- /*hitboxes[lWINDOW_INDEX] = { 0, 0, 1, 1080 };
- hitboxes[rWINDOW_INDEX] = { 0, 0, 1, 1080 };
- hitboxes[uWINDOW_INDEX] = { 0, 0, 1920, 1 };
- hitboxes[bWINDOW_INDEX] = { 0, 0, 1920, 1 };*/
 
- //  reps[TREE_INDEX].setSize(Vector2f(43 * 6, 55 * 6 ));
-//   reps[SAPLING_INDEX].setSize(Vector2f(20 * 6, 37 * 6));
-  // reps[GRASS_INDEX].setSize(Vector2f(19 * 6, 18 * 6));
-  //// reps[MUSHROOM_INDEX].setSize(Vector2f(16 * 6, 17 * 6));
-  // reps[BUSH_INDEX].setSize(Vector2f(18 * 6, 15 * 6));
-  // //reps[FRUIT_INDEX].setSize(Vector2f(34 * 6, 27 * 6));
-  ///// reps[SPROUT_INDEX].setSize(Vector2f(16 * 6, 14 * 6));
-  // reps[FLOWERS_INDEX].setSize(Vector2f(33 * 6, 33 * 6));
-   /*reps[lWINDOW_INDEX].setSize(Vector2f(20, 1080));
-   reps[rWINDOW_INDEX].setSize(Vector2f(20, 1080));
-   reps[uWINDOW_INDEX].setSize(Vector2f(1920, 20));
-   reps[bWINDOW_INDEX].setSize(Vector2f(1920, 20));*/
+// https://stackoverflow.com/questions/28690526/c-how-to-pass-an-uninitialized-pointer-to-a-function
+bool Scene::isNearby(int x, int y, OBJECT* nearby)
+{
+    if (!x || !y) return false;
 
-   // up until window stuff
-   //for (unsigned int i = 0; i < NUM_OBJECT_SPRITES; i++) { // how to do this if sprites not made???
-   //    spriteMap[i].getTransform().transformRect(hitboxes[i]);
-   //   // reps[i].setFillColor(Color(101, 5, 56, 70));
-   //   // reps[i].setPosition(Vector2f(sprites[i].getPosition().x, sprites[i].getPosition().y));
-   //    /*if (i == rWINDOW_INDEX) reps[i].setPosition(Vector2f(sprites[i].getPosition().x + ))*/
-   //}
-
-//}
-
-//bool Scene::checkCollisions(Mon mon)
-//{
-//    //Sprite possibleCollisions[NUM_OBJECT_SPRITES]; // use this later
-//    for (int i = (int) BUSH; i < NUM_OBJ_TYPES; i++)
-//    {
-//        for (int j = 0; j < numObj[i]; j++)
-//        {
-//            if (mon.willCollide(spriteMap[std::make_pair((OBJECT)i, j)], hitboxMap[std::make_pair((OBJECT)i, j)])) // something added with this loop or implementation in Test.cpp that caused opengl
-//            {
-//              //  reps[i].setFillColor(Color(201, 114, 144, 40));
-//                return true; // what if multiple collisions? only first returned
-//              //  possibleCollisions[i] = sprites[i];
-//            }
-//            else {
-//                // reps[i].setFillColor(Color(2, 207, 188, 40));
-//                return false;
-//            }
-//        }
-//    }
-//
-//    // get mon's position
-//    // loop through sprites to see if sprite position within radius of mon's next move
-//    // for each one that is, check to see if HB will intersect
-//    // if any potential collision, false
-//}
+    for (int i = 0; i < NUM_OBJ_TYPES; i++)
+    {
+        for (int j = 0; j < numObj[i]; j++)
+        {
+            if (spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x / TILE_SIZE == x &&
+                spriteMap[std::make_pair((OBJECT)i, j)].getPosition().y / TILE_SIZE == y)
+            {// idk if this'll work for tree
+                (*nearby) = (OBJECT)i;
+                return true; // will this break??
+            }
+        }
+    }
+    return false;
+}
 
 VertexArray Scene::getBackground() { return background; }
 
-//VertexArray Scene::getForestLayer() { return forestLayer; }
+int* Scene::getNumObj() { return numObj; }
 
-Texture& Scene::getTexture() { return ssTrans; }
+Texture& Scene::getTexture() { return transSS; }
 
 std::map<std::pair<OBJECT, int>, Sprite> Scene::get_spriteMap() { return spriteMap; }
 

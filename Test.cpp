@@ -17,16 +17,15 @@ int main()
 
     // initializing textures and background constants
     VertexArray background;
-    Texture ssTrans;
+    Texture transSS;
     Image spritesheet;
 
     if (!spritesheet.loadFromFile("graphics/SPRITESHEET.png")) std::cout << "ERROR" << std::endl;
     spritesheet.createMaskFromColor(Color::White, 0);
-    ssTrans.loadFromImage(spritesheet);
+    transSS.loadFromImage(spritesheet);
 
     // creates Mon character
     Mon eevee = Mon(SCRN_W / 2, SCRN_H / 2, "graphics/eevee.png");
-    //Player player = Player(SCRN_W / 3, SCRN_H / 3, "graphics/eevee.png");
 
     Scene fieldScene;
     bool showRep = true;
@@ -47,25 +46,6 @@ int main()
         if (Keyboard::isKeyPressed(Keyboard::Escape)) window.close();
 
         if (Keyboard::isKeyPressed(Keyboard::Tab)) showRep = !showRep;
-
-        //Event event;
-
-        // while (window.pollEvent(event))
-        // {
-        //     if (event.type == Event::KeyPressed)
-        //     {
-        //         player.isMoving(true);
-        //         player.setSprite();
-        //         player.updateDirection(); // try switching with setSprite to see if detects LEFT_UP
-        //     }
-        //     if (event.type == Event::KeyReleased)
-        //     {
-        //         player.isMoving(false);
-        //         player.zeroDirection();
-        //     }
-        // }
-
-
 
          // update time
         Time dt = clock.restart();
@@ -99,25 +79,16 @@ int main()
         {
             for (int j = 0; j < fieldScene.getNumObj()[i]; j++)
             {
-
-                //if (eevee.willCollide(fieldScene.get_spriteMap[std::make_pair((OBJECT)i, j)], 
-                //                      fieldScene.get_hitboxMap[std::make_pair((OBJECT)i, j)])) // something added with this loop or implementation in Test.cpp that caused opengl
-                //{
                 Sprite obj = fieldScene.get_spriteMap()[std::make_pair((OBJECT)i, j)];
                 FloatRect objHB = fieldScene.get_hitboxMap()[std::make_pair((OBJECT)i, j)];
 
                 if (eevee.getGlobalHitbox().intersects(obj.getTransform().transformRect(objHB)))
                 {
                     fieldScene.get_Reps()[std::make_pair((OBJECT)i, j)].setFillColor(Color(201, 114, 144, 40)); // this isn't triggering
-                    std::cout << "COLLISION: " << (OBJECT)i << j << std::endl;
-                    // while (eevee.getOrientation() == old) { 
-                        //} // generated paused...jumped up and moved off !!
                     eevee.isMoving(false);
                     eevee.setDirection(eevee.oppDirection(eevee.getOrientation())); // generate opposite direction
                     eevee.isMoving(true);
                     eevee.setSprite(); // isMoving?? // what if multiple collisions? only first returned
-                    //  possibleCollisions[i] = sprites[i];
-                //break; // or continue? // maybe instead accumulates all directions it can't go in and chooses from remaining
                 }
                 else {
                     fieldScene.get_Reps()[std::make_pair((OBJECT)i, j)].setFillColor(Color(101, 5, 56, 70));
@@ -139,20 +110,17 @@ int main()
         for (int i = 0; i < NUM_OBJ_TYPES; i++) // 2 is # of Object types!!!
         {
             // gets number of sprites of current OBJECT type
-           // int numTree = fieldScene.getNumObj();
+            // int numTree = fieldScene.getNumObj();
             for (int j = 0; j < fieldScene.getNumObj()[i]; j++) // some reason tree being dranw at 0,0? not in initialized
             {
-                //std::cout << fieldScene.getNumObj()[i] << std::endl;
                 Vector2f pos;
 
-                 //std::cout << "pos: " << pos.x << ", " << pos.y << std::endl; // all have same pos
                 window.draw(fieldScene.get_spriteMap()[std::make_pair((OBJECT)i, j)]);
                 if (showRep) window.draw(fieldScene.get_Reps()[std::make_pair((OBJECT)i, j)]);
             }
 
         }
         window.draw(eevee.getSprite());
-        // window.draw(player.getSprite());
         eevee.updateRep();
         window.draw(eevee.getRep());
 
@@ -182,5 +150,11 @@ int main()
 // creature interactions
 // no sprite overlap (NASTY overlap between sapling and tree)
 // more backgrounds
-
-
+// not enough columns so increased to 15.. check if offscreen stuff
+// update collision protocol: if near obj HB, remove direction from possibility
+// TODO:
+// cycle thru animations
+// idle animation
+// transitioning between
+// recognizing diagonal anims
+// asleep

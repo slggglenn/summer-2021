@@ -248,7 +248,7 @@ void Mon::updateFrames(Direction dir)
 				else frame_ = 0;
 			}
 		}
-		else !frame_; // always starts at 0 for new animation
+		else frame_ = !frame_; // always starts at 0 for new animation
 
 		waitFrame_ = 0;
 	}
@@ -269,9 +269,6 @@ void Mon::setDirection(Direction dir)
 {
 	updateFrames(dir);
 
-	//std::cout << "last frame: " << orientLastFrame_ << std::endl;
-	//std::cout << "this frame: " << orientation_ << std::endl << std::endl;
-
 	switch (dir) {
 	case LEFT:
 		direction.x = -1;
@@ -288,44 +285,6 @@ void Mon::setDirection(Direction dir)
 	}
 }
 
-//// this should be moved to player!!
-//Vector2f Mon::updateDirection()
-//{
-//
-//	if (Keyboard::isKeyPressed(Keyboard::Left))
-//	{
-//		if (Keyboard::isKeyPressed(Keyboard::Up))
-//		{
-//			setOrientation(LEFT_UP); // not really working
-//			direction.x = -1;
-//			direction.y = -1;
-//		}
-//		else {
-//			setOrientation(LEFT);
-//			direction.x = -1;
-//		}
-//	}
-//
-//	if (Keyboard::isKeyPressed(Keyboard::Right))
-//	{
-//		setOrientation(RIGHT);
-//		direction.x = 1;
-//	}
-//
-//	if (Keyboard::isKeyPressed(Keyboard::Up))
-//	{
-//		setOrientation(UP);
-//		direction.y = -1;
-//	}
-//
-//	if (Keyboard::isKeyPressed(Keyboard::Down))
-//	{
-//		setOrientation(DOWN);
-//		direction.y = 1;
-//	}
-//	return direction;
-//}
-
 Vector2f Mon::zeroDirection()
 {
 	direction.x = 0;
@@ -339,11 +298,6 @@ void Mon::update(Time dt)
 	for (int i = 0; i < 8; i++) isOption[i] = true;
 
 	waitFrame_++;
-	// cases:
-	// idle running (0,1,0,1...)
-	// start walking-->if idle ends on 1 or 0--> go to 0 (0,1,2,0,1,2...)
-	//	if stops: idle 0 (0,1,...)
-	//  if changes dir: new direction moving's 0 (0,1,2...)
 	
 	// updates frame #
 	
@@ -356,7 +310,6 @@ void Mon::update(Time dt)
 	if (position_.x <= 1 || position_.x >= 1919 || position_.y <= 1 || position_.y >= 1079)
 	{
 		srand(time(0));
-		std::cout << "barrier!";
 		isMoving(false);
 		set_stepCounter(0);
 
@@ -409,25 +362,17 @@ Direction Mon::oppDirection(Direction dir)
 	case RIGHT_UP:
 		return LEFT_DOWN;
 		break;
-
 	}
 }
-// hitbox position
-// {} but first two are x and y from sprite's left
-// when colliding, getGlobalHitbox
 
 void Mon::updateRep()
-{ // mon rep uses transform bc sprite moving, for others just set permanent position
-	//rep.setPosition(Character::getSprite().getPosition());
-	//if ()
-	//std::cout << hitbox_.left << ", " << hitbox_.top << std::endl;
-	rep.setPosition(hitbox_.left, hitbox_.top); // sets to top left
+{
+	rep.setPosition(hitbox_.left, hitbox_.top);
 }
 
 void Mon::updateHitbox()
 {
-	//Character::getSprite().getTransform().transformRect(hitbox_);
-	hitbox_.left = getSprite().getPosition().x;//getGlobalBounds().left;
+	hitbox_.left = getSprite().getPosition().x;
 	hitbox_.top = getSprite().getPosition().y;
 }
 
@@ -439,25 +384,6 @@ FloatRect Mon::getGlobalHitbox()
 {
 	return getSprite().getTransform().transformRect(hitbox_);
 }
-
-//bool Mon::willCollide(Sprite obj, FloatRect objHB)
-//{
-//	return (getGlobalHitbox().intersects(obj.getTransform().transformRect(objHB))); //something about this isn't working
-//	/*{sprites[i].getTransform().transformRect(hitboxes[i]);
-//		rep.setFillColor(Color(201, 114, 144, 40));
-//		std::cout << "collision!";
-//		return true;
-//	}
-//	else
-//	{
-//		rep.setFillColor(Color(2, 207, 188, 40));
-//		return false;
-//	}*/
-//	/*Character::updatePosition(Character::getPosition().x - dt.asSeconds() * Character::getSpeed() * Character::getDirection().x,
-//		Character::getPosition().y - dt.asSeconds() * Character::getSpeed() * Character::getDirection().y);*/
-//	// resets with our update (eevee.getSprite()) command in main none the wiser
-//}
-
 
 unsigned int Mon::get_stepCounter()
 {
@@ -518,7 +444,7 @@ Direction Mon::randDir(Direction constr1, Direction constr2, Direction constr3)
 
 int Mon::randSteps()
 {
-	srand((int)time(0)); // make these different?
+	srand((int)time(0));
 	int randTen = rand() % 50; // 0-49
 	state_ = MOVING;
 	if (randTen > 0 && randTen <= 5) {
@@ -539,10 +465,3 @@ int Mon::randSteps()
 		return 0;
 	}
 }
-
-// getTransform().transformRect(m_hitbox);
-//const bool colliding = player.getGlobalHitbox().intersects(enemy.getGlobalHitbox());
-
-
-
-// update collision protocol: if near obj HB, remove direction from possibility

@@ -4,48 +4,36 @@
 #include "Mon.h"
 #include <iostream>
 
-#define NUM_OBJECT_SPRITES (20) // +4 trees
 #define NUM_OBJ_TYPES (6)
 
-enum OBJECT { FLOWER, MUSHROOM, SPROUT, BUSH, SAPLING, TREE }; // organized in terms of priority drawn (why is tree first??)
-// NONE is temp!!
+enum OBJECT { FLOWER, MUSHROOM, SPROUT, BUSH, SAPLING, TREE }; // organized in terms of priority drawn
+
 class Scene
 {
 private:
-	VertexArray background, forestLayer;
-	Texture ssTrans; // transparent texture; loaded from spritesheet
-	Image spritesheet; // get rid of flower hitbox
-	//Sprite sprites[NUM_OBJECT_SPRITES]; // somehow associate index number with what type of obj they are
+	VertexArray background;
+	Image spritesheet;
+	Texture transSS; // transparent texture; loaded from spritesheet
+	
+	int numObj[NUM_OBJ_TYPES]; // number of each obj; index is enum val
 	std::map<std::pair<OBJECT, int>, Sprite> spriteMap;
-	int numObj[NUM_OBJ_TYPES];
-	FloatRect hitboxes[NUM_OBJ_TYPES];
 	std::map<std::pair<OBJECT, int>, FloatRect> hitboxMap;
-	std::map<std::pair<OBJECT, int>, RectangleShape> reps;
+	std::map<std::pair<OBJECT, int>, RectangleShape> reps; // TEMP //
 
 public:
 	Scene();
-	int* getNumObj();
+
 	void makeBackground(VertexArray& background);
-	//void makeForest(unsigned int startIndex);
+	void initialize_spriteMap();
+	void makeSprite(OBJECT type, Vector2f pos, Sprite& sprite);
 	void makeHitboxes();
+
+	bool isNearby(int x, int y, OBJECT* nearby);
+	
 	VertexArray getBackground();
-	//VertexArray getForestLayer();
+	int* getNumObj();
 	Texture& getTexture();
 	std::map<std::pair<OBJECT, int>, Sprite> get_spriteMap();
-	void makeSprite(OBJECT type, Vector2f pos, Sprite& sprite);
-	void initialize_spriteMap();
-	bool isNearby(int x, int y, OBJECT* nearby);
 	std::map<std::pair<OBJECT, int>, FloatRect> get_hitboxMap();
-	//bool checkCollisions(Mon mon);
 	std::map<std::pair<OBJECT, int>, RectangleShape> get_Reps();
 };
-
-
-// TODO
-// spritemap --> map of sprites
-// hitbox implementation
-// debug collisions
-
-// add a couple of random events and extra mons
-// maybe different backgrounds?
-// music
