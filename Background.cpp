@@ -14,7 +14,6 @@ Scene::Scene() {
     makeHitboxes();
 }
 
-
 int* Scene::getNumObj() { return numObj; }
 
 void Scene::makeBackground(VertexArray& background) {
@@ -40,46 +39,9 @@ void Scene::makeBackground(VertexArray& background) {
     }
 }
 
-// functino to give obj type, switch to randomly generate number of them --> store in map
-// 
-// or map initialization randomly gens obj numbs --> stores
-// during draw, creates sprite and initializes and draws (can go through in layers so no unwanted overlapping)
-
-//int Scene::initializeSubtype(OBJECT type, int num, int rMax, int cMax, int percentMax, int randNum)
-//{
-//    srand(randNum);
-//    int count = 0;
-//    for (int r = 0; r < rMax; r++) // 6, 9 always going to be misevenly distributed
-//    {
-//        for (int c = 0; c < cMax; c++) // lesss rows to get rid of overlap
-//        {
-//            int flow = (rand() % 99) + 1;
-//
-//            if (flow >= 1 && flow <= percentMax) // temp to figure out how many rows + cs needed
-//            { // have rowcount instead ?? (implement for both)
-//                if (count == num) break;
-//                else {
-//                    spriteMap[std::make_pair(type, count)].x = c * (TILE_SIZE + 20);
-//                    spriteMap[std::make_pair(type, count)].y = r * (TILE_SIZE + 20);
-//                    //std::cout << "flow: #: " << count << "pos: " << c << ", " << r << endl;
-//                    count++;
-//                }
-//            }
-//        }
-//    }
-//    return count;
-//}
-
-
-
 void Scene::initialize_spriteMap() // start with 0
 {
     srand(time(0));
-    //int randNums[NUM_OBJ_TYPES];
-    //for (unsigned int j = 0; j < NUM_OBJ_TYPES; j++) // NEED TO EXCLUDE TREE!! WASTE TO INCLUDE
-    //{
-    //    randNums[j] = rand() % (j + 1) + 1;
-    //} // better to generatet
     int percent[NUM_OBJ_TYPES] = { 5, 7, 3, 4, 3, 9 };
     int densityBuffer[NUM_OBJ_TYPES] = { 0,0,0,0,0,0 };
     int willPlaceObj = 0;
@@ -135,7 +97,7 @@ void Scene::initialize_spriteMap() // start with 0
                 mP = percent[(int)MUSHROOM] + densityBuffer[(int)MUSHROOM];
                 spP = percent[(int)SPROUT] + densityBuffer[(int)SPROUT];
                 bP = percent[(int)BUSH] + densityBuffer[(int)BUSH];
-                saP = percent[(int)SAPLING] + densityBuffer[(int)SAPLING];
+                saP = percent[(int)SAPLING];
                 tP = percent[(int)TREE] + densityBuffer[(int)TREE];
 
                 if (randObj <= fP) currType = FLOWER;
@@ -251,11 +213,12 @@ void Scene::makeHitboxes() {
             }
             hitboxMap[std::make_pair((OBJECT)i, j)].left = spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x;//0; // else messes with transform call in test? spriteMap[std::make_pair((OBJECT)i, j)].getPosition().x;
             hitboxMap[std::make_pair((OBJECT)i, j)].top = spriteMap[std::make_pair((OBJECT)i, j)].getPosition().y; // spriteMap[std::make_pair((OBJECT)i, j)].getPosition().y;
-            hitboxMap[std::make_pair((OBJECT)i, j)].width = objWidth * spriteMap[std::make_pair((OBJECT)i, j)].getScale().x;
-            hitboxMap[std::make_pair((OBJECT)i, j)].height = objHeight * spriteMap[std::make_pair((OBJECT)i, j)].getScale().y;
+            hitboxMap[std::make_pair((OBJECT)i, j)].width = objWidth;// *spriteMap[std::make_pair((OBJECT)i, j)].getScale().x;
+            hitboxMap[std::make_pair((OBJECT)i, j)].height = objHeight;// *spriteMap[std::make_pair((OBJECT)i, j)].getScale().y;
 
             // spriteMap[std::make_pair((OBJECT)i, j)].getTransform().transformRect(hitboxMap[std::make_pair((OBJECT)i, j)]); // may not need toput this here?? called another time in test
-            reps[std::make_pair((OBJECT)i, j)].setSize(Vector2f(hitboxMap[std::make_pair((OBJECT)i, j)].width, hitboxMap[std::make_pair((OBJECT)i, j)].height));
+            reps[std::make_pair((OBJECT)i, j)].setSize(Vector2f(hitboxMap[std::make_pair((OBJECT)i, j)].width * spriteMap[std::make_pair((OBJECT)i, j)].getScale().x,
+                                                                hitboxMap[std::make_pair((OBJECT)i, j)].height * spriteMap[std::make_pair((OBJECT)i, j)].getScale().y)); // DOES THIS CHANGE WORK
             // hitboxMap[std::make_pair((OBJECT)i, j)].
              // run
 

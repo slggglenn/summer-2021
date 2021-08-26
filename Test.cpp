@@ -76,7 +76,7 @@ int main()
             int steps = eevee.randSteps();
             Direction dir = eevee.randDir(); // sets here so if no movement, sprite has chance of turning
             if (steps) {
-                eevee.setDirection(dir);
+                eevee.setDirection(dir); // updates frames
                 eevee.setOrientation(dir);
                 eevee.setSprite();
                 eevee.set_stepCounter(steps); // !!! type convo !!!
@@ -89,7 +89,7 @@ int main()
                     eevee.setDirection(dir);
                     eevee.setOrientation(dir);
                     eevee.setSprite();
-                }
+                } //update frames?
                 eevee.isMoving(false);
             }
         }
@@ -125,6 +125,7 @@ int main()
             }
         }
 
+        eevee.updateFrames(eevee.getOrientation());
         eevee.update(dt); // if no collisions, moves as normal
         eevee.updateHitbox(); // right place??
 
@@ -172,7 +173,7 @@ int main()
 
 
 //TODO:
-// increase HB size so won't overlap before changing directions
+// increase HB size so won't overlap before changing directions; also in HB for anim changes
 // test current iter
 // once working, instead of swithcing opp dir, just eliminate certain ones and then move
 // // apples
@@ -181,3 +182,5 @@ int main()
 // creature interactions
 // no sprite overlap (NASTY overlap between sapling and tree)
 // more backgrounds
+
+

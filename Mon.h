@@ -21,7 +21,9 @@ private:
 	Image textBack_; //!!!
 	Sprite sprite_;
 	Direction orientation_ = DOWN;
-	int idleFrame, movingFrame, asleepFrame;
+	int frame_ = 0;
+	int waitFrame_ = 0;
+	Direction orientLastFrame_ = DOWN;
 
 	//IntRect idleL[2], idleR[2], idleU[2], idleD[2];
 	std::map<std::tuple<State, Direction, int>, IntRect> frameMap;
@@ -32,6 +34,7 @@ public:
 	Mon(float new_x, float new_y, std::string img_loc); //https://stackoverflow.com/questions/14693745/string-as-parameter
 
 	void initialize_frameMap();
+	void updateFrames(Direction dir);
 	Vector2f getPosition();
 	void updatePosition(float new_x, float new_y);
 	FloatRect getSpriteBounds(); // !!! MODIFY !!!
